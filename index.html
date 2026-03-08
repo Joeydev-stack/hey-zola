@@ -672,7 +672,276 @@
       .cta-form { flex-direction: column; }
       footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
     }
-  </style>
+    /* ── WHY ZOLA SECTION ── */
+    .why-section { background: var(--off); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .why-card {
+      border-radius: 24px;
+      padding: 36px;
+    }
+    .why-them {
+      background: var(--white);
+      border: 1.5px solid rgba(17,17,17,0.08);
+    }
+    .why-us {
+      background: var(--dark);
+      color: var(--white);
+    }
+    .why-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+      font-family: 'Syne', sans-serif;
+    }
+    .why-us-label { color: var(--sun) !important; }
+    .why-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .why-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .why-item strong { color: var(--dark); }
+    .why-zola-hero { margin-bottom: 24px; }
+    .why-zola-input {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 14px;
+      font-style: italic;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 10px;
+    }
+    .why-zola-arrow {
+      text-align: center;
+      font-size: 20px;
+      color: var(--sun);
+      margin-bottom: 10px;
+    }
+    .why-zola-output {
+      background: rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .why-output-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .why-output-row:last-child { margin-bottom: 0; }
+    .why-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .why-map-strip {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      color: var(--lime);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .why-zola-cta-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ── SAMPLE ITINERARY ── */
+    .sample-wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .sample-prompt {
+      background: rgba(255,184,0,0.08);
+      border: 1.5px solid rgba(255,184,0,0.2);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sample-prompt-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #B37E00;
+      font-family: 'Syne', sans-serif;
+    }
+    .sample-prompt-text {
+      font-size: 16px;
+      font-style: italic;
+      color: var(--dark);
+      line-height: 1.5;
+    }
+    .sample-itinerary {
+      background: var(--dark);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 6px 6px 0 var(--coral), 0 30px 60px rgba(17,17,17,0.15);
+    }
+    .sample-header { margin-bottom: 28px; }
+    .sample-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--white);
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+    .sample-tags { display: flex; gap: 7px; flex-wrap: wrap; }
+    .sample-tag {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.6);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+    .sample-stop {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 6px;
+    }
+    .sample-time-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 56px;
+    }
+    .sample-time {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.35);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .sample-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .sample-line {
+      width: 2px;
+      flex: 1;
+      min-height: 30px;
+      background: rgba(255,255,255,0.08);
+      margin: 6px 0;
+    }
+    .sample-body {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+    .sample-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--white);
+      margin-bottom: 3px;
+    }
+    .sample-type {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .sample-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .sample-meta {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--sun);
+      font-weight: 600;
+    }
+    .sample-footer {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 13px;
+      color: var(--lime);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* ── TRUST STRIP ── */
+    .trust-strip {
+      margin: 0 52px 80px;
+      background: var(--off);
+      border-radius: 24px;
+      padding: 48px 60px;
+    }
+    .trust-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .trust-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+    .trust-icon { font-size: 22px; }
+    .trust-item strong { color: var(--dark); font-weight: 600; }
+    .trust-divider {
+      width: 1px;
+      align-self: stretch;
+      background: rgba(17,17,17,0.1);
+      flex-shrink: 0;
+    }
+    .city-pill-more {
+      background: rgba(200,240,0,0.08);
+      border-color: rgba(200,240,0,0.25);
+      color: #5a7000;
+    }
+
+    @media (max-width: 900px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .trust-inner { flex-direction: column; gap: 28px; }
+      .trust-divider { display: none; }
+      .trust-strip { margin: 0 16px 60px; padding: 36px 24px; }
+      .sample-itinerary { padding: 22px; }
+    }
+
+    </style>
 </head>
 <body>
 
@@ -704,7 +973,7 @@
       <span class="t-coral"> Zola</span><span class="t-mag">!</span>
     </h1>
 
-    <p class="hero-sub">Tell Zola your vibe. Watch her build your perfect day — right now.</p>
+    <p class="hero-sub">Type <em>"cozy date night in Atlanta"</em> — Zola builds you a mapped, ready-to-walk plan in seconds.</p>
 
     <!-- LIVE AI DEMO EMBEDDED -->
     <div class="demo-card" id="demoCard">
@@ -829,6 +1098,111 @@
     </div>
   </section>
 
+  <!-- WHY ZOLA SECTION -->
+  <section class="section why-section">
+    <div class="label reveal">The honest answer</div>
+    <h2 class="section-title reveal">Why Zola instead of<br><em>Google Maps?</em></h2>
+    <div class="why-grid reveal">
+      <div class="why-card why-them">
+        <div class="why-card-label">The old way</div>
+        <div class="why-item">
+          <span class="why-icon">🗺️</span>
+          <div><strong>Google Maps</strong> — requires you to already know what you want. Search "coffee shop" and get 200 options with no soul.</div>
+        </div>
+        <div class="why-item">
+          <span class="why-icon">⭐</span>
+          <div><strong>Yelp</strong> — great reviews, zero curation. You still have to figure out what fits your mood, day, and vibe.</div>
+        </div>
+        <div class="why-item">
+          <span class="why-icon">📱</span>
+          <div><strong>TikTok</strong> — fun discoveries, but scattered. No order, no timing, no "here's your whole afternoon."</div>
+        </div>
+        <div class="why-item">
+          <span class="why-icon">🤖</span>
+          <div><strong>ChatGPT</strong> — gives you a list of text. No map. No hours. No real-time data. You're still doing all the work.</div>
+        </div>
+      </div>
+      <div class="why-card why-us">
+        <div class="why-card-label why-us-label">The Zola way</div>
+        <div class="why-zola-hero">
+          <div class="why-zola-input">"Cozy date night, not too loud, great cocktails"</div>
+          <div class="why-zola-arrow">↓</div>
+          <div class="why-zola-output">
+            <div class="why-output-row"><span class="why-dot" style="background:var(--sun)"></span><strong>7pm</strong> — Tiny Lou's · Cocktail bar · ⭐4.8</div>
+            <div class="why-output-row"><span class="why-dot" style="background:var(--coral)"></span><strong>8:30pm</strong> — Staplehouse · New American · ⭐4.9</div>
+            <div class="why-output-row"><span class="why-dot" style="background:var(--magenta)"></span><strong>10pm</strong> — The Majestic · Jazz lounge · ⭐4.7</div>
+            <div class="why-map-strip">📍 Mapped · Timed · Ready to walk into</div>
+          </div>
+        </div>
+        <p class="why-zola-cta-text">Start with your mood. Get a full plan. No searching, no deciding.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAMPLE ITINERARY PROOF SECTION -->
+  <section class="section sample-section">
+    <div class="label reveal">See it in action</div>
+    <h2 class="section-title reveal">A real Zola itinerary<br><em>from one sentence.</em></h2>
+    <div class="sample-wrapper reveal">
+      <div class="sample-prompt">
+        <span class="sample-prompt-label">The vibe typed in:</span>
+        <span class="sample-prompt-text">"Spontaneous Saturday in Austin — good coffee to start, local art, then the best tacos I've ever had"</span>
+      </div>
+      <div class="sample-itinerary">
+        <div class="sample-header">
+          <div class="sample-title">Your Austin Saturday ☀️</div>
+          <div class="sample-tags">
+            <span class="sample-tag">☕ Coffee</span>
+            <span class="sample-tag">🎨 Art</span>
+            <span class="sample-tag">🌮 Tacos</span>
+            <span class="sample-tag">Austin, TX</span>
+          </div>
+        </div>
+        <div class="sample-stop">
+          <div class="sample-time-col">
+            <div class="sample-time">9:30am</div>
+            <div class="sample-dot" style="background:var(--sun)"></div>
+            <div class="sample-line"></div>
+          </div>
+          <div class="sample-body">
+            <div class="sample-name">Caffè Medici</div>
+            <div class="sample-type">☕ Specialty Coffee · Congress Ave</div>
+            <div class="sample-desc">Austin's most celebrated independent café. Order the Gibraltar — sit by the window and watch Congress Ave wake up.</div>
+            <div class="sample-meta"><span>⭐ 4.8</span><span>· Opens 7am</span><span>· $</span></div>
+          </div>
+        </div>
+        <div class="sample-stop">
+          <div class="sample-time-col">
+            <div class="sample-time">11am</div>
+            <div class="sample-dot" style="background:var(--coral)"></div>
+            <div class="sample-line"></div>
+          </div>
+          <div class="sample-body">
+            <div class="sample-name">Blanton Museum of Art</div>
+            <div class="sample-type">🎨 Art Museum · UT Campus</div>
+            <div class="sample-desc">One of the best university art museums in the country. The ellsworth kelly chapel nearby is unmissable — a 10 min walk.</div>
+            <div class="sample-meta"><span>⭐ 4.7</span><span>· $12 entry</span><span>· ~2 hrs</span></div>
+          </div>
+        </div>
+        <div class="sample-stop">
+          <div class="sample-time-col">
+            <div class="sample-time">1:30pm</div>
+            <div class="sample-dot" style="background:var(--magenta)"></div>
+          </div>
+          <div class="sample-body">
+            <div class="sample-name">Veracruz All Natural</div>
+            <div class="sample-type">🌮 Tacos · East Austin</div>
+            <div class="sample-desc">The migas breakfast taco was voted best in America. Cash only, line moves fast, worth every minute of the wait.</div>
+            <div class="sample-meta"><span>⭐ 4.9</span><span>· Opens 8am</span><span>· $</span></div>
+          </div>
+        </div>
+        <div class="sample-footer">
+          <span>📍 All spots mapped · Optimized route · ~4.2 miles total</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- VIBE EXAMPLES -->
   <section class="section" style="padding-top:0">
     <div class="label reveal">Real queries, real magic</div>
@@ -863,8 +1237,9 @@
 
   <!-- CITIES -->
   <section class="section" style="padding-top:0">
-    <div class="label reveal">Zola knows</div>
-    <h2 class="section-title reveal">Every city. <em>Every vibe.</em></h2>
+    <div class="label reveal">Where Zola is live</div>
+    <h2 class="section-title reveal">Starting in cities<br><em>we know deeply.</em></h2>
+    <p class="section-sub reveal" style="max-width:520px;margin:0 auto 48px;font-size:17px;color:var(--muted);font-style:italic;text-align:center;">We're launching with a focused set of cities — so every recommendation is real, not guessed. More cities drop as we grow.</p>
     <div class="cities-flow reveal">
       <div class="city-pill">🗽 New York</div>
       <div class="city-pill">🌴 Los Angeles</div>
@@ -875,7 +1250,27 @@
       <div class="city-pill">🌿 Portland</div>
       <div class="city-pill">🎵 Nashville</div>
       <div class="city-pill">⛰️ Denver</div>
-      <div class="city-pill">✨ + everywhere</div>
+      <div class="city-pill city-pill-more">🔜 More dropping soon</div>
+    </div>
+  </section>
+
+  <!-- TRUST LINE -->
+  <section class="trust-strip reveal">
+    <div class="trust-inner">
+      <div class="trust-item">
+        <span class="trust-icon">👤</span>
+        <div><strong>Built for</strong> curious travelers, spontaneous weekenders, and people who want to actually experience a city — not just scroll one.</div>
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-item">
+        <span class="trust-icon">📍</span>
+        <div><strong>Live in</strong> Austin, NYC, LA, Miami, SF, Chicago, Nashville, Portland & Denver. New cities added every few weeks.</div>
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-item">
+        <span class="trust-icon">🔑</span>
+        <div><strong>Early access</strong> means you're first in line when the app launches — plus you help shape what Zola becomes.</div>
+      </div>
     </div>
   </section>
 
