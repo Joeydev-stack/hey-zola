@@ -654,8 +654,19 @@
     .footer-dots { display: flex; gap: 8px; }
     .fd { width: 10px; height: 10px; border-radius: 50%; }
 
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .stop-meta {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--sun);
+      margin-bottom: 6px;
+      letter-spacing: 0.2px;
+    }
+    .stop-address {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      margin-top: 8px;
+      font-style: italic;
+    }
 
     @media (max-width: 900px) {
       nav { padding: 18px 24px; }
@@ -1396,6 +1407,12 @@
         const div = document.createElement('div');
         div.className = 'stop-item';
         div.style.animationDelay = `${idx * 0.12}s`;
+        const ratingStr = stop.rating ? `⭐ ${stop.rating}` : '';
+        const priceStr = stop.price || '';
+        const openStr = stop.open_status || '';
+        const addressStr = stop.address ? `📍 ${stop.address.split(',').slice(0,2).join(',')}` : '';
+        const metaLine = [ratingStr, priceStr, openStr].filter(Boolean).join(' · ');
+
         div.innerHTML = `
           <div class="stop-time-col">
             <div class="stop-time">${stop.time || ''}</div>
@@ -1404,7 +1421,9 @@
           <div class="stop-body">
             <div class="stop-name">${stop.name}</div>
             <div class="stop-type">${stop.type || ''}</div>
+            ${metaLine ? `<div class="stop-meta">${metaLine}</div>` : ''}
             <div class="stop-desc">${stop.description}</div>
+            ${addressStr ? `<div class="stop-address">${addressStr}</div>` : ''}
             <div class="stop-tags">${(stop.tags||[]).map(t=>`<span class="stop-tag">${t}</span>`).join('')}</div>
           </div>
         `;
