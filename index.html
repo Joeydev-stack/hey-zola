@@ -174,7 +174,7 @@
     /* ── LIVE AI DEMO CARD ── */
     .demo-card {
       width: 100%;
-      max-width: 640px;
+      max-width: 660px;
       background: var(--dark);
       border-radius: 28px;
       padding: 32px;
@@ -215,7 +215,6 @@
       animation: blink 1.5s infinite;
     }
 
-    /* City selector */
     .demo-city-row {
       display: flex; gap: 8px; flex-wrap: wrap;
       margin-bottom: 16px;
@@ -237,7 +236,6 @@
       color: var(--sun);
     }
 
-    /* Vibe input */
     .demo-input-wrap {
       position: relative;
       margin-bottom: 14px;
@@ -260,7 +258,6 @@
     .demo-input::placeholder { color: rgba(255,255,255,0.3); font-style: italic; }
     .demo-input:focus { border-color: rgba(255,184,0,0.5); }
 
-    /* Quick vibes */
     .quick-vibes {
       display: flex; gap: 8px; flex-wrap: wrap;
       margin-bottom: 18px;
@@ -282,7 +279,6 @@
       color: #ff9480;
     }
 
-    /* CTA button */
     .demo-btn {
       width: 100%;
       background: var(--sun);
@@ -300,7 +296,6 @@
     .demo-btn:hover { background: var(--coral); color: #fff; transform: scale(1.02); box-shadow: 0 8px 30px rgba(255,92,58,0.3); }
     .demo-btn:disabled { opacity: 0.6; transform: none; }
 
-    /* Loading state */
     .loading-steps {
       display: none;
       flex-direction: column;
@@ -371,42 +366,84 @@
       letter-spacing: 0.3px;
     }
 
+    /* ── STOP CARD (Phase 2 upgrade) ── */
     .stop-item {
-      display: flex; gap: 14px; align-items: flex-start;
       margin-bottom: 14px;
       animation: fadeUp 0.5s ease forwards;
       opacity: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
     }
-    .stop-time-col {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 0; flex-shrink: 0; width: 52px;
+
+    /* Photo strip */
+    .stop-photo {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+      background: rgba(255,255,255,0.04);
     }
+    .stop-photo-placeholder {
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(135deg, rgba(255,184,0,0.08), rgba(255,92,58,0.08));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+    }
+
+    .stop-content {
+      padding: 14px 16px;
+    }
+
+    .stop-top-row {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .stop-name-block { flex: 1; }
     .stop-time {
       font-family: 'Syne', sans-serif;
-      font-size: 11px; font-weight: 700;
-      color: rgba(255,255,255,0.35);
-      text-align: center;
-      letter-spacing: 0.2px;
-    }
-    .stop-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      margin: 6px auto 0;
-      flex-shrink: 0;
-    }
-    .stop-body {
-      flex: 1;
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 13px 16px;
+      font-size: 10px; font-weight: 700;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
     }
     .stop-name {
       font-family: 'Syne', sans-serif;
       font-weight: 700;
       font-size: 15px;
       color: var(--white);
-      margin-bottom: 3px;
       letter-spacing: -0.2px;
+    }
+
+    .stop-meta-right {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .stop-rating {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 600;
+      color: var(--sun);
+    }
+    .stop-rating-count {
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      font-weight: 400;
+    }
+
+    .stop-price {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      font-weight: 500;
+    }
+
+    .stop-type-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 6px;
     }
     .stop-type {
       font-size: 11px;
@@ -414,21 +451,48 @@
       letter-spacing: 1px;
       text-transform: uppercase;
       color: rgba(255,255,255,0.3);
-      margin-bottom: 6px;
     }
+    .stop-status {
+      font-size: 10px; font-weight: 600;
+      padding: 2px 8px; border-radius: 100px;
+      letter-spacing: 0.3px;
+    }
+    .status-open { background: rgba(200,240,0,0.12); color: #a8d000; border: 1px solid rgba(200,240,0,0.2); }
+    .status-closed { background: rgba(255,92,58,0.12); color: #ff9480; border: 1px solid rgba(255,92,58,0.2); }
+    .status-unknown { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.1); }
+
     .stop-desc {
       font-size: 13px;
       color: rgba(255,255,255,0.5);
       line-height: 1.55;
       font-weight: 300;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
-    .stop-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .stop-tag {
-      background: rgba(255,255,255,0.07);
-      color: rgba(255,255,255,0.4);
-      font-size: 11px; font-weight: 500;
-      padding: 3px 9px; border-radius: 100px;
+
+    .stop-address {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    /* Open in Maps link */
+    .maps-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,184,0,0.1);
+      border: 1px solid rgba(255,184,0,0.2);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 12px; font-weight: 600;
+      color: var(--sun);
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .maps-link:hover {
+      background: rgba(255,184,0,0.2);
+      border-color: rgba(255,184,0,0.4);
+      transform: translateY(-1px);
     }
 
     .zola-tip {
@@ -451,6 +515,35 @@
       color: rgba(255,255,255,0.5);
       line-height: 1.6;
       font-style: italic;
+    }
+
+    /* ── MAP SECTION ── */
+    .map-section {
+      display: none;
+      margin-top: 20px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .map-section.visible { display: block; }
+    .map-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .map-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px; font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 6px;
+    }
+    #zolaMap {
+      width: 100%;
+      height: 280px;
+      border: none;
     }
 
     .reset-btn {
@@ -523,7 +616,6 @@
     }
     .section-title em { color: var(--coral); font-style: normal; }
 
-    /* STEPS */
     .steps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -554,7 +646,6 @@
     }
     .step-desc { font-size: 14px; color: var(--muted); line-height: 1.65; font-weight: 300; }
 
-    /* VIBE CARDS */
     .vibes-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -586,7 +677,6 @@
     .tag-mag { background: rgba(232,0,111,0.1); color: #B3005A; }
     .tag-lime { background: rgba(200,240,0,0.18); color: #556800; }
 
-    /* CITIES */
     .cities-flow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 44px; }
     .city-pill {
       display: flex; align-items: center; gap: 8px;
@@ -600,7 +690,6 @@
     }
     .city-pill:hover { border-color: var(--coral); background: rgba(255,92,58,0.05); transform: scale(1.04); }
 
-    /* CTA */
     .cta-section {
       margin: 0 52px 100px;
       background: var(--dark);
@@ -638,7 +727,6 @@
       max-width: 460px; margin: 0 auto;
     }
 
-    /* FOOTER */
     footer {
       padding: 36px 52px;
       border-top: 1.5px solid rgba(17,17,17,0.08);
@@ -654,19 +742,8 @@
     .footer-dots { display: flex; gap: 8px; }
     .fd { width: 10px; height: 10px; border-radius: 50%; }
 
-    .stop-meta {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--sun);
-      margin-bottom: 6px;
-      letter-spacing: 0.2px;
-    }
-    .stop-address {
-      font-size: 12px;
-      color: rgba(255,255,255,0.35);
-      margin-top: 8px;
-      font-style: italic;
-    }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
     @media (max-width: 900px) {
       nav { padding: 18px 24px; }
@@ -683,276 +760,7 @@
       .cta-form { flex-direction: column; }
       footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
     }
-    /* ── WHY ZOLA SECTION ── */
-    .why-section { background: var(--off); }
-    .why-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      max-width: 960px;
-      margin: 0 auto;
-    }
-    .why-card {
-      border-radius: 24px;
-      padding: 36px;
-    }
-    .why-them {
-      background: var(--white);
-      border: 1.5px solid rgba(17,17,17,0.08);
-    }
-    .why-us {
-      background: var(--dark);
-      color: var(--white);
-    }
-    .why-card-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 24px;
-      font-family: 'Syne', sans-serif;
-    }
-    .why-us-label { color: var(--sun) !important; }
-    .why-item {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      margin-bottom: 18px;
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--muted);
-    }
-    .why-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-    .why-item strong { color: var(--dark); }
-    .why-zola-hero { margin-bottom: 24px; }
-    .why-zola-input {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 14px 18px;
-      font-size: 14px;
-      font-style: italic;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 10px;
-    }
-    .why-zola-arrow {
-      text-align: center;
-      font-size: 20px;
-      color: var(--sun);
-      margin-bottom: 10px;
-    }
-    .why-zola-output {
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 18px;
-    }
-    .why-output-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-    .why-output-row:last-child { margin-bottom: 0; }
-    .why-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .why-map-strip {
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 12px;
-      color: var(--lime);
-      font-weight: 600;
-      letter-spacing: 0.3px;
-    }
-    .why-zola-cta-text {
-      font-size: 14px;
-      color: rgba(255,255,255,0.5);
-      font-style: italic;
-      line-height: 1.6;
-    }
-
-    /* ── SAMPLE ITINERARY ── */
-    .sample-wrapper {
-      max-width: 680px;
-      margin: 0 auto;
-    }
-    .sample-prompt {
-      background: rgba(255,184,0,0.08);
-      border: 1.5px solid rgba(255,184,0,0.2);
-      border-radius: 16px;
-      padding: 20px 24px;
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .sample-prompt-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: #B37E00;
-      font-family: 'Syne', sans-serif;
-    }
-    .sample-prompt-text {
-      font-size: 16px;
-      font-style: italic;
-      color: var(--dark);
-      line-height: 1.5;
-    }
-    .sample-itinerary {
-      background: var(--dark);
-      border-radius: 24px;
-      padding: 32px;
-      box-shadow: 6px 6px 0 var(--coral), 0 30px 60px rgba(17,17,17,0.15);
-    }
-    .sample-header { margin-bottom: 28px; }
-    .sample-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 22px;
-      color: var(--white);
-      letter-spacing: -0.5px;
-      margin-bottom: 10px;
-    }
-    .sample-tags { display: flex; gap: 7px; flex-wrap: wrap; }
-    .sample-tag {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.6);
-      font-size: 12px;
-      font-weight: 500;
-      padding: 4px 12px;
-      border-radius: 100px;
-    }
-    .sample-stop {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 6px;
-    }
-    .sample-time-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex-shrink: 0;
-      width: 56px;
-    }
-    .sample-time {
-      font-family: 'Syne', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.35);
-      text-align: center;
-      margin-bottom: 6px;
-    }
-    .sample-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .sample-line {
-      width: 2px;
-      flex: 1;
-      min-height: 30px;
-      background: rgba(255,255,255,0.08);
-      margin: 6px 0;
-    }
-    .sample-body {
-      flex: 1;
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 12px;
-    }
-    .sample-name {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--white);
-      margin-bottom: 3px;
-    }
-    .sample-type {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-    .sample-desc {
-      font-size: 13px;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.6;
-      margin-bottom: 10px;
-    }
-    .sample-meta {
-      display: flex;
-      gap: 10px;
-      font-size: 12px;
-      color: var(--sun);
-      font-weight: 600;
-    }
-    .sample-footer {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 13px;
-      color: var(--lime);
-      font-weight: 600;
-      text-align: center;
-    }
-
-    /* ── TRUST STRIP ── */
-    .trust-strip {
-      margin: 0 52px 80px;
-      background: var(--off);
-      border-radius: 24px;
-      padding: 48px 60px;
-    }
-    .trust-inner {
-      display: flex;
-      align-items: flex-start;
-      gap: 40px;
-      max-width: 960px;
-      margin: 0 auto;
-    }
-    .trust-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--muted);
-    }
-    .trust-icon { font-size: 22px; }
-    .trust-item strong { color: var(--dark); font-weight: 600; }
-    .trust-divider {
-      width: 1px;
-      align-self: stretch;
-      background: rgba(17,17,17,0.1);
-      flex-shrink: 0;
-    }
-    .city-pill-more {
-      background: rgba(200,240,0,0.08);
-      border-color: rgba(200,240,0,0.25);
-      color: #5a7000;
-    }
-
-    @media (max-width: 900px) {
-      .why-grid { grid-template-columns: 1fr; }
-      .trust-inner { flex-direction: column; gap: 28px; }
-      .trust-divider { display: none; }
-      .trust-strip { margin: 0 16px 60px; padding: 36px 24px; }
-      .sample-itinerary { padding: 22px; }
-    }
-
-    </style>
+  </style>
 </head>
 <body>
 
@@ -984,16 +792,15 @@
       <span class="t-coral"> Zola</span><span class="t-mag">!</span>
     </h1>
 
-    <p class="hero-sub">Type <em>"cozy date night in Atlanta"</em> — Zola builds you a mapped, ready-to-walk plan in seconds.</p>
+    <p class="hero-sub">Tell Zola your vibe. Watch her build your perfect day — right now.</p>
 
-    <!-- LIVE AI DEMO EMBEDDED -->
+    <!-- LIVE AI DEMO -->
     <div class="demo-card" id="demoCard">
       <div class="demo-header">
         <div class="demo-logo">Zola!</div>
         <div class="demo-live-badge"><span class="live-dot"></span> Live AI</div>
       </div>
 
-      <!-- City pills -->
       <div class="demo-city-row" id="cityRow">
         <button class="city-btn active" data-city="Austin, Texas">🤠 Austin</button>
         <button class="city-btn" data-city="New York City">🗽 New York</button>
@@ -1003,7 +810,6 @@
         <button class="city-btn" data-city="Chicago">🏙️ Chicago</button>
       </div>
 
-      <!-- Vibe input -->
       <div class="demo-input-wrap">
         <textarea
           class="demo-input"
@@ -1014,7 +820,6 @@
         ></textarea>
       </div>
 
-      <!-- Quick vibes -->
       <div class="quick-vibes">
         <button class="qv-chip" data-vibe="cozy morning coffee shop with great wifi, then the best tacos in the city, then a rooftop jazz bar for sunset">☕ Cozy → tacos → jazz</button>
         <button class="qv-chip" data-vibe="hidden local gems, no tourists, places only locals know about">📍 Hidden locals only</button>
@@ -1023,10 +828,8 @@
         <button class="qv-chip" data-vibe="artsy afternoon, galleries, vintage shops, creative neighborhood vibes">🎨 Artsy afternoon</button>
       </div>
 
-      <!-- Main CTA -->
       <button class="demo-btn" id="buildBtn">✨ Build my day, Zola</button>
 
-      <!-- Loading -->
       <div class="loading-steps" id="loadingSteps">
         <div class="loading-step" id="ls1">
           <div class="ls-icon"><span class="ls-emoji">🧠</span><div class="ls-spin"></div></div>
@@ -1042,14 +845,22 @@
         </div>
       </div>
 
-      <!-- Error -->
       <div class="error-msg" id="errorMsg"></div>
 
-      <!-- Results -->
+      <!-- RESULTS -->
       <div class="results-panel" id="resultsPanel">
         <div class="result-title" id="resultTitle"></div>
         <div class="result-mood-tags" id="moodTags"></div>
         <div id="stopsContainer"></div>
+
+        <!-- MAP -->
+        <div class="map-section" id="mapSection">
+          <div class="map-header">
+            <div class="map-label">🗺️ Your day on the map</div>
+          </div>
+          <iframe id="zolaMap" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
         <div class="zola-tip" id="zolaTip" style="display:none">
           <div class="zola-tip-header">
             <span style="font-size:18px">Z</span> Zola's local tip
@@ -1109,111 +920,6 @@
     </div>
   </section>
 
-  <!-- WHY ZOLA SECTION -->
-  <section class="section why-section">
-    <div class="label reveal">The honest answer</div>
-    <h2 class="section-title reveal">Why Zola instead of<br><em>Google Maps?</em></h2>
-    <div class="why-grid reveal">
-      <div class="why-card why-them">
-        <div class="why-card-label">The old way</div>
-        <div class="why-item">
-          <span class="why-icon">🗺️</span>
-          <div><strong>Google Maps</strong> — requires you to already know what you want. Search "coffee shop" and get 200 options with no soul.</div>
-        </div>
-        <div class="why-item">
-          <span class="why-icon">⭐</span>
-          <div><strong>Yelp</strong> — great reviews, zero curation. You still have to figure out what fits your mood, day, and vibe.</div>
-        </div>
-        <div class="why-item">
-          <span class="why-icon">📱</span>
-          <div><strong>TikTok</strong> — fun discoveries, but scattered. No order, no timing, no "here's your whole afternoon."</div>
-        </div>
-        <div class="why-item">
-          <span class="why-icon">🤖</span>
-          <div><strong>ChatGPT</strong> — gives you a list of text. No map. No hours. No real-time data. You're still doing all the work.</div>
-        </div>
-      </div>
-      <div class="why-card why-us">
-        <div class="why-card-label why-us-label">The Zola way</div>
-        <div class="why-zola-hero">
-          <div class="why-zola-input">"Cozy date night, not too loud, great cocktails"</div>
-          <div class="why-zola-arrow">↓</div>
-          <div class="why-zola-output">
-            <div class="why-output-row"><span class="why-dot" style="background:var(--sun)"></span><strong>7pm</strong> — Tiny Lou's · Cocktail bar · ⭐4.8</div>
-            <div class="why-output-row"><span class="why-dot" style="background:var(--coral)"></span><strong>8:30pm</strong> — Staplehouse · New American · ⭐4.9</div>
-            <div class="why-output-row"><span class="why-dot" style="background:var(--magenta)"></span><strong>10pm</strong> — The Majestic · Jazz lounge · ⭐4.7</div>
-            <div class="why-map-strip">📍 Mapped · Timed · Ready to walk into</div>
-          </div>
-        </div>
-        <p class="why-zola-cta-text">Start with your mood. Get a full plan. No searching, no deciding.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- SAMPLE ITINERARY PROOF SECTION -->
-  <section class="section sample-section">
-    <div class="label reveal">See it in action</div>
-    <h2 class="section-title reveal">A real Zola itinerary<br><em>from one sentence.</em></h2>
-    <div class="sample-wrapper reveal">
-      <div class="sample-prompt">
-        <span class="sample-prompt-label">The vibe typed in:</span>
-        <span class="sample-prompt-text">"Spontaneous Saturday in Austin — good coffee to start, local art, then the best tacos I've ever had"</span>
-      </div>
-      <div class="sample-itinerary">
-        <div class="sample-header">
-          <div class="sample-title">Your Austin Saturday ☀️</div>
-          <div class="sample-tags">
-            <span class="sample-tag">☕ Coffee</span>
-            <span class="sample-tag">🎨 Art</span>
-            <span class="sample-tag">🌮 Tacos</span>
-            <span class="sample-tag">Austin, TX</span>
-          </div>
-        </div>
-        <div class="sample-stop">
-          <div class="sample-time-col">
-            <div class="sample-time">9:30am</div>
-            <div class="sample-dot" style="background:var(--sun)"></div>
-            <div class="sample-line"></div>
-          </div>
-          <div class="sample-body">
-            <div class="sample-name">Caffè Medici</div>
-            <div class="sample-type">☕ Specialty Coffee · Congress Ave</div>
-            <div class="sample-desc">Austin's most celebrated independent café. Order the Gibraltar — sit by the window and watch Congress Ave wake up.</div>
-            <div class="sample-meta"><span>⭐ 4.8</span><span>· Opens 7am</span><span>· $</span></div>
-          </div>
-        </div>
-        <div class="sample-stop">
-          <div class="sample-time-col">
-            <div class="sample-time">11am</div>
-            <div class="sample-dot" style="background:var(--coral)"></div>
-            <div class="sample-line"></div>
-          </div>
-          <div class="sample-body">
-            <div class="sample-name">Blanton Museum of Art</div>
-            <div class="sample-type">🎨 Art Museum · UT Campus</div>
-            <div class="sample-desc">One of the best university art museums in the country. The ellsworth kelly chapel nearby is unmissable — a 10 min walk.</div>
-            <div class="sample-meta"><span>⭐ 4.7</span><span>· $12 entry</span><span>· ~2 hrs</span></div>
-          </div>
-        </div>
-        <div class="sample-stop">
-          <div class="sample-time-col">
-            <div class="sample-time">1:30pm</div>
-            <div class="sample-dot" style="background:var(--magenta)"></div>
-          </div>
-          <div class="sample-body">
-            <div class="sample-name">Veracruz All Natural</div>
-            <div class="sample-type">🌮 Tacos · East Austin</div>
-            <div class="sample-desc">The migas breakfast taco was voted best in America. Cash only, line moves fast, worth every minute of the wait.</div>
-            <div class="sample-meta"><span>⭐ 4.9</span><span>· Opens 8am</span><span>· $</span></div>
-          </div>
-        </div>
-        <div class="sample-footer">
-          <span>📍 All spots mapped · Optimized route · ~4.2 miles total</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- VIBE EXAMPLES -->
   <section class="section" style="padding-top:0">
     <div class="label reveal">Real queries, real magic</div>
@@ -1248,9 +954,8 @@
 
   <!-- CITIES -->
   <section class="section" style="padding-top:0">
-    <div class="label reveal">Where Zola is live</div>
-    <h2 class="section-title reveal">Starting in cities<br><em>we know deeply.</em></h2>
-    <p class="section-sub reveal" style="max-width:520px;margin:0 auto 48px;font-size:17px;color:var(--muted);font-style:italic;text-align:center;">We're launching with a focused set of cities — so every recommendation is real, not guessed. More cities drop as we grow.</p>
+    <div class="label reveal">Zola knows</div>
+    <h2 class="section-title reveal">Every city. <em>Every vibe.</em></h2>
     <div class="cities-flow reveal">
       <div class="city-pill">🗽 New York</div>
       <div class="city-pill">🌴 Los Angeles</div>
@@ -1261,27 +966,7 @@
       <div class="city-pill">🌿 Portland</div>
       <div class="city-pill">🎵 Nashville</div>
       <div class="city-pill">⛰️ Denver</div>
-      <div class="city-pill city-pill-more">🔜 More dropping soon</div>
-    </div>
-  </section>
-
-  <!-- TRUST LINE -->
-  <section class="trust-strip reveal">
-    <div class="trust-inner">
-      <div class="trust-item">
-        <span class="trust-icon">👤</span>
-        <div><strong>Built for</strong> curious travelers, spontaneous weekenders, and people who want to actually experience a city — not just scroll one.</div>
-      </div>
-      <div class="trust-divider"></div>
-      <div class="trust-item">
-        <span class="trust-icon">📍</span>
-        <div><strong>Live in</strong> Austin, NYC, LA, Miami, SF, Chicago, Nashville, Portland & Denver. New cities added every few weeks.</div>
-      </div>
-      <div class="trust-divider"></div>
-      <div class="trust-item">
-        <span class="trust-icon">🔑</span>
-        <div><strong>Early access</strong> means you're first in line when the app launches — plus you help shape what Zola becomes.</div>
-      </div>
+      <div class="city-pill">✨ + everywhere</div>
     </div>
   </section>
 
@@ -1384,8 +1069,25 @@
       loadingSteps.forEach(id => document.getElementById(id).classList.remove('active','done'));
     }
 
-    // ── DOT COLORS ──
+    // ── HELPERS ──
     const dotColors = ['#FFB800','#FF5C3A','#E8006F','#C8F000','#0A7EA4'];
+
+    function priceLabel(level) {
+      if (level === null || level === undefined) return '';
+      return '$'.repeat(level + 1);
+    }
+
+    function statusClass(s) {
+      if (s === 'open') return 'status-open';
+      if (s === 'closed') return 'status-closed';
+      return 'status-unknown';
+    }
+
+    function statusLabel(s) {
+      if (s === 'open') return '● Open now';
+      if (s === 'closed') return '● Closed';
+      return '● Check hours';
+    }
 
     // ── RENDER RESULTS ──
     function renderResults(data) {
@@ -1402,34 +1104,94 @@
 
       const stopsEl = document.getElementById('stopsContainer');
       stopsEl.innerHTML = '';
+
+      const mapPins = [];
+
       (data.stops || []).forEach((stop, idx) => {
         const color = dotColors[idx % dotColors.length];
         const div = document.createElement('div');
         div.className = 'stop-item';
         div.style.animationDelay = `${idx * 0.12}s`;
-        const ratingStr = stop.rating ? `⭐ ${stop.rating}` : '';
-        const priceStr = stop.price || '';
-        const openStr = stop.open_status || '';
-        const addressStr = stop.address ? `📍 ${stop.address.split(',').slice(0,2).join(',')}` : '';
-        const metaLine = [ratingStr, priceStr, openStr].filter(Boolean).join(' · ');
+
+        // Photo or placeholder
+        const photoHTML = stop.photo_url
+          ? `<img class="stop-photo" src="${stop.photo_url}" alt="${stop.name}" loading="lazy" onerror="this.style.display='none'">`
+          : `<div class="stop-photo-placeholder">📍</div>`;
+
+        // Rating stars
+        const ratingHTML = stop.rating
+          ? `<div class="stop-rating">
+               ⭐ ${stop.rating}
+               <span class="stop-rating-count">(${(stop.user_ratings_total||0).toLocaleString()})</span>
+             </div>`
+          : '';
+
+        // Price
+        const priceHTML = stop.price_level !== null && stop.price_level !== undefined
+          ? `<div class="stop-price">${priceLabel(stop.price_level)}</div>`
+          : '';
+
+        // Status badge
+        const statusHTML = `<span class="stop-status ${statusClass(stop.open_status)}">${statusLabel(stop.open_status)}</span>`;
+
+        // Address
+        const addressHTML = stop.address
+          ? `<div class="stop-address">📍 ${stop.address}</div>`
+          : '';
+
+        // Maps link
+        const mapsHTML = stop.maps_url
+          ? `<a class="maps-link" href="${stop.maps_url}" target="_blank" rel="noopener">
+               🗺️ Open in Google Maps
+             </a>`
+          : '';
 
         div.innerHTML = `
-          <div class="stop-time-col">
-            <div class="stop-time">${stop.time || ''}</div>
-            <div class="stop-dot" style="background:${color}"></div>
-          </div>
-          <div class="stop-body">
-            <div class="stop-name">${stop.name}</div>
-            <div class="stop-type">${stop.type || ''}</div>
-            ${metaLine ? `<div class="stop-meta">${metaLine}</div>` : ''}
+          ${photoHTML}
+          <div class="stop-content">
+            <div class="stop-top-row">
+              <div class="stop-name-block">
+                <div class="stop-time">${stop.time || ''}</div>
+                <div class="stop-name">${stop.name}</div>
+              </div>
+              <div class="stop-meta-right">
+                ${ratingHTML}
+                ${priceHTML}
+              </div>
+            </div>
+            <div class="stop-type-row">
+              <div class="stop-type">${stop.type || ''}</div>
+              ${statusHTML}
+            </div>
             <div class="stop-desc">${stop.description}</div>
-            ${addressStr ? `<div class="stop-address">${addressStr}</div>` : ''}
-            <div class="stop-tags">${(stop.tags||[]).map(t=>`<span class="stop-tag">${t}</span>`).join('')}</div>
+            ${addressHTML}
+            ${mapsHTML}
           </div>
         `;
         stopsEl.appendChild(div);
+
+        // Collect coords for map
+        if (stop.lat && stop.lng) {
+          mapPins.push({ name: stop.name, lat: stop.lat, lng: stop.lng });
+        }
       });
 
+      // ── BUILD MAP ──
+      if (mapPins.length > 0) {
+        const mapSection = document.getElementById('mapSection');
+        const mapIframe = document.getElementById('zolaMap');
+
+        // Build Google Maps embed with all pins as a search
+        // Use the first stop as center, list all in the q param
+        const allNames = mapPins.map(p => p.name).join('|');
+        const center = mapPins[0];
+        const embedSrc = `https://www.google.com/maps/embed/v1/search?key=AIzaSyD4_4UQN9LNE3l6bjjUeEZL1Nn6dXtK7Qs&q=${encodeURIComponent(allNames + ' ' + selectedCity)}&center=${center.lat},${center.lng}&zoom=13`;
+
+        mapIframe.src = embedSrc;
+        mapSection.classList.add('visible');
+      }
+
+      // Zola tip
       if(data.zola_note) {
         document.getElementById('zolaTipText').textContent = data.zola_note;
         document.getElementById('zolaTip').style.display = 'block';
@@ -1439,7 +1201,6 @@
 
       document.getElementById('resultsPanel').classList.add('visible');
 
-      // Scroll results into view
       setTimeout(() => {
         document.getElementById('resultsPanel').scrollIntoView({behavior:'smooth', block:'nearest'});
       }, 200);
@@ -1469,7 +1230,6 @@
         });
 
         const json = await res.json();
-
         if(!res.ok) throw new Error(json.error || 'Something went wrong');
 
         stopLoading();
@@ -1491,6 +1251,7 @@
       document.getElementById('vibeInput').value = '';
       document.getElementById('resultsPanel').classList.remove('visible');
       document.getElementById('errorMsg').classList.remove('visible');
+      document.getElementById('mapSection').classList.remove('visible');
       document.getElementById('vibeInput').focus();
     });
 
