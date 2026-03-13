@@ -555,6 +555,7 @@
       display: flex; gap: 10px;
       margin-bottom: 16px;
     }
+    .results-panel.visible .share-row { display: flex !important; }
     .share-btn, .copy-btn {
       flex: 1;
       display: flex; align-items: center; justify-content: center; gap: 7px;
@@ -1064,7 +1065,7 @@
         <div class="result-mood-tags" id="moodTags"></div>
 
         <!-- SHARE ROW — top of results -->
-        <div class="share-row" id="shareRow">
+        <div class="share-row" id="shareRow" style="display:flex">
           <button class="share-btn" id="shareBtn" onclick="shareItinerary()">
             <span>📤</span> Share this day
           </button>
