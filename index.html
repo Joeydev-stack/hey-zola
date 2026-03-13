@@ -1069,7 +1069,7 @@
           <div class="zola-tip-text" id="zolaTipText"></div>
         </div>
         <button class="save-btn" id="copyLinkBtn" onclick="copyPageLink()" style="display:block; width:100%; margin-top:16px;">
-          🔗 Copy link to this day
+          🔗 Share Hey, Zola!
         </button>
         <button class="reset-btn" id="resetBtn">↩ Try a different vibe</button>
       </div>
@@ -1221,11 +1221,11 @@
     function copyPageLink() {
       const btn = document.getElementById('copyLinkBtn');
       navigator.clipboard.writeText(window.location.href).then(() => {
-        btn.textContent = '✅ Link copied!';
+        btn.textContent = '✅ Link copied — share the vibe!';
         btn.style.background = 'var(--coral)';
         btn.style.color = '#fff';
         setTimeout(() => {
-          btn.textContent = '🔗 Copy link to this day';
+          btn.textContent = '🔗 Share Hey, Zola!';
           btn.style.background = '';
           btn.style.color = '';
         }, 2500);
@@ -1237,8 +1237,8 @@
         ta.select();
         document.execCommand('copy');
         document.body.removeChild(ta);
-        btn.textContent = '✅ Link copied!';
-        setTimeout(() => { btn.textContent = '🔗 Copy link to this day'; }, 2500);
+        btn.textContent = '✅ Link copied — share the vibe!';
+        setTimeout(() => { btn.textContent = '🔗 Share Hey, Zola!'; }, 2500);
       });
     }
 
