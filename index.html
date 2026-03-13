@@ -551,33 +551,22 @@
       border: none;
     }
 
-    .share-row {
-      display: flex; gap: 10px;
-      margin-bottom: 16px;
-    }
-    .results-panel.visible .share-row { display: flex !important; }
-    .share-btn, .copy-btn {
-      flex: 1;
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-      padding: 13px;
+    .save-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px;
       border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px; font-weight: 600;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px; font-weight: 800;
       border: none; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .share-btn {
       background: var(--sun);
       color: var(--dark);
+      transition: all 0.2s;
+      margin-bottom: 10px;
+      letter-spacing: -0.2px;
     }
-    .share-btn:hover { background: var(--coral); color: #fff; transform: scale(1.02); }
-    .copy-btn {
-      background: rgba(255,255,255,0.08);
-      border: 1.5px solid rgba(255,255,255,0.15);
-      color: rgba(255,255,255,0.7);
-    }
-    .copy-btn:hover { border-color: rgba(255,184,0,0.4); color: var(--sun); }
-    .copy-btn.copied { border-color: rgba(200,240,0,0.4); color: var(--lime); }
+    .save-btn:hover { background: var(--coral); color: #fff; transform: scale(1.02); }
+    .save-btn:disabled { opacity: 0.6; transform: none; }
 
     .reset-btn {
       width: 100%;
@@ -1064,15 +1053,10 @@
         <div class="result-title" id="resultTitle"></div>
         <div class="result-mood-tags" id="moodTags"></div>
 
-        <!-- SHARE ROW — top of results -->
-        <div class="share-row" id="shareRow" style="display:flex">
-          <button class="share-btn" id="shareBtn" onclick="shareItinerary()">
-            <span>📤</span> Share this day
-          </button>
-          <button class="copy-btn" id="copyBtn" onclick="copyLink()">
-            <span>🔗</span> Copy link
-          </button>
-        </div>
+        <!-- SAVE BUTTON -->
+        <button class="save-btn" id="saveBtn" onclick="saveAsPDF()">
+          📄 Save my itinerary
+        </button>
 
         <div id="stopsContainer"></div>
 
@@ -1233,45 +1217,94 @@
   </footer>
 
   <script>
-    // ── SHARE ──
+    // ── SAVE AS PDF ──
     let currentItineraryTitle = '';
+    let currentItineraryData = null;
 
-    function shareItinerary() {
-      const title = currentItineraryTitle || 'My Hey, Zola! Day';
-      const text = `Check out this AI-curated day I built with Hey, Zola! 🌟 "${title}"`;
-      const url = window.location.href;
+    function saveAsPDF() {
+      if (!currentItineraryData) return;
 
-      if (navigator.share) {
-        navigator.share({ title, text, url })
-          .catch(() => {}); // user cancelled, no error needed
-      } else {
-        // Fallback for desktop — copy to clipboard
-        copyLink();
-      }
-    }
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Generating PDF...';
 
-    function copyLink() {
-      const url = window.location.href;
-      navigator.clipboard.writeText(url).then(() => {
-        const btn = document.getElementById('copyBtn');
-        btn.innerHTML = '<span>✅</span> Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.innerHTML = '<span>🔗</span> Copy link';
-          btn.classList.remove('copied');
-        }, 2500);
-      }).catch(() => {
-        // Fallback for older browsers
-        const ta = document.createElement('textarea');
-        ta.value = window.location.href;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        const btn = document.getElementById('copyBtn');
-        btn.innerHTML = '<span>✅</span> Copied!';
-        setTimeout(() => { btn.innerHTML = '<span>🔗</span> Copy link'; }, 2500);
-      });
+      const data = currentItineraryData;
+      const title = data.title || 'My Hey, Zola! Day';
+
+      // Build clean HTML for print
+      const priceSymbols = (level) => level != null ? '$'.repeat(level + 1) : '';
+      const statusLabel = (s) => s === 'open' ? '✅ Open now' : s === 'closed' ? '⛔ Closed' : '🕐 Check hours';
+
+      const stopsHTML = (data.stops || []).map((stop, i) => `
+        <div style="margin-bottom:20px; padding:16px; border:1px solid #eee; border-radius:12px; page-break-inside:avoid;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+            <div>
+              <div style="font-size:11px; color:#999; text-transform:uppercase; letter-spacing:1px; margin-bottom:2px;">${stop.time || ''}</div>
+              <div style="font-size:18px; font-weight:800; color:#111; margin-bottom:2px;">${stop.name}</div>
+              <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:1px;">${stop.type || ''} · ${statusLabel(stop.open_status)}</div>
+            </div>
+            <div style="text-align:right; flex-shrink:0; margin-left:12px;">
+              ${stop.rating ? `<div style="font-size:13px; font-weight:700; color:#FFB800;">⭐ ${stop.rating} <span style="color:#aaa; font-weight:400;">(${(stop.user_ratings_total||0).toLocaleString()})</span></div>` : ''}
+              ${stop.price_level != null ? `<div style="font-size:12px; color:#888;">${priceSymbols(stop.price_level)}</div>` : ''}
+            </div>
+          </div>
+          ${stop.description ? `<div style="font-size:13px; color:#555; line-height:1.6; margin-bottom:8px;">${stop.description}</div>` : ''}
+          ${stop.address ? `<div style="font-size:12px; color:#999;">📍 ${stop.address}</div>` : ''}
+          ${stop.maps_url ? `<div style="font-size:12px; margin-top:6px;"><a href="${stop.maps_url}" style="color:#FF5C3A;">Open in Google Maps →</a></div>` : ''}
+        </div>
+      `).join('');
+
+      const tagsHTML = (data.mood_tags || []).map(t =>
+        `<span style="display:inline-block; background:#fff8e6; border:1px solid #FFB800; color:#b37e00; font-size:11px; font-weight:600; padding:3px 10px; border-radius:100px; margin:2px;">${t}</span>`
+      ).join('');
+
+      const zolaNote = data.zola_note ? `
+        <div style="margin-top:20px; padding:14px 16px; background:#fff8e6; border:1px solid #FFB800; border-radius:12px;">
+          <div style="font-size:12px; font-weight:700; color:#FFB800; margin-bottom:4px;">Z  ZOLA'S LOCAL TIP</div>
+          <div style="font-size:13px; color:#555; font-style:italic; line-height:1.6;">${data.zola_note}</div>
+        </div>
+      ` : '';
+
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>${title}</title>
+          <style>
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body { font-family: 'Helvetica Neue', Arial, sans-serif; padding: 32px; color: #111; max-width: 680px; margin: 0 auto; }
+            @media print {
+              body { padding: 20px; }
+              a { color: #FF5C3A !important; }
+            }
+          </style>
+        </head>
+        <body>
+          <div style="border-bottom: 3px solid #FFB800; padding-bottom: 16px; margin-bottom: 20px;">
+            <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#FF5C3A; margin-bottom:6px;">HEY, ZOLA! · A local friend in every city</div>
+            <h1 style="font-size:26px; font-weight:800; letter-spacing:-0.5px; color:#111; margin-bottom:10px;">${title}</h1>
+            <div>${tagsHTML}</div>
+          </div>
+          ${stopsHTML}
+          ${zolaNote}
+          <div style="margin-top:28px; padding-top:14px; border-top:1px solid #eee; font-size:11px; color:#bbb; text-align:center;">
+            Built with Hey, Zola! · getzolaapp.com · @GetZolaApp
+          </div>
+        </body>
+        </html>
+      `;
+
+      // Open print dialog
+      const win = window.open('', '_blank');
+      win.document.write(html);
+      win.document.close();
+      win.focus();
+      setTimeout(() => {
+        win.print();
+        btn.disabled = false;
+        btn.textContent = '📄 Save my itinerary';
+      }, 600);
     }
 
     // ── HAMBURGER MENU ──
@@ -1385,6 +1418,7 @@
     function renderResults(data) {
       document.getElementById('resultTitle').textContent = data.title || 'Your Perfect Day';
       currentItineraryTitle = data.title || 'Your Perfect Day';
+      currentItineraryData = data;
 
       const tagsEl = document.getElementById('moodTags');
       tagsEl.innerHTML = '';
