@@ -729,7 +729,7 @@
     }
     .cta-form {
       display: flex; gap: 10px; justify-content: center;
-      max-width: 460px; margin: 0 auto;
+      max-width: 520px; margin: 0 auto; width: 100%;
     }
 
     footer {
@@ -788,9 +788,9 @@
       .step:first-child { border-radius: 20px 20px 0 0; }
       .step:last-child { border-radius: 0 0 20px 20px; }
       .vibes-grid { grid-template-columns: 1fr; }
-      .cta-section { margin: 0 16px 60px; padding: 48px 20px; }
-      .cta-form { flex-direction: column; align-items: center; }
-      .cta-form iframe { width: 100% !important; max-width: 100% !important; height: 420px !important; pointer-events: auto !important; touch-action: auto !important; }
+      .cta-section { margin: 0 16px 60px; padding: 48px 12px; }
+      .cta-form { flex-direction: column; align-items: stretch; padding: 0; }
+      .cta-form iframe { width: 100% !important; max-width: 100% !important; min-width: 0 !important; height: 420px !important; pointer-events: auto !important; touch-action: auto !important; }
       footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
     }
   </style>
@@ -1015,7 +1015,7 @@
       <p class="cta-sub">Be the first to know when Zola drops.</p>
       <div class="cta-form">
         <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
-        <iframe src="https://subscribe-forms.beehiiv.com/294198e9-a0c3-4f42-b2f9-87c56d6553a7" class="beehiiv-embed" data-test-id="beehiiv-embed" frameborder="0" scrolling="auto" style="width: 100%; max-width: 520px; height: 420px; margin: 0 auto; border-radius: 16px !important; background-color: transparent; box-shadow: 0 0 #0000; display: block; pointer-events: auto; touch-action: auto;"></iframe>
+        <iframe src="https://subscribe-forms.beehiiv.com/294198e9-a0c3-4f42-b2f9-87c56d6553a7" class="beehiiv-embed" data-test-id="beehiiv-embed" frameborder="0" scrolling="auto" style="width: 100%; max-width: 520px; min-width: 280px; height: 420px; margin: 0 auto; border-radius: 16px !important; background-color: transparent; box-shadow: 0 0 #0000; display: block; pointer-events: auto; touch-action: auto;"></iframe>
       </div>
     </div>
   </div>
