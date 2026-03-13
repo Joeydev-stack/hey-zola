@@ -551,6 +551,33 @@
       border: none;
     }
 
+    .share-row {
+      display: flex; gap: 10px;
+      margin-top: 16px; margin-bottom: 10px;
+    }
+    .share-btn, .copy-btn {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 13px;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 600;
+      border: none; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .share-btn {
+      background: var(--sun);
+      color: var(--dark);
+    }
+    .share-btn:hover { background: var(--coral); color: #fff; transform: scale(1.02); }
+    .copy-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+    }
+    .copy-btn:hover { border-color: rgba(255,184,0,0.4); color: var(--sun); }
+    .copy-btn.copied { border-color: rgba(200,240,0,0.4); color: var(--lime); }
+
     .reset-btn {
       width: 100%;
       margin-top: 16px;
@@ -1051,6 +1078,14 @@
           </div>
           <div class="zola-tip-text" id="zolaTipText"></div>
         </div>
+        <div class="share-row" id="shareRow">
+          <button class="share-btn" id="shareBtn" onclick="shareItinerary()">
+            <span>📤</span> Share this day
+          </button>
+          <button class="copy-btn" id="copyBtn" onclick="copyLink()">
+            <span>🔗</span> Copy link
+          </button>
+        </div>
         <button class="reset-btn" id="resetBtn">↩ Try a different vibe</button>
       </div>
     </div>
@@ -1194,6 +1229,47 @@
   </footer>
 
   <script>
+    // ── SHARE ──
+    let currentItineraryTitle = '';
+
+    function shareItinerary() {
+      const title = currentItineraryTitle || 'My Hey, Zola! Day';
+      const text = `Check out this AI-curated day I built with Hey, Zola! 🌟 "${title}"`;
+      const url = window.location.href;
+
+      if (navigator.share) {
+        navigator.share({ title, text, url })
+          .catch(() => {}); // user cancelled, no error needed
+      } else {
+        // Fallback for desktop — copy to clipboard
+        copyLink();
+      }
+    }
+
+    function copyLink() {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.innerHTML = '<span>✅</span> Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = '<span>🔗</span> Copy link';
+          btn.classList.remove('copied');
+        }, 2500);
+      }).catch(() => {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = window.location.href;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        const btn = document.getElementById('copyBtn');
+        btn.innerHTML = '<span>✅</span> Copied!';
+        setTimeout(() => { btn.innerHTML = '<span>🔗</span> Copy link'; }, 2500);
+      });
+    }
+
     // ── HAMBURGER MENU ──
     function toggleMenu() {
       const menu = document.getElementById('mobileMenu');
@@ -1304,6 +1380,7 @@
     // ── RENDER RESULTS ──
     function renderResults(data) {
       document.getElementById('resultTitle').textContent = data.title || 'Your Perfect Day';
+      currentItineraryTitle = data.title || 'Your Perfect Day';
 
       const tagsEl = document.getElementById('moodTags');
       tagsEl.innerHTML = '';
