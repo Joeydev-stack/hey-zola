@@ -1052,12 +1052,6 @@
       <div class="results-panel" id="resultsPanel">
         <div class="result-title" id="resultTitle"></div>
         <div class="result-mood-tags" id="moodTags"></div>
-
-        <!-- SAVE BUTTON -->
-        <button class="save-btn" id="saveBtn" onclick="saveAsPDF()">
-          📄 Save my itinerary
-        </button>
-
         <div id="stopsContainer"></div>
 
         <!-- MAP -->
@@ -1074,6 +1068,9 @@
           </div>
           <div class="zola-tip-text" id="zolaTipText"></div>
         </div>
+        <button class="save-btn" id="saveBtn" onclick="saveAsPDF()" style="display:block; width:100%; margin-top:16px;">
+          📄 Save my itinerary
+        </button>
         <button class="reset-btn" id="resetBtn">↩ Try a different vibe</button>
       </div>
     </div>
