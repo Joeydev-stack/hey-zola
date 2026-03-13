@@ -732,6 +732,75 @@
       max-width: 520px; margin: 0 auto; width: 100%;
     }
 
+    .email-form-wrap {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 28px 28px 24px;
+    }
+    .email-form-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 14px;
+      font-style: italic;
+      text-align: center;
+    }
+    .email-form-row {
+      display: flex;
+      gap: 10px;
+    }
+    .email-input {
+      flex: 1;
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+      min-width: 0;
+    }
+    .email-input::placeholder { color: rgba(255,255,255,0.35); }
+    .email-input:focus { border-color: rgba(255,184,0,0.5); }
+    .email-submit-btn {
+      background: var(--sun);
+      color: var(--dark);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .email-submit-btn:hover { background: var(--coral); color: #fff; transform: scale(1.03); }
+    .email-success {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--lime);
+      text-align: center;
+      font-weight: 500;
+    }
+    .email-error {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #ff9480;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .email-form-row { flex-direction: column; }
+      .email-submit-btn { width: 100%; padding: 16px; font-size: 16px; }
+      .email-input { padding: 16px 18px; font-size: 16px; }
+      .email-form-wrap { padding: 22px 18px; }
+    }
+
     footer {
       padding: 36px 52px;
       border-top: 1.5px solid rgba(17,17,17,0.08);
@@ -790,7 +859,6 @@
       .vibes-grid { grid-template-columns: 1fr; }
       .cta-section { margin: 0 16px 60px; padding: 48px 12px; }
       .cta-form { flex-direction: column; align-items: stretch; padding: 0; }
-      .cta-form iframe { width: 100% !important; max-width: 100% !important; min-width: 0 !important; height: 420px !important; pointer-events: auto !important; touch-action: auto !important; }
       footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
     }
   </style>
@@ -1014,8 +1082,19 @@
       <h2 class="cta-title">Your city is<br>waiting, <span class="hi">friend.</span></h2>
       <p class="cta-sub">Be the first to know when Zola drops.</p>
       <div class="cta-form">
-        <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
-        <iframe src="https://subscribe-forms.beehiiv.com/294198e9-a0c3-4f42-b2f9-87c56d6553a7" class="beehiiv-embed" data-test-id="beehiiv-embed" frameborder="0" scrolling="auto" style="width: 100%; max-width: 520px; min-width: 280px; height: 420px; margin: 0 auto; border-radius: 16px !important; background-color: transparent; box-shadow: 0 0 #0000; display: block; pointer-events: auto; touch-action: auto;"></iframe>
+        <div class="email-form-wrap">
+          <p class="email-form-label">Drop your email — be first in line.</p>
+          <div class="email-form-row">
+            <input type="email" id="emailInput" class="email-input" placeholder="Enter your email" />
+            <button class="email-submit-btn" id="emailSubmitBtn" onclick="submitEmail()">Notify Me</button>
+          </div>
+          <div class="email-success" id="emailSuccess" style="display:none">
+            🎉 You're on the list! Zola will find you soon.
+          </div>
+          <div class="email-error" id="emailError" style="display:none">
+            ⚠️ Something went wrong. Try again!
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1289,12 +1368,63 @@
       document.getElementById('vibeInput').focus();
     });
 
-    // ── ENTER KEY ──
+    // ── EMAIL SUBMIT → BEEHIIV ──
+    async function submitEmail() {
+      const input = document.getElementById('emailInput');
+      const btn = document.getElementById('emailSubmitBtn');
+      const success = document.getElementById('emailSuccess');
+      const error = document.getElementById('emailError');
+      const email = input.value.trim();
+
+      if (!email || !email.includes('@')) {
+        input.style.borderColor = 'rgba(255,92,58,0.6)';
+        setTimeout(() => input.style.borderColor = '', 1500);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      success.style.display = 'none';
+      error.style.display = 'none';
+
+      try {
+        const res = await fetch('https://api.beehiiv.com/v2/publications/pub_294198e9-a0c3-4f42-b2f9-87c56d6553a7/subscriptions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, reactivate_existing: true, send_welcome_email: true })
+        });
+
+        if (res.ok || res.status === 201 || res.status === 200) {
+          success.style.display = 'block';
+          input.value = '';
+        } else {
+          // Fallback — open Beehiiv page directly
+          window.open(`https://getzolaapp.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
+          success.style.display = 'block';
+          input.value = '';
+        }
+      } catch (err) {
+        // Fallback — open Beehiiv page directly
+        window.open(`https://getzolaapp.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
+        success.style.display = 'block';
+        input.value = '';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Notify Me';
+      }
+    }
+
+    // ── ENTER KEY (vibe input) ──
     document.getElementById('vibeInput').addEventListener('keydown', e => {
       if(e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         document.getElementById('buildBtn').click();
       }
+    });
+
+    // ── ENTER KEY (email input) ──
+    document.getElementById('emailInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') submitEmail();
     });
   </script>
 </body>
