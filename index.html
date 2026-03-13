@@ -583,6 +583,75 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 200;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--dark);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 65px; left: 0; right: 0;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(20px);
+      z-index: 99;
+      flex-direction: column;
+      padding: 16px 24px 24px;
+      border-bottom: 1px solid rgba(17,17,17,0.08);
+      transform: translateY(-10px);
+      opacity: 0;
+      transition: all 0.25s ease;
+    }
+    .mobile-menu.open {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .mobile-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--dark);
+      text-decoration: none;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(17,17,17,0.06);
+      transition: color 0.2s;
+    }
+    .mobile-link:hover { color: var(--coral); }
+    .mobile-link-cta {
+      margin-top: 12px;
+      background: var(--dark);
+      color: var(--white) !important;
+      text-align: center;
+      padding: 16px;
+      border-radius: 100px;
+      border: none;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .mobile-link-cta:hover { background: var(--coral); color: var(--white) !important; }
+
     /* TICKER */
     .ticker-wrap {
       overflow: hidden;
@@ -822,6 +891,8 @@
     @media (max-width: 900px) {
       nav { padding: 18px 24px; }
       .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .hamburger { display: flex; }
       .hero { padding: 110px 20px 60px; }
       .demo-card { padding: 22px; }
 
@@ -878,7 +949,18 @@
       <a class="nav-link" href="hey-zola-about.html">About</a>
     </div>
     <button class="nav-cta" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">Get Early Access</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a class="mobile-link" href="hey-zola-how-it-works.html">How it works</a>
+    <a class="mobile-link" href="hey-zola-cities.html">Cities</a>
+    <a class="mobile-link" href="hey-zola-about.html">About</a>
+    <a class="mobile-link mobile-link-cta" href="#" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">✨ Get Early Access</a>
+  </div>
 
   <!-- HERO -->
   <section class="hero">
@@ -1112,6 +1194,23 @@
   </footer>
 
   <script>
+    // ── HAMBURGER MENU ──
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const burger = document.getElementById('hamburger');
+      menu.classList.toggle('open');
+      burger.classList.toggle('open');
+    }
+    // Close menu on outside tap
+    document.addEventListener('click', e => {
+      const menu = document.getElementById('mobileMenu');
+      const burger = document.getElementById('hamburger');
+      if (!menu.contains(e.target) && !burger.contains(e.target)) {
+        menu.classList.remove('open');
+        burger.classList.remove('open');
+      }
+    });
+
     // ── CURSOR ──
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
