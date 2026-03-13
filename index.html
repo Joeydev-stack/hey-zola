@@ -30,6 +30,11 @@
       cursor: none;
     }
 
+    @media (hover: none) and (pointer: coarse) {
+      body, button, a { cursor: auto !important; }
+      .cursor, .cursor-ring { display: none !important; }
+    }
+
     .cursor {
       position: fixed;
       width: 10px; height: 10px;
@@ -750,14 +755,42 @@
       .nav-links { display: none; }
       .hero { padding: 110px 20px 60px; }
       .demo-card { padding: 22px; }
-      .demo-city-row { display: none; }
+
+      /* City row: scrollable row instead of hidden */
+      .demo-city-row {
+        display: flex !important;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 4px;
+      }
+      .demo-city-row::-webkit-scrollbar { display: none; }
+      .city-btn { flex-shrink: 0; }
+
+      /* Quick vibes: horizontal scroll */
+      .quick-vibes {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 4px;
+      }
+      .quick-vibes::-webkit-scrollbar { display: none; }
+      .qv-chip { flex-shrink: 0; }
+
+      /* Smaller photo + map on mobile */
+      .stop-photo { height: 120px; }
+      #zolaMap { height: 220px; }
+
       .section { padding: 72px 24px; }
       .steps { grid-template-columns: 1fr; }
       .step:first-child { border-radius: 20px 20px 0 0; }
       .step:last-child { border-radius: 0 0 20px 20px; }
       .vibes-grid { grid-template-columns: 1fr; }
-      .cta-section { margin: 0 16px 60px; padding: 64px 32px; }
-      .cta-form { flex-direction: column; }
+      .cta-section { margin: 0 16px 60px; padding: 48px 20px; }
+      .cta-form { flex-direction: column; align-items: center; }
+      .cta-form iframe { width: 100% !important; max-width: 100% !important; height: 280px !important; }
       footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
     }
   </style>
