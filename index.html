@@ -553,7 +553,7 @@
 
     .share-row {
       display: flex; gap: 10px;
-      margin-top: 16px; margin-bottom: 10px;
+      margin-bottom: 16px;
     }
     .share-btn, .copy-btn {
       flex: 1;
@@ -1062,6 +1062,17 @@
       <div class="results-panel" id="resultsPanel">
         <div class="result-title" id="resultTitle"></div>
         <div class="result-mood-tags" id="moodTags"></div>
+
+        <!-- SHARE ROW — top of results -->
+        <div class="share-row" id="shareRow">
+          <button class="share-btn" id="shareBtn" onclick="shareItinerary()">
+            <span>📤</span> Share this day
+          </button>
+          <button class="copy-btn" id="copyBtn" onclick="copyLink()">
+            <span>🔗</span> Copy link
+          </button>
+        </div>
+
         <div id="stopsContainer"></div>
 
         <!-- MAP -->
@@ -1077,14 +1088,6 @@
             <span style="font-size:18px">Z</span> Zola's local tip
           </div>
           <div class="zola-tip-text" id="zolaTipText"></div>
-        </div>
-        <div class="share-row" id="shareRow">
-          <button class="share-btn" id="shareBtn" onclick="shareItinerary()">
-            <span>📤</span> Share this day
-          </button>
-          <button class="copy-btn" id="copyBtn" onclick="copyLink()">
-            <span>🔗</span> Copy link
-          </button>
         </div>
         <button class="reset-btn" id="resetBtn">↩ Try a different vibe</button>
       </div>
