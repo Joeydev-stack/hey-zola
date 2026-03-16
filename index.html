@@ -807,6 +807,103 @@
       .hero-mascot { display: none; }
       .nav-logo-img { height: 32px; }
     }
+
+    /* NAV RIGHT */
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-user { display: flex; align-items: center; gap: 10px; }
+    .nav-user-name { font-size: 13px; font-weight: 500; color: var(--muted); }
+    .nav-signout {
+      font-size: 13px; font-weight: 500; color: var(--muted);
+      background: transparent; border: 1.5px solid rgba(17,17,17,0.12);
+      border-radius: 100px; padding: 6px 14px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-signout:hover { border-color: var(--coral); color: var(--coral); }
+
+    /* AUTH MODAL */
+    .auth-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 998;
+      backdrop-filter: blur(4px);
+    }
+    .auth-overlay.visible { display: block; }
+    .auth-modal {
+      display: none; position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--white); border-radius: 24px;
+      padding: 40px 36px; width: 100%; max-width: 400px;
+      z-index: 999; box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+    }
+    .auth-modal.visible { display: block; }
+    .auth-close {
+      position: absolute; top: 16px; right: 18px;
+      background: transparent; border: none; cursor: pointer;
+      font-size: 16px; color: var(--muted); transition: color 0.2s;
+    }
+    .auth-close:hover { color: var(--dark); }
+    .auth-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 22px; color: var(--coral); margin-bottom: 16px;
+    }
+    .auth-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 22px; color: var(--dark);
+      letter-spacing: -0.5px; margin-bottom: 6px;
+    }
+    .auth-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+    .auth-input {
+      width: 100%; padding: 14px 16px;
+      border: 1.5px solid rgba(17,17,17,0.12);
+      border-radius: 12px; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; color: var(--dark); outline: none;
+      margin-bottom: 12px; transition: border-color 0.2s;
+    }
+    .auth-input:focus { border-color: var(--coral); }
+    .auth-btn-primary {
+      width: 100%; padding: 15px; border-radius: 12px;
+      background: var(--dark); color: var(--white);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 15px; border: none; cursor: pointer;
+      transition: all 0.2s; margin-bottom: 14px;
+    }
+    .auth-btn-primary:hover { background: var(--coral); }
+    .auth-divider {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px; background: rgba(17,17,17,0.1);
+    }
+    .auth-divider span { font-size: 12px; color: var(--muted); }
+    .auth-btn-google {
+      width: 100%; padding: 13px; border-radius: 12px;
+      background: var(--white); border: 1.5px solid rgba(17,17,17,0.12);
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      font-weight: 500; color: var(--dark); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; transition: all 0.2s; margin-bottom: 20px;
+    }
+    .auth-btn-google:hover { border-color: var(--dark); background: var(--off); }
+    .auth-toggle { text-align: center; font-size: 13px; color: var(--muted); }
+    .auth-toggle button {
+      background: transparent; border: none; cursor: pointer;
+      color: var(--coral); font-weight: 600; font-size: 13px; margin-left: 4px;
+    }
+    .auth-error {
+      background: rgba(255,92,58,0.08); border: 1px solid rgba(255,92,58,0.2);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 13px; color: var(--coral); margin-bottom: 14px;
+    }
+    .auth-success {
+      background: rgba(45,155,111,0.08); border: 1px solid rgba(45,155,111,0.2);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 13px; color: #2D9B6F; margin-bottom: 14px;
+    }
+    @media (max-width: 900px) {
+      .auth-modal { padding: 32px 24px; max-width: calc(100% - 40px); }
+      .nav-user-name { display: none; }
+    }
+
     .ticker-wrap {
       overflow: hidden;
       padding: 18px 0;
@@ -1088,6 +1185,8 @@
     }
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -1103,7 +1202,13 @@
       <a class="nav-link" href="#pricing">Pricing</a>
       <a class="nav-link" href="olli-about.html">About</a>
     </div>
-    <button class="nav-cta" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">Get Early Access</button>
+    <div class="nav-right">
+      <button class="nav-cta" id="navAuthBtn" onclick="openAuthModal()">Sign in</button>
+      <div class="nav-user" id="navUser" style="display:none">
+        <span class="nav-user-name" id="navUserName"></span>
+        <button class="nav-signout" onclick="signOut()">Sign out</button>
+      </div>
+    </div>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -1116,6 +1221,35 @@
     <a class="mobile-link" href="#pricing" onclick="toggleMenu()">Pricing</a>
     <a class="mobile-link" href="olli-about.html">About</a>
     <a class="mobile-link mobile-link-cta" href="#" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">✨ Get Early Access</a>
+  </div>
+
+  <!-- AUTH MODAL -->
+  <div class="auth-overlay" id="authOverlay" onclick="closeAuthModal()"></div>
+  <div class="auth-modal" id="authModal">
+    <button class="auth-close" onclick="closeAuthModal()">✕</button>
+    <div class="auth-logo">Olli</div>
+    <div class="auth-title" id="authTitle">Welcome back</div>
+    <div class="auth-sub" id="authSub">Sign in to save your itineraries</div>
+
+    <div class="auth-error" id="authError" style="display:none"></div>
+    <div class="auth-success" id="authSuccess" style="display:none"></div>
+
+    <input class="auth-input" id="authEmail" type="email" placeholder="Your email" />
+    <input class="auth-input" id="authPassword" type="password" placeholder="Password (6+ characters)" />
+
+    <button class="auth-btn-primary" id="authSubmitBtn" onclick="handleAuth()">Sign in</button>
+
+    <div class="auth-divider"><span>or</span></div>
+
+    <button class="auth-btn-google" onclick="signInWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
+      Continue with Google
+    </button>
+
+    <div class="auth-toggle">
+      <span id="authToggleText">Don't have an account?</span>
+      <button onclick="toggleAuthMode()" id="authToggleBtn">Sign up</button>
+    </div>
   </div>
 
   <!-- HERO -->
@@ -1207,8 +1341,8 @@
           </div>
           <div class="zola-tip-text" id="zolaTipText"></div>
         </div>
-        <button class="save-btn" id="copyLinkBtn" onclick="copyPageLink()" style="display:block; width:100%; margin-top:16px;">
-          🔗 Share Hey, Olli!
+        <button class="save-btn" id="copyLinkBtn" onclick="currentUser ? saveItinerary() : copyPageLink()" style="display:block; width:100%; margin-top:16px;">
+          🔗 Share Olli!
         </button>
         <button class="reset-btn" id="resetBtn">↩ Try a different vibe</button>
       </div>
@@ -1398,6 +1532,167 @@
   </footer>
 
   <script>
+    // ── SUPABASE INIT ──
+    const { createClient } = supabase;
+    const _supabase = createClient(
+      'https://khmjudppxeicircdkvsr.supabase.co',
+      'sb_publishable_hBUz687GcBUbGGJ4dRlCaw_1KcCiTP5'
+    );
+
+    let currentUser = null;
+
+    // Check session on load
+    async function initAuth() {
+      const { data: { session } } = await _supabase.auth.getSession();
+      if (session?.user) setUser(session.user);
+
+      _supabase.auth.onAuthStateChange((event, session) => {
+        if (session?.user) setUser(session.user);
+        else clearUser();
+      });
+    }
+
+    function setUser(user) {
+      currentUser = user;
+      const email = user.email || '';
+      const name = email.split('@')[0];
+      document.getElementById('navAuthBtn').style.display = 'none';
+      document.getElementById('navUser').style.display = 'flex';
+      document.getElementById('navUserName').textContent = `👋 ${name}`;
+      closeAuthModal();
+    }
+
+    function clearUser() {
+      currentUser = null;
+      document.getElementById('navAuthBtn').style.display = 'block';
+      document.getElementById('navUser').style.display = 'none';
+    }
+
+    // ── AUTH MODAL ──
+    let authMode = 'signin';
+
+    function openAuthModal() {
+      document.getElementById('authOverlay').classList.add('visible');
+      document.getElementById('authModal').classList.add('visible');
+      document.getElementById('authEmail').focus();
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authOverlay').classList.remove('visible');
+      document.getElementById('authModal').classList.remove('visible');
+      document.getElementById('authError').style.display = 'none';
+      document.getElementById('authSuccess').style.display = 'none';
+    }
+
+    function toggleAuthMode() {
+      authMode = authMode === 'signin' ? 'signup' : 'signin';
+      const isSignIn = authMode === 'signin';
+      document.getElementById('authTitle').textContent = isSignIn ? 'Welcome back' : 'Create account';
+      document.getElementById('authSub').textContent = isSignIn ? 'Sign in to save your itineraries' : 'Join Olli — free forever';
+      document.getElementById('authSubmitBtn').textContent = isSignIn ? 'Sign in' : 'Create account';
+      document.getElementById('authToggleText').textContent = isSignIn ? "Don't have an account?" : 'Already have an account?';
+      document.getElementById('authToggleBtn').textContent = isSignIn ? 'Sign up' : 'Sign in';
+      document.getElementById('authError').style.display = 'none';
+      document.getElementById('authSuccess').style.display = 'none';
+    }
+
+    async function handleAuth() {
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value.trim();
+      const errEl = document.getElementById('authError');
+      const sucEl = document.getElementById('authSuccess');
+      const btn = document.getElementById('authSubmitBtn');
+
+      if (!email || !password) {
+        errEl.textContent = 'Please enter your email and password.';
+        errEl.style.display = 'block'; return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = authMode === 'signin' ? 'Signing in...' : 'Creating account...';
+      errEl.style.display = 'none';
+      sucEl.style.display = 'none';
+
+      try {
+        let result;
+        if (authMode === 'signin') {
+          result = await _supabase.auth.signInWithPassword({ email, password });
+        } else {
+          result = await _supabase.auth.signUp({ email, password });
+          if (!result.error && result.data?.user) {
+            sucEl.textContent = '🎉 Account created! Check your email to verify.';
+            sucEl.style.display = 'block';
+          }
+        }
+        if (result.error) {
+          errEl.textContent = result.error.message;
+          errEl.style.display = 'block';
+        }
+      } catch (e) {
+        errEl.textContent = 'Something went wrong. Try again.';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = authMode === 'signin' ? 'Sign in' : 'Create account';
+      }
+    }
+
+    async function signInWithGoogle() {
+      await _supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.href }
+      });
+    }
+
+    async function signOut() {
+      await _supabase.auth.signOut();
+      clearUser();
+    }
+
+    // ── SAVE ITINERARY TO SUPABASE ──
+    async function saveItinerary() {
+      if (!currentUser) {
+        openAuthModal();
+        return;
+      }
+      if (!currentItineraryData) return;
+
+      const btn = document.getElementById('copyLinkBtn');
+      btn.textContent = '💾 Saving...';
+      btn.disabled = true;
+
+      try {
+        const { error } = await _supabase.from('searches').insert({
+          user_id: currentUser.id,
+          city: document.querySelector('.city-btn.active')?.dataset.city || '',
+          vibe: document.getElementById('vibeInput').value,
+          title: currentItineraryData.title,
+          stops: currentItineraryData.stops,
+          mood_tags: currentItineraryData.mood_tags,
+        });
+
+        if (error) throw error;
+        btn.textContent = '✅ Saved!';
+        btn.style.background = '#2D9B6F';
+        btn.style.color = '#fff';
+        setTimeout(() => {
+          btn.textContent = '🔗 Share Olli!';
+          btn.style.background = '';
+          btn.style.color = '';
+          btn.disabled = false;
+        }, 2500);
+      } catch (e) {
+        btn.textContent = '⚠️ Could not save';
+        setTimeout(() => {
+          btn.textContent = '🔗 Share Olli!';
+          btn.disabled = false;
+        }, 2000);
+      }
+    }
+
+    // Init auth on page load
+    initAuth();
+
     // ── COPY LINK ──
     let currentItineraryTitle = '';
     let currentItineraryData = null;
@@ -1646,6 +1941,14 @@
       }
 
       document.getElementById('resultsPanel').classList.add('visible');
+
+      // Update save button based on auth state
+      const saveBtn = document.getElementById('copyLinkBtn');
+      if (currentUser) {
+        saveBtn.textContent = '💾 Save this itinerary';
+      } else {
+        saveBtn.textContent = '🔗 Share Olli!';
+      }
 
       setTimeout(() => {
         document.getElementById('resultsPanel').scrollIntoView({behavior:'smooth', block:'nearest'});
