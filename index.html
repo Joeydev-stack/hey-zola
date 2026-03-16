@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hey, Zola! — A local friend in every city.</title>
+  <title>Olli — A local friend in every city — A local friend in every city.</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --sun: #FFB800;
-      --coral: #FF5C3A;
+      --coral: #FF6B35;
       --magenta: #E8006F;
       --lime: #C8F000;
-      --dark: #111111;
+      --dark: #1A1A2E;
       --white: #FFFFFF;
       --off: #F7F7F5;
       --muted: rgba(17,17,17,0.65);
@@ -73,7 +73,7 @@
       letter-spacing: -0.5px;
       color: var(--dark);
     }
-    .nav-logo .zola { color: var(--coral); }
+    .nav-logo .olli { color: var(--coral); }
     .nav-logo .bang { color: var(--sun); }
     .nav-links {
       display: flex; align-items: center; gap: 32px;
@@ -781,7 +781,28 @@
       .pricing-price { font-size: 44px; }
     }
 
-    /* TICKER */
+    .nav-logo-img {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+
+    /* OLLI MASCOT in hero */
+    .hero-mascot {
+      position: absolute;
+      right: 5%;
+      bottom: 0;
+      height: 340px;
+      width: auto;
+      pointer-events: none;
+      opacity: 0;
+      animation: fadeUp 1s 0.8s forwards;
+      z-index: 1;
+    }
+    @media (max-width: 900px) {
+      .hero-mascot { display: none; }
+      .nav-logo-img { height: 28px; }
+    }
     .ticker-wrap {
       overflow: hidden;
       padding: 18px 0;
@@ -1008,7 +1029,7 @@
       font-family: 'Syne', sans-serif;
       font-weight: 800; font-size: 17px;
     }
-    .footer-logo .zola { color: var(--coral); }
+    .footer-logo .olli { color: var(--coral); }
     .footer-logo .bang { color: var(--sun); }
     .footer-copy { font-size: 13px; color: rgba(17,17,17,0.55); }
     .footer-dots { display: flex; gap: 8px; }
@@ -1071,12 +1092,14 @@
 
   <!-- NAV -->
   <nav>
-    <div class="nav-logo">Hey, <span class="zola">Zola</span><span class="bang">!</span></div>
+    <div class="nav-logo">
+      <img src="olli-logo.png" alt="Olli" class="nav-logo-img" />
+    </div>
     <div class="nav-links">
-      <a class="nav-link" href="hey-zola-how-it-works.html">How it works</a>
-      <a class="nav-link" href="hey-zola-cities.html">Cities</a>
+      <a class="nav-link" href="olli-how-it-works.html">How it works</a>
+      <a class="nav-link" href="olli-cities.html">Cities</a>
       <a class="nav-link" href="#pricing">Pricing</a>
-      <a class="nav-link" href="hey-zola-about.html">About</a>
+      <a class="nav-link" href="olli-about.html">About</a>
     </div>
     <button class="nav-cta" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">Get Early Access</button>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -1086,10 +1109,10 @@
 
   <!-- MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
-    <a class="mobile-link" href="hey-zola-how-it-works.html">How it works</a>
-    <a class="mobile-link" href="hey-zola-cities.html">Cities</a>
+    <a class="mobile-link" href="olli-how-it-works.html">How it works</a>
+    <a class="mobile-link" href="olli-cities.html">Cities</a>
     <a class="mobile-link" href="#pricing" onclick="toggleMenu()">Pricing</a>
-    <a class="mobile-link" href="hey-zola-about.html">About</a>
+    <a class="mobile-link" href="olli-about.html">About</a>
     <a class="mobile-link mobile-link-cta" href="#" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">✨ Get Early Access</a>
   </div>
 
@@ -1104,15 +1127,21 @@
 
     <h1 class="hero-title">
       <span class="t-dark">Hey,</span>
-      <span class="t-coral"> Zola</span><span class="t-mag">!</span>
+      <span class="t-coral"> Olli</span><span class="t-mag">!</span>
     </h1>
 
-    <p class="hero-sub">Tell Zola your vibe. Watch her build your perfect day — right now.</p>
+    <p class="hero-sub">Tell Olli your vibe. Watch her build your perfect day — right now.</p>
+
+    <!-- Olli mascot -->
+    <img src="olli-mascot.png" alt="Olli mascot" class="hero-mascot" />
 
     <!-- LIVE AI DEMO -->
     <div class="demo-card" id="demoCard">
       <div class="demo-header">
-        <div class="demo-logo">Zola!</div>
+        <div class="demo-logo" style="display:flex; align-items:center; gap:8px;">
+          <img src="olli-avatar-face.png" alt="Olli" style="width:30px; height:30px; border-radius:50%; object-fit:cover;" />
+          <span>Olli</span>
+        </div>
         <div class="demo-live-badge"><span class="live-dot"></span> Live AI</div>
       </div>
 
@@ -1143,7 +1172,7 @@
         <button class="qv-chip" data-vibe="artsy afternoon, galleries, vintage shops, creative neighborhood vibes">🎨 Artsy afternoon</button>
       </div>
 
-      <button class="demo-btn" id="buildBtn">✨ Build my day, Zola</button>
+      <button class="demo-btn" id="buildBtn">✨ Build my day, Olli</button>
 
       <div class="loading-steps" id="loadingSteps">
         <div class="loading-step" id="ls1">
@@ -1178,12 +1207,12 @@
 
         <div class="zola-tip" id="zolaTip" style="display:none">
           <div class="zola-tip-header">
-            <span style="font-size:18px">Z</span> Zola's local tip
+            <img src="olli-avatar-face.png" alt="Olli" style="width:28px; height:28px; border-radius:50%; object-fit:cover;" /> Olli's local tip
           </div>
           <div class="zola-tip-text" id="zolaTipText"></div>
         </div>
         <button class="save-btn" id="copyLinkBtn" onclick="copyPageLink()" style="display:block; width:100%; margin-top:16px;">
-          🔗 Share Hey, Zola!
+          🔗 Share Hey, Olli!
         </button>
         <button class="reset-btn" id="resetBtn">↩ Try a different vibe</button>
       </div>
@@ -1220,14 +1249,14 @@
       <div class="step">
         <div class="step-num">01</div>
         <div class="step-icon">💬</div>
-        <div class="step-name">Tell Zola your vibe</div>
+        <div class="step-name">Tell Olli your vibe</div>
         <p class="step-desc">Type exactly how you're feeling. No filters, no dropdowns. Just talk like you're texting your most well-traveled friend.</p>
       </div>
       <div class="step">
         <div class="step-num">02</div>
         <div class="step-icon">🧠</div>
         <div class="step-name">AI builds your itinerary</div>
-        <p class="step-desc">Zola reads your mood and matches it to real local spots — pulling from Google Places, Yelp, and deep city knowledge.</p>
+        <p class="step-desc">Olli reads your mood and matches it to real local spots — pulling from Google Places, Yelp, and deep city knowledge.</p>
       </div>
       <div class="step">
         <div class="step-num">03</div>
@@ -1272,7 +1301,7 @@
 
   <!-- CITIES -->
   <section class="section" style="padding-top:0">
-    <div class="label reveal">Zola knows</div>
+    <div class="label reveal">Olli knows</div>
     <h2 class="section-title reveal">Every city. <em>Every vibe.</em></h2>
     <div class="cities-flow reveal">
       <div class="city-pill">🗽 New York</div>
@@ -1299,7 +1328,7 @@
       <div class="pricing-card">
         <div class="pricing-badge" style="background:rgba(17,17,17,0.06); color:var(--muted)">Free</div>
         <div class="pricing-price">$0<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc">Perfect for trying Zola out. No account needed.</div>
+        <div class="pricing-desc">Perfect for trying Olli out. No account needed.</div>
         <ul class="pricing-features">
           <li>✅ 3 AI-powered searches per month</li>
           <li>✅ Real venue data — photos, ratings, hours</li>
@@ -1314,7 +1343,7 @@
 
       <!-- PRO -->
       <div class="pricing-card pricing-card-pro">
-        <div class="pricing-badge" style="background:rgba(255,184,0,0.15); color:#7A5800;">⚡ Zola Pro</div>
+        <div class="pricing-badge" style="background:rgba(255,184,0,0.15); color:#7A5800;">⚡ Olli Pro</div>
         <div class="pricing-price">$7<span class="pricing-per">/month</span></div>
         <div class="pricing-desc">For the real explorers. Unlimited everything.</div>
         <ul class="pricing-features">
@@ -1341,7 +1370,7 @@
     <div class="cta-inner">
       <p class="cta-label">Coming soon</p>
       <h2 class="cta-title">Your city is<br>waiting, <span class="hi">friend.</span></h2>
-      <p class="cta-sub">Be the first to know when Zola drops.</p>
+      <p class="cta-sub">Be the first to know when Olli drops.</p>
       <div class="cta-form">
         <div class="email-form-wrap">
           <p class="email-form-label">Drop your email — be first in line.</p>
@@ -1350,7 +1379,7 @@
             <button class="email-submit-btn" id="emailSubmitBtn" onclick="submitEmail()">Notify Me</button>
           </div>
           <div class="email-success" id="emailSuccess" style="display:none">
-            🎉 You're on the list! Zola will find you soon.
+            🎉 You're on the list! Olli will find you soon.
           </div>
           <div class="email-error" id="emailError" style="display:none">
             ⚠️ Something went wrong. Try again!
@@ -1362,8 +1391,10 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo">Hey, <span class="zola">Zola</span><span class="bang">!</span></div>
-    <p class="footer-copy">© 2026 Hey, Zola! · A local friend in every city.</p>
+    <div class="footer-logo">
+      <img src="olli-logo.png" alt="Olli" style="height:28px; width:auto;" />
+    </div>
+    <p class="footer-copy">© 2026 Hey, Olli! · A local friend in every city.</p>
     <div class="footer-dots">
       <div class="fd" style="background:var(--sun)"></div>
       <div class="fd" style="background:var(--coral)"></div>
@@ -1384,7 +1415,7 @@
         btn.style.background = 'var(--coral)';
         btn.style.color = '#fff';
         setTimeout(() => {
-          btn.textContent = '🔗 Share Hey, Zola!';
+          btn.textContent = '🔗 Share Hey, Olli!';
           btn.style.background = '';
           btn.style.color = '';
         }, 2500);
@@ -1397,7 +1428,7 @@
         document.execCommand('copy');
         document.body.removeChild(ta);
         btn.textContent = '✅ Link copied — share the vibe!';
-        setTimeout(() => { btn.textContent = '🔗 Share Hey, Zola!'; }, 2500);
+        setTimeout(() => { btn.textContent = '🔗 Share Hey, Olli!'; }, 2500);
       });
     }
 
@@ -1489,7 +1520,7 @@
     }
 
     // ── HELPERS ──
-    const dotColors = ['#FFB800','#FF5C3A','#E8006F','#C8F000','#0A7EA4'];
+    const dotColors = ['#FFB800','#FF6B35','#E8006F','#C8F000','#00B4A6'];
 
     function priceLabel(level) {
       if (level === null || level === undefined) return '';
@@ -1612,9 +1643,9 @@
         mapSection.classList.add('visible');
       }
 
-      // Zola tip
-      if(data.zola_note) {
-        document.getElementById('zolaTipText').textContent = data.zola_note;
+      // Olli tip
+      if(data.olli_note) {
+        document.getElementById('zolaTipText').textContent = data.olli_note;
         document.getElementById('zolaTip').style.display = 'block';
       } else {
         document.getElementById('zolaTip').style.display = 'none';
@@ -1639,12 +1670,12 @@
 
       const btn = document.getElementById('buildBtn');
       btn.disabled = true;
-      btn.textContent = '✨ Zola is thinking...';
+      btn.textContent = '✨ Olli is thinking...';
       document.getElementById('errorMsg').classList.remove('visible');
       startLoading();
 
       try {
-        const res = await fetch('/api/zola-ai', {
+        const res = await fetch('/api/olli-ai', {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ vibe, city: selectedCity })
@@ -1659,11 +1690,11 @@
       } catch(err) {
         stopLoading();
         const errEl = document.getElementById('errorMsg');
-        errEl.textContent = '⚠️ Zola hit a snag: ' + err.message + '. Try again in a moment.';
+        errEl.textContent = '⚠️ Olli hit a snag: ' + err.message + '. Try again in a moment.';
         errEl.classList.add('visible');
       } finally {
         btn.disabled = false;
-        btn.textContent = '✨ Build my day, Zola';
+        btn.textContent = '✨ Build my day, Olli';
       }
     });
 
