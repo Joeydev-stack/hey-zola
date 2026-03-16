@@ -782,7 +782,7 @@
     }
 
     .nav-logo-img {
-      height: 36px;
+      height: 40px;
       width: auto;
       display: block;
     }
@@ -790,18 +790,22 @@
     /* OLLI MASCOT in hero */
     .hero-mascot {
       position: absolute;
-      right: 5%;
-      bottom: 0;
-      height: 340px;
+      right: 2%;
+      bottom: 60px;
+      height: 280px;
       width: auto;
       pointer-events: none;
       opacity: 0;
       animation: fadeUp 1s 0.8s forwards;
       z-index: 1;
+      mix-blend-mode: normal;
+    }
+    @media (max-width: 1100px) {
+      .hero-mascot { height: 200px; right: 0; }
     }
     @media (max-width: 900px) {
       .hero-mascot { display: none; }
-      .nav-logo-img { height: 28px; }
+      .nav-logo-img { height: 32px; }
     }
     .ticker-wrap {
       overflow: hidden;
@@ -1092,9 +1096,7 @@
 
   <!-- NAV -->
   <nav>
-    <div class="nav-logo">
-      <img src="olli-logo.png" alt="Olli" class="nav-logo-img" />
-    </div>
+    <div class="nav-logo">Hey, <span class="olli">Olli</span><span class="bang">!</span></div>
     <div class="nav-links">
       <a class="nav-link" href="olli-how-it-works.html">How it works</a>
       <a class="nav-link" href="olli-cities.html">Cities</a>
@@ -1132,16 +1134,10 @@
 
     <p class="hero-sub">Tell Olli your vibe. Watch her build your perfect day — right now.</p>
 
-    <!-- Olli mascot -->
-    <img src="olli-mascot.png" alt="Olli mascot" class="hero-mascot" />
-
     <!-- LIVE AI DEMO -->
     <div class="demo-card" id="demoCard">
       <div class="demo-header">
-        <div class="demo-logo" style="display:flex; align-items:center; gap:8px;">
-          <img src="olli-avatar-face.png" alt="Olli" style="width:30px; height:30px; border-radius:50%; object-fit:cover;" />
-          <span>Olli</span>
-        </div>
+        <div class="demo-logo">Olli!</div>
         <div class="demo-live-badge"><span class="live-dot"></span> Live AI</div>
       </div>
 
@@ -1207,7 +1203,7 @@
 
         <div class="zola-tip" id="zolaTip" style="display:none">
           <div class="zola-tip-header">
-            <img src="olli-avatar-face.png" alt="Olli" style="width:28px; height:28px; border-radius:50%; object-fit:cover;" /> Olli's local tip
+            <span style="font-size:18px">✦</span> Olli's local tip
           </div>
           <div class="zola-tip-text" id="zolaTipText"></div>
         </div>
@@ -1391,9 +1387,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo">
-      <img src="olli-logo.png" alt="Olli" style="height:28px; width:auto;" />
-    </div>
+    <div class="footer-logo">Hey, <span class="olli">Olli</span><span class="bang">!</span></div>
     <p class="footer-copy">© 2026 Hey, Olli! · A local friend in every city.</p>
     <div class="footer-dots">
       <div class="fd" style="background:var(--sun)"></div>
