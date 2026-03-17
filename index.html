@@ -1201,6 +1201,7 @@
       <a class="nav-link" href="olli-cities.html">Cities</a>
       <a class="nav-link" href="#pricing">Pricing</a>
       <a class="nav-link" href="olli-about.html">About</a>
+      <a class="nav-link" href="saved.html" id="myDaysLink" style="display:none">My Days</a>
     </div>
     <div class="nav-right">
       <button class="nav-cta" id="navAuthBtn" onclick="openAuthModal()">Sign in</button>
@@ -1559,6 +1560,8 @@
       document.getElementById('navAuthBtn').style.display = 'none';
       document.getElementById('navUser').style.display = 'flex';
       document.getElementById('navUserName').textContent = `👋 ${name}`;
+      const myDays = document.getElementById('myDaysLink');
+      if (myDays) myDays.style.display = 'block';
       closeAuthModal();
     }
 
@@ -1566,6 +1569,8 @@
       currentUser = null;
       document.getElementById('navAuthBtn').style.display = 'block';
       document.getElementById('navUser').style.display = 'none';
+      const myDays = document.getElementById('myDaysLink');
+      if (myDays) myDays.style.display = 'none';
     }
 
     // ── AUTH MODAL ──
