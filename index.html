@@ -241,6 +241,42 @@
       color: var(--sun);
     }
 
+    .city-btn-location {
+      background: rgba(0,180,166,0.15) !important;
+      border-color: rgba(0,180,166,0.4) !important;
+      color: #00B4A6 !important;
+    }
+    .city-btn-locating {
+      background: rgba(255,184,0,0.15) !important;
+      border-color: rgba(255,184,0,0.4) !important;
+      color: var(--sun) !important;
+    }
+
+    .custom-city-wrap {
+      display: flex; gap: 8px; align-items: center;
+      margin-bottom: 12px;
+    }
+    .custom-city-input {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,184,0,0.4);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--white);
+      outline: none;
+    }
+    .custom-city-input::placeholder { color: rgba(255,255,255,0.3); font-style: italic; }
+    .custom-city-apply {
+      background: var(--sun); color: var(--dark);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 13px; padding: 10px 18px;
+      border-radius: 12px; border: none; cursor: pointer;
+      white-space: nowrap; transition: background 0.2s; flex-shrink: 0;
+    }
+    .custom-city-apply:hover { background: var(--coral); color: #fff; }
+
     .demo-input-wrap {
       position: relative;
       margin-bottom: 14px;
@@ -1277,12 +1313,24 @@
       </div>
 
       <div class="demo-city-row" id="cityRow">
+        <button class="city-btn" id="locationBtn" onclick="useMyLocation()">📍 My location</button>
         <button class="city-btn active" data-city="Austin, Texas">🤠 Austin</button>
         <button class="city-btn" data-city="New York City">🗽 New York</button>
         <button class="city-btn" data-city="Los Angeles">🌴 LA</button>
         <button class="city-btn" data-city="Miami">🌊 Miami</button>
         <button class="city-btn" data-city="Nashville">🎵 Nashville</button>
         <button class="city-btn" data-city="Chicago">🏙️ Chicago</button>
+        <button class="city-btn" id="otherCityBtn" onclick="toggleCustomCity()">🔍 Other...</button>
+      </div>
+      <div class="custom-city-wrap" id="customCityWrap" style="display:none; margin-bottom:12px;">
+        <input
+          type="text"
+          id="customCityInput"
+          class="custom-city-input"
+          placeholder="Type any city... e.g. Tokyo, Denver, Barcelona"
+          onkeydown="if(event.key==='Enter') applyCustomCity()"
+        />
+        <button class="custom-city-apply" onclick="applyCustomCity()">Go →</button>
       </div>
 
       <div class="demo-input-wrap">
@@ -1766,6 +1814,109 @@
       });
     },{threshold:0.12});
     document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+    // ── USE MY LOCATION ──
+    async function useMyLocation() {
+      const btn = document.getElementById('locationBtn');
+
+      if (!navigator.geolocation) {
+        btn.textContent = '❌ Not supported';
+        return;
+      }
+
+      btn.textContent = '⏳ Locating...';
+      btn.classList.add('city-btn-locating');
+
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const { latitude, longitude } = pos.coords;
+          try {
+            const res = await fetch(
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyD4_4UQN9LNE3l6bjjUeEZL1Nn6dXtK7Qs`
+            );
+            const data = await res.json();
+
+            // Extract city name from results
+            let city = '';
+            const results = data.results || [];
+            for (const result of results) {
+              for (const component of result.address_components) {
+                if (component.types.includes('locality')) {
+                  city = component.long_name;
+                  break;
+                }
+              }
+              if (city) break;
+            }
+
+            // Fallback to formatted address first component
+            if (!city && results.length > 0) {
+              city = results[0].formatted_address.split(',')[0];
+            }
+
+            if (city) {
+              selectedCity = city;
+              document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
+              btn.textContent = `📍 ${city}`;
+              btn.classList.remove('city-btn-locating');
+              btn.classList.add('active', 'city-btn-location');
+            } else {
+              btn.textContent = '📍 My location';
+              btn.classList.remove('city-btn-locating');
+            }
+          } catch (e) {
+            btn.textContent = '📍 My location';
+            btn.classList.remove('city-btn-locating');
+          }
+        },
+        (err) => {
+          btn.textContent = '📍 My location';
+          btn.classList.remove('city-btn-locating');
+          if (err.code === 1) {
+            // Permission denied — show message in vibe input area
+            const input = document.getElementById('vibeInput');
+            input.placeholder = 'Location access denied — pick a city above';
+            setTimeout(() => {
+              input.placeholder = 'e.g. cozy coffee with wifi, best tacos, rooftop jazz bar at sunset...';
+            }, 3000);
+          }
+        },
+        { timeout: 8000 }
+      );
+    }
+
+    // ── CUSTOM CITY ──
+    function toggleCustomCity() {
+      const wrap = document.getElementById('customCityWrap');
+      const btn = document.getElementById('otherCityBtn');
+      const isVisible = wrap.style.display !== 'none';
+      wrap.style.display = isVisible ? 'none' : 'flex';
+      if (!isVisible) {
+        document.getElementById('customCityInput').focus();
+        btn.style.background = 'rgba(255,184,0,0.15)';
+        btn.style.borderColor = 'rgba(255,184,0,0.4)';
+        btn.style.color = 'var(--sun)';
+      } else {
+        btn.style.background = '';
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      }
+    }
+
+    function applyCustomCity() {
+      const input = document.getElementById('customCityInput');
+      const city = input.value.trim();
+      if (!city) return;
+      selectedCity = city;
+      // Deactivate all preset buttons
+      document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
+      // Show as active on the Other button
+      const btn = document.getElementById('otherCityBtn');
+      btn.textContent = `📍 ${city}`;
+      btn.classList.add('active');
+      // Hide input
+      document.getElementById('customCityWrap').style.display = 'none';
+    }
 
     // ── CITY SELECTOR ──
     let selectedCity = 'Austin, Texas';
