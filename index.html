@@ -11,6 +11,14 @@
   <meta property="og:url" content="https://getolliapp.com" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://getolliapp.com/olli-og-image.jpg" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#FF6B35" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Olli" />
+  <link rel="apple-touch-icon" href="/olli-avatar-circle.png" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -947,6 +955,30 @@
       .nav-user-name { display: none; }
     }
 
+    /* PWA INSTALL BANNER */
+    .install-banner {
+      display: none; position: fixed; bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--dark); color: var(--white);
+      border: 1.5px solid rgba(255,107,53,0.3);
+      border-radius: 100px; padding: 12px 20px;
+      font-size: 13px; font-weight: 500; z-index: 999;
+      align-items: center; gap: 10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      white-space: nowrap; animation: fadeUp 0.4s ease forwards;
+    }
+    .install-banner.visible { display: flex; }
+    .install-banner-btn {
+      background: var(--coral); color: white; border: none;
+      border-radius: 100px; padding: 6px 14px;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      font-family: 'Syne', sans-serif;
+    }
+    .install-banner-close {
+      background: transparent; border: none;
+      color: rgba(255,255,255,0.4); cursor: pointer; font-size: 16px;
+    }
+
     .ticker-wrap {
       overflow: hidden;
       padding: 18px 0;
@@ -1312,6 +1344,13 @@
       <span id="authToggleText">Don't have an account?</span>
       <button onclick="toggleAuthMode()" id="authToggleBtn">Sign up</button>
     </div>
+  </div>
+
+  <!-- PWA INSTALL BANNER -->
+  <div class="install-banner" id="installBanner">
+    📱 Add Olli to your home screen
+    <button class="install-banner-btn" id="installBtn">Install</button>
+    <button class="install-banner-close" onclick="document.getElementById('installBanner').classList.remove('visible')">✕</button>
   </div>
 
   <!-- HERO -->
@@ -1805,6 +1844,26 @@
     // Init auth on page load
     initAuth();
 
+    // ── PWA INSTALL ──
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      setTimeout(() => {
+        document.getElementById('installBanner').classList.add('visible');
+      }, 3000);
+    });
+    document.getElementById('installBtn').addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      document.getElementById('installBanner').classList.remove('visible');
+    });
+    window.addEventListener('appinstalled', () => {
+      document.getElementById('installBanner').classList.remove('visible');
+    });
+
     // ── COPY LINK ──
     let currentItineraryTitle = '';
     let currentItineraryData = null;
@@ -2277,6 +2336,14 @@
     document.getElementById('emailInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') submitEmail();
     });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>
