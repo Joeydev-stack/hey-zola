@@ -1233,10 +1233,10 @@
   <nav>
     <div class="nav-logo">Hey, <span class="olli">Olli</span><span class="bang">!</span></div>
     <div class="nav-links">
-      <a class="nav-link" href="olli-how-it-works.html">How it works</a>
-      <a class="nav-link" href="olli-cities.html">Cities</a>
-      <a class="nav-link" href="#pricing">Pricing</a>
-      <a class="nav-link" href="olli-about.html">About</a>
+      <a class="nav-link" href="#how-it-works">How it works</a>
+      <a class="nav-link" href="#cities">Cities</a>
+      <a class="nav-link" href="pricing.html">Pricing</a>
+      <a class="nav-link" href="#about">About</a>
       <a class="nav-link" href="saved.html" id="myDaysLink" style="display:none">My Days</a>
     </div>
     <div class="nav-right">
@@ -1253,10 +1253,10 @@
 
   <!-- MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
-    <a class="mobile-link" href="olli-how-it-works.html">How it works</a>
-    <a class="mobile-link" href="olli-cities.html">Cities</a>
-    <a class="mobile-link" href="#pricing" onclick="toggleMenu()">Pricing</a>
-    <a class="mobile-link" href="olli-about.html">About</a>
+    <a class="mobile-link" href="#how-it-works" onclick="toggleMenu()">How it works</a>
+    <a class="mobile-link" href="#cities" onclick="toggleMenu()">Cities</a>
+    <a class="mobile-link" href="pricing.html" onclick="toggleMenu()">Pricing</a>
+    <a class="mobile-link" href="#about" onclick="toggleMenu()">About</a>
     <a class="mobile-link mobile-link-cta" href="#" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">✨ Get Early Access</a>
   </div>
 
@@ -1421,7 +1421,7 @@
   </div>
 
   <!-- HOW IT WORKS -->
-  <section class="section">
+  <section class="section" id="how-it-works">
     <div class="label reveal">How it works</div>
     <h2 class="section-title reveal">Three steps to your<br><em>perfect day</em></h2>
     <div class="steps reveal">
@@ -1479,7 +1479,7 @@
   </section>
 
   <!-- CITIES -->
-  <section class="section" style="padding-top:0">
+  <section class="section" style="padding-top:0" id="cities">
     <div class="label reveal">Olli knows</div>
     <h2 class="section-title reveal">Every city. <em>Every vibe.</em></h2>
     <div class="cities-flow reveal">
@@ -1538,6 +1538,23 @@
         <button class="pricing-cta-pro" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">Join the waitlist →</button>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about" style="padding-top:0">
+    <div class="label reveal">About Olli</div>
+    <h2 class="section-title reveal">Built for the<br><em>curious explorer.</em></h2>
+    <div class="reveal" style="max-width:640px">
+      <p style="font-size:16px; color:var(--muted); line-height:1.8; font-weight:300; margin-bottom:16px;">
+        Olli was built by BIEY SYSTEMS with one idea in mind — what if you had a brilliant local friend in every city you visited? Someone who just <em>gets</em> your vibe and tells you exactly where to go.
+      </p>
+      <p style="font-size:16px; color:var(--muted); line-height:1.8; font-weight:300; margin-bottom:16px;">
+        No more scrolling through endless reviews. No more generic tourist traps. Just tell Olli how you're feeling, and she'll build your perfect day — with real spots, real photos, and a map ready to go.
+      </p>
+      <p style="font-size:16px; color:var(--muted); line-height:1.8; font-weight:300;">
+        Olli works in any city on earth. She's powered by AI and real data from Google Places. And she's just getting started.
+      </p>
     </div>
   </section>
 
