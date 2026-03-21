@@ -1752,29 +1752,44 @@
       btn.disabled = true;
 
       try {
-        const { error } = await _supabase.from('searches').insert({
+        const { data, error } = await _supabase.from('searches').insert({
           user_id: currentUser.id,
-          city: document.querySelector('.city-btn.active')?.dataset.city || '',
+          city: document.querySelector('.city-btn.active')?.dataset.city || selectedCity || '',
           vibe: document.getElementById('vibeInput').value,
           title: currentItineraryData.title,
           stops: currentItineraryData.stops,
           mood_tags: currentItineraryData.mood_tags,
-        });
+        }).select('id').single();
 
         if (error) throw error;
-        btn.textContent = '✅ Saved!';
+
+        // Generate shareable link
+        const shareUrl = `${window.location.origin}/day.html?id=${data.id}`;
+
+        // Copy link to clipboard
+        await navigator.clipboard.writeText(shareUrl).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = shareUrl;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        });
+
+        btn.textContent = '✅ Saved & link copied!';
         btn.style.background = '#2D9B6F';
         btn.style.color = '#fff';
         setTimeout(() => {
-          btn.textContent = '🔗 Share Olli!';
+          btn.textContent = currentUser ? '💾 Save & share' : '🔗 Share Olli!';
           btn.style.background = '';
           btn.style.color = '';
           btn.disabled = false;
-        }, 2500);
+        }, 3000);
+
       } catch (e) {
         btn.textContent = '⚠️ Could not save';
         setTimeout(() => {
-          btn.textContent = '🔗 Share Olli!';
+          btn.textContent = currentUser ? '💾 Save & share' : '🔗 Share Olli!';
           btn.disabled = false;
         }, 2000);
       }
@@ -2138,7 +2153,7 @@
       // Update save button based on auth state
       const saveBtn = document.getElementById('copyLinkBtn');
       if (currentUser) {
-        saveBtn.textContent = '💾 Save this itinerary';
+        saveBtn.textContent = '💾 Save & share';
       } else {
         saveBtn.textContent = '🔗 Share Olli!';
       }
