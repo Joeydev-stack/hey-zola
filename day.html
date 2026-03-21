@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Olli Day — A local friend in every city</title>
+  <meta property="og:title" content="Check out my Olli day!" />
+  <meta property="og:description" content="I built the perfect day with Olli — AI-powered local discovery. Try it yourself!" />
+  <meta property="og:image" content="https://getolliapp.com/olli-avatar-circle.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --sun: #FFB800; --coral: #FF6B35; --dark: #1A1A2E;
+      --white: #FFFFFF; --off: #F7F7F5; --muted: rgba(17,17,17,0.6);
+      --lime: #C8F000; --teal: #00B4A6;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--dark); color: var(--white); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+    /* NAV */
+    nav {
+      padding: 20px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; text-decoration: none; color: var(--white); }
+    .nav-logo .olli { color: var(--coral); }
+    .nav-logo .bang { color: var(--sun); }
+    .nav-cta {
+      background: var(--sun); color: var(--dark);
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14px;
+      padding: 10px 22px; border-radius: 100px; border: none; cursor: pointer;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .nav-cta:hover { background: var(--coral); color: #fff; transform: scale(1.04); }
+
+    /* LOADING */
+    .loading-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 60vh; gap: 16px;
+    }
+    .loading-spinner {
+      width: 44px; height: 44px;
+      border: 3px solid rgba(255,107,53,0.2);
+      border-top-color: var(--coral);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 15px; color: rgba(255,255,255,0.4); }
+
+    /* ERROR */
+    .error-state {
+      display: none; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 60vh; text-align: center; padding: 40px;
+    }
+    .error-icon { font-size: 52px; margin-bottom: 16px; }
+    .error-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 24px; margin-bottom: 10px; }
+    .error-sub { font-size: 15px; color: rgba(255,255,255,0.4); margin-bottom: 28px; }
+
+    /* ITINERARY */
+    .itinerary { display: none; max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    .itin-header { margin-bottom: 28px; }
+    .itin-city {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--coral); margin-bottom: 10px;
+    }
+    .itin-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 5vw, 48px);
+      letter-spacing: -1.5px; line-height: 1.05;
+      color: var(--white); margin-bottom: 14px;
+    }
+    .itin-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .itin-tag {
+      background: rgba(255,184,0,0.12); border: 1px solid rgba(255,184,0,0.2);
+      color: var(--sun); font-size: 11px; font-weight: 600;
+      padding: 4px 12px; border-radius: 100px;
+    }
+    .itin-divider { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 28px; }
+
+    /* STOP CARDS */
+    .stop-item {
+      margin-bottom: 16px;
+      border-radius: 18px; overflow: hidden;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      animation: fadeUp 0.5s ease forwards;
+      opacity: 0;
+    }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+    .stop-photo { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .stop-photo-placeholder {
+      width: 100%; height: 100px;
+      background: linear-gradient(135deg, rgba(255,184,0,0.08), rgba(255,107,53,0.08));
+      display: flex; align-items: center; justify-content: center; font-size: 28px;
+    }
+    .stop-content { padding: 16px 20px; }
+    .stop-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+    .stop-time { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .stop-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; color: var(--white); letter-spacing: -0.3px; }
+    .stop-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+    .stop-rating { font-size: 12px; font-weight: 700; color: var(--sun); }
+    .stop-price { font-size: 11px; color: rgba(255,255,255,0.3); }
+    .stop-type-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .stop-type { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+    .stop-status { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 100px; }
+    .status-open { background: rgba(200,240,0,0.12); color: #a8d000; border: 1px solid rgba(200,240,0,0.2); }
+    .status-closed { background: rgba(255,92,58,0.12); color: #ff9480; border: 1px solid rgba(255,92,58,0.2); }
+    .status-unknown { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.1); }
+    .stop-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; font-weight: 300; margin-bottom: 10px; }
+    .stop-address { font-size: 11px; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+    .maps-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,184,0,0.1); border: 1px solid rgba(255,184,0,0.2);
+      border-radius: 100px; padding: 6px 14px;
+      font-size: 12px; font-weight: 600; color: var(--sun);
+      text-decoration: none; transition: all 0.2s;
+    }
+    .maps-link:hover { background: rgba(255,184,0,0.2); }
+
+    /* OLLI TIP */
+    .olli-tip {
+      background: rgba(255,184,0,0.08); border: 1px solid rgba(255,184,0,0.15);
+      border-radius: 16px; padding: 16px 20px; margin: 8px 0 24px;
+    }
+    .olli-tip-header {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--sun); letter-spacing: 0.5px; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .olli-tip-text { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; font-style: italic; }
+
+    /* CTA */
+    .share-cta {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 28px; text-align: center; margin-top: 32px;
+    }
+    .share-cta-title {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px;
+      color: var(--white); letter-spacing: -0.5px; margin-bottom: 8px;
+    }
+    .share-cta-sub { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+    .share-cta-btn {
+      display: inline-block; background: var(--sun); color: var(--dark);
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px;
+      padding: 16px 36px; border-radius: 100px; text-decoration: none;
+      transition: all 0.2s; border: none; cursor: pointer;
+    }
+    .share-cta-btn:hover { background: var(--coral); color: #fff; transform: scale(1.03); }
+
+    /* FOOTER */
+    footer { padding: 28px 40px; border-top: 1px solid rgba(255,255,255,0.07); text-align: center; }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .itinerary { padding: 28px 16px 60px; }
+      .stop-photo { height: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="index.html">Hey, <span class="olli">Olli</span><span class="bang">!</span></a>
+    <a class="nav-cta" href="index.html">✨ Build my day</a>
+  </nav>
+
+  <!-- LOADING -->
+  <div class="loading-state" id="loadingState">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading this itinerary...</div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-state" id="errorState">
+    <div class="error-icon">🗺️</div>
+    <div class="error-title">Itinerary not found</div>
+    <div class="error-sub">This link may have expired or been removed.</div>
+    <a class="share-cta-btn" href="index.html">Build your own day →</a>
+  </div>
+
+  <!-- ITINERARY -->
+  <div class="itinerary" id="itinerary">
+    <div class="itin-header">
+      <div class="itin-city" id="itinCity"></div>
+      <div class="itin-title" id="itinTitle"></div>
+      <div class="itin-tags" id="itinTags"></div>
+    </div>
+    <div class="itin-divider"></div>
+    <div id="stopsContainer"></div>
+    <div class="olli-tip" id="olliTip" style="display:none">
+      <div class="olli-tip-header">✦ Olli's local tip</div>
+      <div class="olli-tip-text" id="olliTipText"></div>
+    </div>
+    <div class="share-cta">
+      <div class="share-cta-title">Love this? Build your own day 🌍</div>
+      <div class="share-cta-sub">Tell Olli your vibe — get a real itinerary for any city on earth.</div>
+      <a class="share-cta-btn" href="index.html">✨ Try Olli free</a>
+    </div>
+  </div>
+
+  <footer>
+    <p class="footer-copy">Built with Olli · getolliapp.com · A local friend in every city.</p>
+  </footer>
+
+  <script>
+    const { createClient } = supabase;
+    const _supabase = createClient(
+      'https://khmjudppxeicircdkvsr.supabase.co',
+      'sb_publishable_hBUz687GcBUbGGJ4dRlCaw_1KcCiTP5'
+    );
+
+    const dotColors = ['#FFB800','#FF6B35','#E8006F','#C8F000','#00B4A6'];
+
+    function priceLabel(level) {
+      if (level == null) return '';
+      return '$'.repeat(level + 1);
+    }
+
+    function statusClass(s) {
+      if (s === 'open') return 'status-open';
+      if (s === 'closed') return 'status-closed';
+      return 'status-unknown';
+    }
+
+    function statusLabel(s) {
+      if (s === 'open') return '● Open now';
+      if (s === 'closed') return '● Closed';
+      return '● Check hours';
+    }
+
+    async function loadItinerary() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+
+      if (!id) {
+        showError();
+        return;
+      }
+
+      // Update page title dynamically
+      try {
+        const { data, error } = await _supabase
+          .from('searches')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error || !data) {
+          showError();
+          return;
+        }
+
+        // Update meta tags
+        document.title = `${data.title} — Olli`;
+
+        // Render
+        document.getElementById('itinCity').textContent = `📍 ${data.city || ''}`;
+        document.getElementById('itinTitle').textContent = data.title || 'My Olli Day';
+
+        const tagsEl = document.getElementById('itinTags');
+        (data.mood_tags || []).forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'itin-tag';
+          span.textContent = tag;
+          tagsEl.appendChild(span);
+        });
+
+        const stopsEl = document.getElementById('stopsContainer');
+        (data.stops || []).forEach((stop, idx) => {
+          const color = dotColors[idx % dotColors.length];
+          const div = document.createElement('div');
+          div.className = 'stop-item';
+          div.style.animationDelay = `${idx * 0.1}s`;
+
+          const photoHTML = stop.photo_url
+            ? `<img class="stop-photo" src="${stop.photo_url}" alt="${stop.name}" loading="lazy" onerror="this.style.display='none'">`
+            : `<div class="stop-photo-placeholder">📍</div>`;
+
+          const ratingHTML = stop.rating
+            ? `<div class="stop-rating">⭐ ${stop.rating} <span style="color:rgba(255,255,255,0.3);font-weight:400">(${(stop.user_ratings_total||0).toLocaleString()})</span></div>`
+            : '';
+
+          const priceHTML = stop.price_level != null
+            ? `<div class="stop-price">${priceLabel(stop.price_level)}</div>` : '';
+
+          const mapsHTML = stop.maps_url
+            ? `<a class="maps-link" href="${stop.maps_url}" target="_blank" rel="noopener">🗺️ Open in Google Maps</a>` : '';
+
+          div.innerHTML = `
+            ${photoHTML}
+            <div class="stop-content">
+              <div class="stop-top">
+                <div>
+                  <div class="stop-time">${stop.time || ''}</div>
+                  <div class="stop-name">${stop.name}</div>
+                </div>
+                <div class="stop-meta">
+                  ${ratingHTML}
+                  ${priceHTML}
+                </div>
+              </div>
+              <div class="stop-type-row">
+                <div class="stop-type">${stop.type || ''}</div>
+                <span class="stop-status ${statusClass(stop.open_status)}">${statusLabel(stop.open_status)}</span>
+              </div>
+              ${stop.description ? `<div class="stop-desc">${stop.description}</div>` : ''}
+              ${stop.address ? `<div class="stop-address">📍 ${stop.address}</div>` : ''}
+              ${mapsHTML}
+            </div>
+          `;
+          stopsEl.appendChild(div);
+        });
+
+        if (data.olli_note) {
+          document.getElementById('olliTipText').textContent = data.olli_note;
+          document.getElementById('olliTip').style.display = 'block';
+        }
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('itinerary').style.display = 'block';
+
+      } catch (e) {
+        showError();
+      }
+    }
+
+    function showError() {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('errorState').style.display = 'flex';
+    }
+
+    loadItinerary();
+  </script>
+</body>
+</html>
