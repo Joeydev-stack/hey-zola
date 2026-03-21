@@ -1236,7 +1236,7 @@
       <a class="nav-link" href="#how-it-works">How it works</a>
       <a class="nav-link" href="#cities">Cities</a>
       <a class="nav-link" href="pricing.html">Pricing</a>
-      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#about" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'}); return false;">About</a>
       <a class="nav-link" href="saved.html" id="myDaysLink" style="display:none">My Days</a>
     </div>
     <div class="nav-right">
@@ -1256,7 +1256,7 @@
     <a class="mobile-link" href="#how-it-works" onclick="toggleMenu()">How it works</a>
     <a class="mobile-link" href="#cities" onclick="toggleMenu()">Cities</a>
     <a class="mobile-link" href="pricing.html" onclick="toggleMenu()">Pricing</a>
-    <a class="mobile-link" href="#about" onclick="toggleMenu()">About</a>
+    <a class="mobile-link" href="#about" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">About</a>
     <a class="mobile-link mobile-link-cta" href="#" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">✨ Get Early Access</a>
   </div>
 
