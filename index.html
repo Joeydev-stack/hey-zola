@@ -1174,6 +1174,64 @@
     @media (max-width: 600px) {
       .pfw-grid { grid-template-columns: 1fr; }
     }
+
+    /* EMOTIONAL CONNECTION */
+    .pain-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; max-width: 960px;
+    }
+    .pain-card {
+      background: var(--off); border-radius: 20px; padding: 28px 24px;
+      border: 2px solid transparent; transition: all 0.25s;
+    }
+    .pain-card:hover { border-color: var(--coral); transform: translateY(-3px); }
+    .pain-card-highlight {
+      background: var(--dark); border-color: var(--coral) !important;
+    }
+    .pain-card-highlight .pain-text { color: rgba(255,255,255,0.85) !important; }
+    .pain-card-highlight .pain-solution { color: var(--sun) !important; }
+    .pain-icon { font-size: 28px; margin-bottom: 12px; }
+    .pain-text {
+      font-size: 15px; font-weight: 500; color: var(--dark);
+      line-height: 1.6; margin-bottom: 10px; font-style: italic;
+    }
+    .pain-solution {
+      font-size: 13px; font-weight: 700; color: var(--coral);
+      letter-spacing: 0.2px;
+    }
+
+    /* SOCIAL PROOF */
+    .proof-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; max-width: 960px; margin-bottom: 32px;
+    }
+    .proof-card {
+      background: var(--white); border-radius: 20px; padding: 28px 24px;
+      border: 2px solid rgba(17,17,17,0.06);
+      transition: all 0.25s;
+    }
+    .proof-card:hover { border-color: var(--sun); transform: translateY(-3px); box-shadow: 3px 3px 0 var(--sun); }
+    .proof-quote {
+      font-size: 14px; color: var(--dark); line-height: 1.7;
+      font-style: italic; margin-bottom: 14px;
+    }
+    .proof-quote::before { content: '"'; font-size: 32px; color: var(--coral); line-height: 0; vertical-align: -12px; margin-right: 4px; font-style: normal; }
+    .proof-author { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; }
+    .proof-stat {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--off); border-radius: 100px;
+      padding: 14px 28px; width: fit-content;
+    }
+    .proof-stat-num {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 28px; color: var(--coral);
+    }
+    .proof-stat-label { font-size: 15px; color: var(--muted); }
+
+    @media (max-width: 900px) {
+      .pain-grid { grid-template-columns: 1fr; }
+      .proof-grid { grid-template-columns: 1fr; }
+    }
     .vibe-card {
       background: var(--off);
       border-radius: 20px;
@@ -1850,6 +1908,53 @@
     </div>
   </section>
 
+  <!-- EMOTIONAL CONNECTION -->
+  <section class="section" style="padding-top:0">
+    <div class="label reveal">Sound familiar?</div>
+    <h2 class="section-title reveal">We get it. <em>Planning is exhausting.</em></h2>
+    <div class="pain-grid reveal">
+      <div class="pain-card">
+        <div class="pain-icon">😤</div>
+        <div class="pain-text">"Tired of scrolling for an hour and still not knowing what to do?"</div>
+        <div class="pain-solution">→ Olli gives you a full day in seconds.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">💬</div>
+        <div class="pain-text">"No more group chat chaos trying to make plans."</div>
+        <div class="pain-solution">→ One vibe. Everyone's happy.</div>
+      </div>
+      <div class="pain-card pain-card-highlight">
+        <div class="pain-icon">⏩</div>
+        <div class="pain-text">"Skip the research. Get straight to the good stuff."</div>
+        <div class="pain-solution">→ Real spots. Real ratings. Ready to go.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="section" style="padding-top:0">
+    <div class="label reveal">Early love</div>
+    <h2 class="section-title reveal">Built for people who <em>hate wasting time.</em></h2>
+    <div class="proof-grid reveal">
+      <div class="proof-card">
+        <div class="proof-quote">"I used Olli for my first night in Miami and it was perfect. I never would have found those spots on my own."</div>
+        <div class="proof-author">— Early Olli user, Miami</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-quote">"We used it for date night in Atlanta. My wife was impressed. That never happens."</div>
+        <div class="proof-author">— Early Olli user, Atlanta</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-quote">"Typed 'kid friendly afternoon' and had 4 great spots in 10 seconds. This is insane."</div>
+        <div class="proof-author">— Early Olli user, Austin</div>
+      </div>
+    </div>
+    <div class="proof-stat reveal">
+      <span class="proof-stat-num">100+</span>
+      <span class="proof-stat-label">days already planned with Olli 🌍</span>
+    </div>
+  </section>
+
   <!-- CTA -->
   <div class="cta-section reveal">
     <div class="cta-blob cb1"></div>
@@ -1857,8 +1962,8 @@
     <div class="cta-blob cb3"></div>
     <div class="cta-inner">
       <p class="cta-label">Coming soon</p>
-      <h2 class="cta-title">Your next great<br>day starts <span class="hi">here.</span></h2>
-      <p class="cta-sub">Join the waitlist — be first to know when Olli launches.</p>
+      <h2 class="cta-title">Your best day<br>is <span class="hi">one vibe away.</span></h2>
+      <p class="cta-sub">No more scrolling. No more indecision. Just tell Olli how you're feeling and go live your day.</p>
       <div class="cta-form">
         <div class="email-form-wrap">
           <p class="email-form-label">Drop your email — be first in line.</p>
