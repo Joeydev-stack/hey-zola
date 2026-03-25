@@ -1132,6 +1132,48 @@
       transition: background 0.2s; text-align: center;
     }
     .itin-ex-cta:hover { background: var(--sun); color: var(--dark); }
+
+    /* PERFECT FOR WHEN */
+    .pfw-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 960px;
+    }
+    .pfw-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 28px 24px;
+      border: 2px solid transparent;
+      transition: all 0.25s;
+    }
+    .pfw-card:hover {
+      border-color: var(--coral);
+      transform: translateY(-4px);
+      box-shadow: 4px 4px 0 var(--coral);
+    }
+    .pfw-highlight {
+      background: var(--dark);
+      border-color: var(--coral) !important;
+    }
+    .pfw-highlight .pfw-title { color: var(--white) !important; }
+    .pfw-highlight .pfw-desc { color: rgba(255,255,255,0.55) !important; }
+    .pfw-emoji { font-size: 32px; margin-bottom: 14px; }
+    .pfw-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 16px; color: var(--dark);
+      letter-spacing: -0.3px; margin-bottom: 10px; line-height: 1.3;
+    }
+    .pfw-desc {
+      font-size: 13px; color: var(--muted);
+      line-height: 1.7; font-weight: 300;
+    }
+    @media (max-width: 900px) {
+      .pfw-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .pfw-grid { grid-template-columns: 1fr; }
+    }
     .vibe-card {
       background: var(--off);
       border-radius: 20px;
@@ -1678,6 +1720,51 @@
       <button class="itin-ex-cta" onclick="document.getElementById('vibeInput').value='artsy afternoon with great coffee and local vibes'; document.getElementById('demoCard').scrollIntoView({behavior:\'smooth\'})">
         Try this vibe yourself →
       </button>
+    </div>
+  </section>
+
+  <!-- PERFECT FOR WHEN -->
+  <section class="section" style="padding-top:0">
+    <div class="label reveal">Sound familiar?</div>
+    <h2 class="section-title reveal">Perfect for when <em>you need it most</em></h2>
+    <div class="pfw-grid reveal">
+
+      <div class="pfw-card">
+        <div class="pfw-emoji">✈️</div>
+        <div class="pfw-title">You just landed in a new city</div>
+        <div class="pfw-desc">No idea where to go. No time to research. Tell Olli your vibe and you'll have a full day planned before you grab your luggage.</div>
+      </div>
+
+      <div class="pfw-card">
+        <div class="pfw-emoji">😩</div>
+        <div class="pfw-title">You can't decide what to do</div>
+        <div class="pfw-desc">You've been staring at your phone for 20 minutes. Olli ends the scrolling. One sentence and your day is planned.</div>
+      </div>
+
+      <div class="pfw-card pfw-highlight">
+        <div class="pfw-emoji">🌹</div>
+        <div class="pfw-title">You're planning a date night</div>
+        <div class="pfw-desc">Tell Olli "romantic, upscale but not stuffy, great cocktails" and watch it build a night your partner will actually remember.</div>
+      </div>
+
+      <div class="pfw-card">
+        <div class="pfw-emoji">👥</div>
+        <div class="pfw-title">Your friends can't agree on anything</div>
+        <div class="pfw-desc">"Something for everyone" is Olli's specialty. One vibe, a full group itinerary, zero arguments.</div>
+      </div>
+
+      <div class="pfw-card">
+        <div class="pfw-emoji">👨‍👩‍👧</div>
+        <div class="pfw-title">You need something kid-friendly</div>
+        <div class="pfw-desc">Just say "family friendly, fun for all ages" and Olli handles the rest — spots the whole family will love.</div>
+      </div>
+
+      <div class="pfw-card">
+        <div class="pfw-emoji">🌍</div>
+        <div class="pfw-title">You want to explore like a local</div>
+        <div class="pfw-desc">No tourist traps. No generic recommendations. Olli finds the spots locals actually go to — in any city on earth.</div>
+      </div>
+
     </div>
   </section>
 
