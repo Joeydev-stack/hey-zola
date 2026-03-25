@@ -185,11 +185,35 @@
       color: var(--muted);
       line-height: 1.6;
       max-width: 480px;
-      margin: 0 auto 44px;
+      margin: 0 auto 28px;
       opacity: 0;
       animation: fadeUp 0.8s 0.5s forwards;
       font-style: italic;
     }
+
+    .hero-cta-btn {
+      display: inline-block;
+      background: var(--coral);
+      color: var(--white);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      padding: 18px 44px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 44px;
+      box-shadow: 0 8px 30px rgba(255,107,53,0.35);
+      transition: all 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.7s forwards;
+      letter-spacing: -0.3px;
+    }
+    .hero-cta-btn:hover { background: var(--dark); transform: scale(1.04); box-shadow: 0 12px 40px rgba(255,107,53,0.25); }
+
+    /* Olli loading image — no background */
+    .ls-emoji { background: transparent !important; mix-blend-mode: normal; }
+    .ls-icon img { background: transparent; }
 
     /* ── LIVE AI DEMO CARD ── */
     .demo-card {
@@ -1052,6 +1076,62 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
     }
+
+    /* REAL ITINERARY EXAMPLE */
+    .itin-example {
+      max-width: 600px;
+      background: var(--dark);
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .itin-ex-header {
+      background: linear-gradient(135deg, #1A1A2E, #2a1a3e);
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .itin-ex-city {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--coral); margin-bottom: 8px;
+    }
+    .itin-ex-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 18px; color: var(--white);
+      letter-spacing: -0.3px; margin-bottom: 12px; font-style: italic;
+    }
+    .itin-ex-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .itin-ex-tag {
+      background: rgba(255,184,0,0.12); border: 1px solid rgba(255,184,0,0.2);
+      color: var(--sun); font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .itin-ex-stops { padding: 20px 28px; }
+    .itin-ex-stop {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .itin-ex-stop:last-child { border-bottom: none; }
+    .itin-ex-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 4px;
+    }
+    .itin-ex-time {
+      font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.3);
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;
+    }
+    .itin-ex-name {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 15px; color: var(--white); margin-bottom: 3px;
+    }
+    .itin-ex-meta { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .itin-ex-cta {
+      display: block; width: 100%;
+      background: var(--coral); color: var(--white);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 15px; padding: 16px; border: none; cursor: pointer;
+      transition: background 0.2s; text-align: center;
+    }
+    .itin-ex-cta:hover { background: var(--sun); color: var(--dark); }
     .vibe-card {
       background: var(--off);
       border-radius: 20px;
@@ -1361,14 +1441,18 @@
     <div class="confetti-shape cs3"></div>
     <div class="confetti-shape cs4"></div>
 
-    <div class="hero-eyebrow"><span class="eyebrow-dot"></span> A local friend in every city</div>
+    <div class="hero-eyebrow"><span class="eyebrow-dot"></span> AI-powered local discovery</div>
 
     <h1 class="hero-title">
-      <span class="t-dark">Hey,</span>
-      <span class="t-coral"> Olli</span><span class="t-mag">!</span>
+      <span class="t-dark">Stop searching.</span><br>
+      <span class="t-coral">Start doing.</span>
     </h1>
 
-    <p class="hero-sub">Tell Olli your vibe. Watch it build your perfect day — right now.</p>
+    <p class="hero-sub">Tell Olli your vibe. Get your perfect day — instantly.</p>
+
+    <button class="hero-cta-btn" onclick="document.getElementById('demoCard').scrollIntoView({behavior:'smooth'}); setTimeout(()=>document.getElementById('vibeInput').focus(),600)">
+      ✨ Plan My Day — It's Free
+    </button>
 
     <!-- LIVE AI DEMO -->
     <div class="demo-card" id="demoCard">
@@ -1420,15 +1504,15 @@
 
       <div class="loading-steps" id="loadingSteps">
         <div class="loading-step" id="ls1">
-          <div class="ls-icon"><img src="olli-face.png" class="ls-emoji" style="width:18px;height:18px;object-fit:contain;border-radius:50%;" /><div class="ls-spin"></div></div>
+          <div class="ls-icon"><img src="olli-face.png" class="ls-emoji" style="width:28px;height:28px;object-fit:contain;background:transparent;" /><div class="ls-spin"></div></div>
           <span>Olli is reading your vibe...</span>
         </div>
         <div class="loading-step" id="ls2">
-          <div class="ls-icon"><img src="olli-face.png" class="ls-emoji" style="width:18px;height:18px;object-fit:contain;border-radius:50%;" /><div class="ls-spin"></div></div>
+          <div class="ls-icon"><img src="olli-face.png" class="ls-emoji" style="width:28px;height:28px;object-fit:contain;background:transparent;" /><div class="ls-spin"></div></div>
           <span>Finding the perfect spots...</span>
         </div>
         <div class="loading-step" id="ls3">
-          <div class="ls-icon"><img src="olli-face.png" class="ls-emoji" style="width:18px;height:18px;object-fit:contain;border-radius:50%;" /><div class="ls-spin"></div></div>
+          <div class="ls-icon"><img src="olli-face.png" class="ls-emoji" style="width:28px;height:28px;object-fit:contain;background:transparent;" /><div class="ls-spin"></div></div>
           <span>Olli is crafting your itinerary...</span>
         </div>
       </div>
@@ -1540,6 +1624,60 @@
         <p class="vibe-loc">Denver, CO · Locals' picks</p>
         <span class="vibe-tag tag-lime">🌿 Local Pick</span>
       </div>
+    </div>
+  </section>
+
+  <!-- REAL ITINERARY EXAMPLE -->
+  <section class="section" style="padding-top:0">
+    <div class="label reveal">See it in action</div>
+    <h2 class="section-title reveal">A real day built <em>by Olli</em></h2>
+    <div class="itin-example reveal">
+      <div class="itin-ex-header">
+        <div class="itin-ex-city">📍 Atlanta, GA</div>
+        <div class="itin-ex-title">"Artsy afternoon with great coffee and local vibes"</div>
+        <div class="itin-ex-tags">
+          <span class="itin-ex-tag">☕ Coffee</span>
+          <span class="itin-ex-tag">🎨 Arts</span>
+          <span class="itin-ex-tag">🌿 Local</span>
+        </div>
+      </div>
+      <div class="itin-ex-stops">
+        <div class="itin-ex-stop">
+          <div class="itin-ex-dot" style="background:#FFB800"></div>
+          <div class="itin-ex-info">
+            <div class="itin-ex-time">10:00 AM</div>
+            <div class="itin-ex-name">Ponce City Market</div>
+            <div class="itin-ex-meta">⭐ 4.7 · Food Hall · ● Open now</div>
+          </div>
+        </div>
+        <div class="itin-ex-stop">
+          <div class="itin-ex-dot" style="background:#FF6B35"></div>
+          <div class="itin-ex-info">
+            <div class="itin-ex-time">12:30 PM</div>
+            <div class="itin-ex-name">Krog Street Market</div>
+            <div class="itin-ex-meta">⭐ 4.5 · Local Market · ● Open now</div>
+          </div>
+        </div>
+        <div class="itin-ex-stop">
+          <div class="itin-ex-dot" style="background:#00B4A6"></div>
+          <div class="itin-ex-info">
+            <div class="itin-ex-time">2:30 PM</div>
+            <div class="itin-ex-name">Atlanta BeltLine Eastside Trail</div>
+            <div class="itin-ex-meta">⭐ 4.8 · Outdoor · ● Open now</div>
+          </div>
+        </div>
+        <div class="itin-ex-stop">
+          <div class="itin-ex-dot" style="background:#C8F000"></div>
+          <div class="itin-ex-info">
+            <div class="itin-ex-time">5:00 PM</div>
+            <div class="itin-ex-name">The Painted Pin</div>
+            <div class="itin-ex-meta">⭐ 4.6 · Bar & Games · ● Opens at 5pm</div>
+          </div>
+        </div>
+      </div>
+      <button class="itin-ex-cta" onclick="document.getElementById('vibeInput').value='artsy afternoon with great coffee and local vibes'; document.getElementById('demoCard').scrollIntoView({behavior:\'smooth\'})">
+        Try this vibe yourself →
+      </button>
     </div>
   </section>
 
@@ -1864,6 +2002,33 @@
     window.addEventListener('appinstalled', () => {
       document.getElementById('installBanner').classList.remove('visible');
     });
+
+    // ── SEARCH LIMIT (3 free for guests) ──
+    const SEARCH_KEY = 'olli_search_count';
+    const FREE_LIMIT = 3;
+
+    function getSearchCount() {
+      return parseInt(sessionStorage.getItem(SEARCH_KEY) || '0');
+    }
+
+    function incrementSearchCount() {
+      const count = getSearchCount() + 1;
+      sessionStorage.setItem(SEARCH_KEY, count);
+      return count;
+    }
+
+    function checkSearchLimit() {
+      if (currentUser) return true; // logged in — unlimited
+      const count = getSearchCount();
+      if (count >= FREE_LIMIT) {
+        // Show auth modal with upgrade message
+        document.getElementById('authTitle').textContent = 'You\'ve used your 3 free searches!';
+        document.getElementById('authSub').textContent = 'Sign up free to keep exploring with Olli.';
+        openAuthModal();
+        return false;
+      }
+      return true;
+    }
 
     // ── COPY LINK ──
     let currentItineraryTitle = '';
@@ -2222,7 +2387,8 @@
       if (currentUser) {
         saveBtn.textContent = '💾 Save & share';
       } else {
-        saveBtn.textContent = '🔗 Share Olli!';
+        const remaining = FREE_LIMIT - getSearchCount();
+        saveBtn.textContent = remaining > 0 ? `🔗 Share Olli! (${remaining} free search${remaining !== 1 ? 'es' : ''} left)` : '🔗 Share Olli!';
       }
 
       setTimeout(() => {
@@ -2239,6 +2405,10 @@
         setTimeout(()=>document.getElementById('vibeInput').style.borderColor = '', 1500);
         return;
       }
+
+      // Check search limit for guests
+      if (!checkSearchLimit()) return;
+      incrementSearchCount();
 
       const btn = document.getElementById('buildBtn');
       btn.disabled = true;
