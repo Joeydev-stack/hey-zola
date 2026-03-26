@@ -19,6 +19,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Olli" />
   <link rel="apple-touch-icon" href="/olli-icon-180.png" />
+  <!-- iOS Splash Screens -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-startup-image" href="/olli-icon-512.png" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -980,6 +983,16 @@
     }
 
     /* PWA INSTALL BANNER */
+    .cta-try-btn {
+      display: inline-block; margin-top: 16px;
+      background: transparent; color: var(--white);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 15px; padding: 14px 32px;
+      border-radius: 100px; border: 2px solid rgba(255,255,255,0.3);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .cta-try-btn:hover { border-color: var(--sun); color: var(--sun); transform: scale(1.03); }
+
     .install-banner {
       display: none; position: fixed; bottom: 20px; left: 50%;
       transform: translateX(-50%);
@@ -1495,7 +1508,7 @@
     <a class="mobile-link" href="#cities" onclick="toggleMenu()">Cities</a>
     <a class="mobile-link" href="pricing.html" onclick="toggleMenu()">Pricing</a>
     <a class="mobile-link" href="#about" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">About</a>
-    <a class="mobile-link mobile-link-cta" href="#" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">✨ Get Early Access</a>
+    <a class="mobile-link mobile-link-cta" href="#" onclick="document.getElementById('demoCard').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">✨ Try Olli Free</a>
   </div>
 
   <!-- AUTH MODAL -->
@@ -1885,7 +1898,7 @@
           <li>✅ Shareable itinerary links</li>
         </ul>
         <div class="pricing-annual">💛 $60/year — save 2 months free</div>
-        <button class="pricing-cta-pro" onclick="document.querySelector('.cta-section').scrollIntoView({behavior:'smooth'})">Join the waitlist →</button>
+        <button class="pricing-cta-pro" onclick="openAuthModal()">Get Olli Pro →</button>
       </div>
 
     </div>
@@ -1961,24 +1974,27 @@
     <div class="cta-blob cb2"></div>
     <div class="cta-blob cb3"></div>
     <div class="cta-inner">
-      <p class="cta-label">Coming soon</p>
+      <p class="cta-label">✅ Live now — free to use</p>
       <h2 class="cta-title">Your best day<br>is <span class="hi">one vibe away.</span></h2>
       <p class="cta-sub">No more scrolling. No more indecision. Just tell Olli how you're feeling and go live your day.</p>
       <div class="cta-form">
         <div class="email-form-wrap">
-          <p class="email-form-label">Drop your email — be first in line.</p>
+          <p class="email-form-label">Get Olli updates — new cities, new features, pro tips.</p>
           <div class="email-form-row">
             <input type="email" id="emailInput" class="email-input" placeholder="Enter your email" />
-            <button class="email-submit-btn" id="emailSubmitBtn" onclick="submitEmail()">Notify Me</button>
+            <button class="email-submit-btn" id="emailSubmitBtn" onclick="submitEmail()">Stay in the loop</button>
           </div>
           <div class="email-success" id="emailSuccess" style="display:none">
-            🎉 You're on the list! Olli will find you soon.
+            🎉 You're in! We'll keep you posted.
           </div>
           <div class="email-error" id="emailError" style="display:none">
             ⚠️ Something went wrong. Try again!
           </div>
         </div>
       </div>
+      <button class="cta-try-btn" onclick="document.getElementById('demoCard').scrollIntoView({behavior:'smooth'}); setTimeout(()=>document.getElementById('vibeInput').focus(),600)">
+        ✨ Try Olli free right now →
+      </button>
     </div>
   </div>
 
@@ -2175,15 +2191,23 @@
     // Init auth on page load
     initAuth();
 
-    // ── PWA INSTALL ──
+    // ── PWA INSTALL — triggers after magic moment ──
     let deferredPrompt = null;
     window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault();
       deferredPrompt = e;
+      // Don't show immediately — wait for magic moment (itinerary generated)
+    });
+
+    function triggerInstallPrompt() {
+      // Only show if not already installed and prompt is available
+      if (!deferredPrompt) return;
+      if (window.matchMedia('(display-mode: standalone)').matches) return;
       setTimeout(() => {
         document.getElementById('installBanner').classList.add('visible');
-      }, 3000);
-    });
+      }, 1500);
+    }
+
     document.getElementById('installBtn').addEventListener('click', async () => {
       if (!deferredPrompt) return;
       deferredPrompt.prompt();
@@ -2193,6 +2217,7 @@
     });
     window.addEventListener('appinstalled', () => {
       document.getElementById('installBanner').classList.remove('visible');
+      deferredPrompt = null;
     });
 
     // ── SEARCH LIMIT (3 free for guests) ──
@@ -2573,6 +2598,17 @@
       }
 
       document.getElementById('resultsPanel').classList.add('visible');
+
+      // 🪄 Magic moment — trigger install prompt after itinerary generated
+      triggerInstallPrompt();
+
+      // 📦 Predictive cache — send stops to service worker
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'CACHE_ITINERARY',
+          stops: currentItineraryData?.stops || []
+        });
+      }
 
       // Update save button based on auth state
       const saveBtn = document.getElementById('copyLinkBtn');
