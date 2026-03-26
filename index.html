@@ -609,6 +609,55 @@
       border: 1px solid rgba(255,255,255,0.08);
     }
     .map-section.visible { display: block; }
+
+    /* MAP SCROLL TRAP FIX */
+    .map-wrap { position: relative; }
+    .map-overlay {
+      position: absolute; inset: 0;
+      background: rgba(26,26,46,0.5);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10;
+      transition: opacity 0.3s;
+    }
+    .map-overlay.hidden { display: none; }
+    .map-overlay-msg {
+      background: rgba(255,107,53,0.9);
+      color: white; font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 13px;
+      padding: 10px 20px; border-radius: 100px;
+      pointer-events: none;
+    }
+
+    /* PROMINENT SHARE BLOCK */
+    .share-block {
+      margin-top: 20px;
+      background: linear-gradient(135deg, rgba(255,107,53,0.15), rgba(255,184,0,0.1));
+      border: 2px solid var(--coral);
+      border-radius: 18px; padding: 22px;
+      text-align: center;
+      box-shadow: 0 0 0 0 rgba(255,107,53,0.4);
+      animation: sharePulse 2s ease-in-out 3;
+    }
+    @keyframes sharePulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,107,53,0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(255,107,53,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,107,53,0); }
+    }
+    .share-block-label {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 15px; color: var(--white);
+      margin-bottom: 12px; letter-spacing: -0.3px;
+    }
+    .share-block-btn {
+      width: 100%; padding: 16px;
+      background: var(--coral); color: var(--white);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 16px; border: none; border-radius: 12px;
+      cursor: pointer; transition: all 0.2s;
+      margin-bottom: 10px; letter-spacing: -0.3px;
+    }
+    .share-block-btn:hover { background: var(--sun); color: var(--dark); transform: scale(1.02); }
+    .share-block-sub { font-size: 11px; color: rgba(255,255,255,0.35); }
     .map-header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 12px 16px;
@@ -852,6 +901,22 @@
       transition: all 0.2s;
     }
     .pricing-cta-pro:hover { background: var(--coral); color: #fff; transform: scale(1.02); }
+
+    .founders-banner {
+      margin-top: 24px;
+      background: linear-gradient(135deg, rgba(255,184,0,0.1), rgba(255,107,53,0.08));
+      border: 1.5px solid rgba(255,184,0,0.3);
+      border-radius: 16px; padding: 16px 24px;
+      font-size: 14px; color: var(--muted);
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      max-width: 600px;
+    }
+    .founders-badge {
+      background: var(--sun); color: var(--dark);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 11px; padding: 4px 10px; border-radius: 100px;
+      white-space: nowrap;
+    }
 
     @media (max-width: 900px) {
       .pricing-grid { grid-template-columns: 1fr; max-width: 100%; }
@@ -1643,7 +1708,12 @@
           <div class="map-header">
             <div class="map-label">🗺️ Your day on the map</div>
           </div>
-          <iframe id="zolaMap" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="map-wrap" id="mapWrap">
+            <iframe id="zolaMap" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="map-overlay" id="mapOverlay" onclick="activateMap()">
+              <div class="map-overlay-msg">👆 Tap to interact · scroll to continue ↓</div>
+            </div>
+          </div>
         </div>
 
         <div class="zola-tip" id="zolaTip" style="display:none">
@@ -1652,9 +1722,16 @@
           </div>
           <div class="zola-tip-text" id="zolaTipText"></div>
         </div>
-        <button class="save-btn" id="copyLinkBtn" onclick="currentUser ? saveItinerary() : copyPageLink()" style="display:block; width:100%; margin-top:16px;">
-          🔗 Share Olli!
-        </button>
+
+        <!-- PROMINENT SHARE BUTTON -->
+        <div class="share-block" id="shareBlock">
+          <div class="share-block-label">Love this day? Share it! 🔥</div>
+          <button class="share-block-btn" id="copyLinkBtn" onclick="currentUser ? saveItinerary() : copyPageLink()">
+            🔗 Send this itinerary to friends
+          </button>
+          <div class="share-block-sub" id="shareBlockSub">Anyone with the link can see your full day — no account needed</div>
+        </div>
+
         <button class="reset-btn" id="resetBtn">↩ Try a different vibe</button>
       </div>
     </div>
@@ -1788,7 +1865,7 @@
           </div>
         </div>
       </div>
-      <button class="itin-ex-cta" onclick="document.getElementById('vibeInput').value='artsy afternoon with great coffee and local vibes'; document.getElementById('demoCard').scrollIntoView({behavior:\'smooth\'})">
+      <button class="itin-ex-cta" onclick="document.getElementById('vibeInput').value='artsy afternoon with great coffee and local vibes'; document.getElementById('demoCard').scrollIntoView({behavior:'smooth'})">
         Try this vibe yourself →
       </button>
     </div>
@@ -1862,7 +1939,7 @@
   <!-- PRICING -->
   <section class="section" id="pricing">
     <div class="label reveal">Simple pricing</div>
-    <h2 class="section-title reveal">Free to explore.<br><em>Pro to go deeper.</em></h2>
+    <h2 class="section-title reveal">Free to start.<br><em>Founders deal inside.</em></h2>
 
     <div class="pricing-grid reveal">
 
@@ -1870,25 +1947,26 @@
       <div class="pricing-card">
         <div class="pricing-badge" style="background:rgba(17,17,17,0.06); color:var(--muted)">Free</div>
         <div class="pricing-price">$0<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc">Perfect for trying Olli out. No account needed.</div>
+        <div class="pricing-desc">Start exploring with Olli today. No credit card needed.</div>
         <ul class="pricing-features">
           <li>✅ 3 Olli-powered searches per month</li>
           <li>✅ Real venue data — photos, ratings, hours</li>
           <li>✅ Interactive map with pins</li>
           <li>✅ Works in any city on earth</li>
-          <li class="muted">— Saved itineraries</li>
+          <li>✅ Save & share itineraries</li>
+          <li class="muted">— Unlimited searches</li>
           <li class="muted">— Favorite spots</li>
-          <li class="muted">— Shareable itinerary links</li>
         </ul>
-        <button class="pricing-cta-secondary" onclick="document.querySelector('.hero').scrollIntoView({behavior:'smooth'})">Try it free →</button>
+        <button class="pricing-cta-secondary" onclick="openAuthModal()">Create free account →</button>
       </div>
 
       <!-- PRO -->
       <div class="pricing-card pricing-card-pro">
-        <div class="pricing-badge" style="background:rgba(255,184,0,0.15); color:#7A5800;">⚡ Olli Pro</div>
-        <div class="pricing-price">$7<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc">For the real explorers. Unlimited everything.</div>
-        <ul class="pricing-features">
+        <div class="pricing-badge" style="background:rgba(255,184,0,0.15); color:#7A5800;">⚡ Olli Pro — Founders Deal</div>
+        <div class="pricing-price" style="text-decoration:line-through; opacity:0.4; font-size:28px;">$7<span class="pricing-per">/mo</span></div>
+        <div class="pricing-price" style="margin-top:-8px;">$4.99<span class="pricing-per">/month</span></div>
+        <div class="pricing-desc" style="color:var(--sun); font-weight:600;">🔥 Limited founders pricing — launching May 1st</div>
+        <ul class="pricing-features" style="margin-top:12px;">
           <li>✅ <strong>Unlimited</strong> Olli-powered searches</li>
           <li>✅ Real venue data — photos, ratings, hours</li>
           <li>✅ Interactive map with pins</li>
@@ -1897,12 +1975,18 @@
           <li>✅ Favorite spots across cities</li>
           <li>✅ Shareable itinerary links</li>
         </ul>
-        <div class="pricing-annual">💛 $60/year — save 2 months free</div>
-        <button class="pricing-cta-pro" onclick="openAuthModal()">Get Olli Pro →</button>
+        <div class="pricing-annual">💛 $49/year — founders rate (reg. $60)</div>
+        <button class="pricing-cta-pro" onclick="requestProInvite()">✉️ Request Founders Access →</button>
       </div>
 
     </div>
-  </section>
+
+    <!-- FOUNDERS BANNER -->
+    <div class="founders-banner reveal">
+      <span class="founders-badge">🎉 Founders Offer</span>
+      Sign up free today → get locked-in founders pricing when Olli Pro launches May 1st.
+      <strong style="color:var(--sun)"> $4.99/mo — locked in for life.</strong>
+    </div>
 
   <!-- ABOUT -->
   <section class="section" id="about" style="padding-top:0">
@@ -1974,34 +2058,20 @@
     <div class="cta-blob cb2"></div>
     <div class="cta-blob cb3"></div>
     <div class="cta-inner">
-      <p class="cta-label">✅ Live now — free to use</p>
+      <p class="cta-label">🎉 Live now · Founders deal inside</p>
       <h2 class="cta-title">Your best day<br>is <span class="hi">one vibe away.</span></h2>
-      <p class="cta-sub">No more scrolling. No more indecision. Just tell Olli how you're feeling and go live your day.</p>
-      <div class="cta-form">
-        <div class="email-form-wrap">
-          <p class="email-form-label">Get Olli updates — new cities, new features, pro tips.</p>
-          <div class="email-form-row">
-            <input type="email" id="emailInput" class="email-input" placeholder="Enter your email" />
-            <button class="email-submit-btn" id="emailSubmitBtn" onclick="submitEmail()">Stay in the loop</button>
-          </div>
-          <div class="email-success" id="emailSuccess" style="display:none">
-            🎉 You're in! We'll keep you posted.
-          </div>
-          <div class="email-error" id="emailError" style="display:none">
-            ⚠️ Something went wrong. Try again!
-          </div>
-        </div>
-      </div>
-      <button class="cta-try-btn" onclick="document.getElementById('demoCard').scrollIntoView({behavior:'smooth'}); setTimeout(()=>document.getElementById('vibeInput').focus(),600)">
-        ✨ Try Olli free right now →
+      <p class="cta-sub">Sign up free today. When Olli Pro launches May 1st, you'll get locked-in founders pricing — <strong style="color:var(--sun)">$4.99/month — locked in.</strong></p>
+      <button class="hero-cta-btn" style="margin-bottom:16px;" onclick="openAuthModal()">
+        ✨ Create my free account
       </button>
+      <p style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:4px;">No credit card needed. Founders pricing locked in when Pro launches.</p>
     </div>
   </div>
 
   <!-- FOOTER -->
   <footer>
     <div class="footer-logo">Hey, <span class="olli">Olli</span><span class="bang">!</span></div>
-    <p class="footer-copy">© 2026 Hey, Olli! · A local friend in every city.</p>
+    <p class="footer-copy">© 2026 Olli · A local friend in every city.</p>
     <div class="footer-dots">
       <div class="fd" style="background:var(--sun)"></div>
       <div class="fd" style="background:var(--coral)"></div>
@@ -2040,7 +2110,47 @@
       document.getElementById('navUserName').textContent = `👋 ${name}`;
       const myDays = document.getElementById('myDaysLink');
       if (myDays) myDays.style.display = 'block';
+
+      // Show founders welcome toast for new signups
+      const isNew = sessionStorage.getItem('olli_new_signup');
+      if (isNew) {
+        sessionStorage.removeItem('olli_new_signup');
+        showFoundersToast(name);
+      }
       closeAuthModal();
+    }
+
+    function showFoundersToast(name) {
+      const toast = document.createElement('div');
+      toast.style.cssText = [
+        'position:fixed', 'bottom:24px', 'left:50%', 'transform:translateX(-50%)',
+        'background:#1A1A2E', 'color:#fff',
+        'border:2px solid #FFB800', 'border-radius:20px',
+        'padding:20px 28px', 'z-index:9999', 'max-width:420px', 'width:90%',
+        'box-shadow:0 20px 60px rgba(0,0,0,0.4)',
+        'font-family:DM Sans,sans-serif', 'font-size:14px',
+        'animation:fadeUp 0.4s ease forwards',
+        'text-align:center'
+      ].join(';');
+
+      const title = document.createElement('div');
+      title.style.cssText = 'font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:#FFB800;margin-bottom:8px;';
+      title.textContent = '🎉 Welcome to Olli, ' + name + '!';
+
+      const body = document.createElement('div');
+      body.style.cssText = 'color:rgba(255,255,255,0.75);line-height:1.6;margin-bottom:12px;';
+      body.innerHTML = 'You are in early. When Olli Pro launches <strong style="color:#fff">May 1st</strong>, you get locked-in founders pricing — <strong style="color:#FFB800">$4.99/month</strong> (reg. $7/mo). We will email you when it is ready.';
+
+      const btn = document.createElement('button');
+      btn.style.cssText = 'background:#FFB800;color:#1A1A2E;border:none;border-radius:100px;padding:8px 20px;font-family:Syne,sans-serif;font-weight:800;font-size:13px;cursor:pointer;';
+      btn.textContent = 'Lets go! ✨';
+      btn.onclick = () => toast.remove();
+
+      toast.appendChild(title);
+      toast.appendChild(body);
+      toast.appendChild(btn);
+      document.body.appendChild(toast);
+      setTimeout(() => { if (toast.parentElement) toast.remove(); }, 8000);
     }
 
     function clearUser() {
@@ -2071,7 +2181,7 @@
       authMode = authMode === 'signin' ? 'signup' : 'signin';
       const isSignIn = authMode === 'signin';
       document.getElementById('authTitle').textContent = isSignIn ? 'Welcome back' : 'Create account';
-      document.getElementById('authSub').textContent = isSignIn ? 'Sign in to save your itineraries' : 'Join Olli — free forever';
+      document.getElementById('authSub').textContent = isSignIn ? 'Sign in to save your itineraries' : 'Join Olli — free to start';
       document.getElementById('authSubmitBtn').textContent = isSignIn ? 'Sign in' : 'Create account';
       document.getElementById('authToggleText').textContent = isSignIn ? "Don't have an account?" : 'Already have an account?';
       document.getElementById('authToggleBtn').textContent = isSignIn ? 'Sign up' : 'Sign in';
@@ -2103,7 +2213,8 @@
         } else {
           result = await _supabase.auth.signUp({ email, password });
           if (!result.error && result.data?.user) {
-            sucEl.textContent = '🎉 Account created! Check your email to verify.';
+            sessionStorage.setItem('olli_new_signup', '1');
+            sucEl.textContent = '🎉 Welcome to Olli! Check your email to verify your account.';
             sucEl.style.display = 'block';
           }
         }
@@ -2220,6 +2331,31 @@
       deferredPrompt = null;
     });
 
+    // ── MAP SCROLL TRAP FIX ──
+    function activateMap() {
+      const overlay = document.getElementById('mapOverlay');
+      const mapWrap = document.getElementById('mapWrap');
+      if (overlay) overlay.classList.add('hidden');
+
+      // Re-show overlay when user scrolls away from map
+      const onScroll = () => {
+        if (!mapWrap) return;
+        const rect = mapWrap.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        if (!isVisible) {
+          if (overlay) overlay.classList.remove('hidden');
+          window.removeEventListener('scroll', onScroll);
+        }
+      };
+      window.addEventListener('scroll', onScroll);
+
+      // Fallback — re-show after 12 seconds
+      setTimeout(() => {
+        if (overlay) overlay.classList.remove('hidden');
+        window.removeEventListener('scroll', onScroll);
+      }, 12000);
+    }
+
     // ── SEARCH LIMIT (3 free for guests) ──
     const SEARCH_KEY = 'olli_search_count';
     const FREE_LIMIT = 3;
@@ -2239,12 +2375,36 @@
       const count = getSearchCount();
       if (count >= FREE_LIMIT) {
         // Show auth modal with upgrade message
-        document.getElementById('authTitle').textContent = 'You\'ve used your 3 free searches!';
+        document.getElementById('authTitle').textContent = "You've used your 3 free searches!";
         document.getElementById('authSub').textContent = 'Sign up free to keep exploring with Olli.';
         openAuthModal();
         return false;
       }
       return true;
+    }
+
+    // ── PRO INVITE REQUEST ──
+    function requestProInvite() {
+      // If logged in, use their email
+      if (currentUser) {
+        const email = currentUser.email;
+        window.open(`https://getolliapp.beehiiv.com/subscribe?email=${encodeURIComponent(email)}&utm_source=pro_request`, '_blank');
+        // Show confirmation
+        const btn = document.querySelector('.pricing-cta-pro');
+        if (btn) {
+          btn.textContent = '✅ Request sent!';
+          btn.style.background = '#2D9B6F';
+          setTimeout(() => {
+            btn.textContent = '✉️ Request Early Access →';
+            btn.style.background = '';
+          }, 3000);
+        }
+      } else {
+        // Open auth modal first
+        document.getElementById('authTitle').textContent = 'Sign in to request Pro access';
+        document.getElementById('authSub').textContent = "Create a free account and we'll notify you when Pro launches.";
+        openAuthModal();
+      }
     }
 
     // ── COPY LINK ──
@@ -2612,11 +2772,14 @@
 
       // Update save button based on auth state
       const saveBtn = document.getElementById('copyLinkBtn');
+      const shareSub = document.getElementById('shareBlockSub');
       if (currentUser) {
-        saveBtn.textContent = '💾 Save & share';
+        saveBtn.textContent = '💾 Save & send this itinerary';
+        if (shareSub) shareSub.textContent = 'Saved to your account + link copied for friends';
       } else {
         const remaining = FREE_LIMIT - getSearchCount();
-        saveBtn.textContent = remaining > 0 ? `🔗 Share Olli! (${remaining} free search${remaining !== 1 ? 'es' : ''} left)` : '🔗 Share Olli!';
+        saveBtn.textContent = '🔗 Send this itinerary to friends';
+        if (shareSub) shareSub.textContent = `Anyone with the link can see your full day — ${remaining > 0 ? remaining + ' free search' + (remaining !== 1 ? 'es' : '') + ' left' : 'sign up to keep exploring'}`;
       }
 
       setTimeout(() => {
@@ -2707,19 +2870,17 @@
           success.style.display = 'block';
           input.value = '';
         } else {
-          // Fallback — open Beehiiv page directly
-          window.open(`https://getzolaapp.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
+          window.open(`https://getolliapp.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
           success.style.display = 'block';
           input.value = '';
         }
       } catch (err) {
-        // Fallback — open Beehiiv page directly
-        window.open(`https://getzolaapp.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
+        window.open(`https://getolliapp.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
         success.style.display = 'block';
         input.value = '';
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Notify Me';
+        btn.textContent = 'Stay in the loop';
       }
     }
 
