@@ -1,25 +1,24 @@
-const CACHE_NAME = 'olli-v1';
+const CACHE_NAME = 'olli-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/pricing.html',
   '/saved.html',
-  '/olli-avatar-circle.png',
+  '/day.html',
+  '/olli-face.png',
+  '/olli-icon-192.png',
+  '/olli-icon-512.png',
   '/olli-og-image.jpg',
-  'https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap'
+  '/manifest.json',
 ];
 
-// Install — cache static assets
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(STATIC_ASSETS).catch(() => {});
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS).catch(() => {}))
   );
   self.skipWaiting();
 });
 
-// Activate — clean old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -29,18 +28,37 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch — network first, fallback to cache
+// Predictive cache after itinerary generated
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'CACHE_ITINERARY') {
+    const { stops } = event.data;
+    if (!stops || !stops.length) return;
+    caches.open(CACHE_NAME).then(cache => {
+      stops.forEach(stop => {
+        if (stop.photo_url) {
+          fetch(stop.photo_url)
+            .then(res => { if (res.ok) cache.put(stop.photo_url, res); })
+            .catch(() => {});
+        }
+      });
+      ['saved.html', 'day.html'].forEach(page => {
+        fetch('/' + page)
+          .then(res => { if (res.ok) cache.put('/' + page, res); })
+          .catch(() => {});
+      });
+    });
+  }
+});
+
 self.addEventListener('fetch', event => {
-  // Skip non-GET and API calls
   if (event.request.method !== 'GET') return;
   if (event.request.url.includes('/api/')) return;
   if (event.request.url.includes('supabase.co')) return;
-  if (event.request.url.includes('googleapis.com')) return;
+  if (event.request.url.includes('googleapis.com') && !event.request.url.includes('fonts')) return;
 
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        // Cache successful responses
         if (response && response.status === 200) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
@@ -48,13 +66,9 @@ self.addEventListener('fetch', event => {
         return response;
       })
       .catch(() => {
-        // Fallback to cache when offline
         return caches.match(event.request).then(cached => {
           if (cached) return cached;
-          // Return offline page for navigation requests
-          if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
-          }
+          if (event.request.mode === 'navigate') return caches.match('/index.html');
         });
       })
   );
