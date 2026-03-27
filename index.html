@@ -194,6 +194,82 @@
       font-style: italic;
     }
 
+    /* HERO PROOF BADGE */
+    .hero-proof-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(45,155,111,0.1);
+      border: 1.5px solid rgba(45,155,111,0.25);
+      border-radius: 100px; padding: 6px 18px;
+      font-size: 12px; font-weight: 600; color: #2D9B6F;
+      margin-bottom: 20px; opacity: 0;
+      animation: fadeUp 0.7s 0.3s forwards;
+    }
+
+    /* STICKY CTA BUTTON */
+    .sticky-cta {
+      position: fixed; bottom: 28px; right: 28px;
+      background: var(--coral); color: var(--white);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 15px; padding: 14px 28px;
+      border-radius: 100px; border: none; cursor: pointer;
+      box-shadow: 0 8px 30px rgba(255,107,53,0.4);
+      z-index: 500; opacity: 0; pointer-events: none;
+      transition: all 0.3s; transform: translateY(10px);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sticky-cta.visible {
+      opacity: 1; pointer-events: all; transform: translateY(0);
+    }
+    .sticky-cta:hover { background: var(--dark); transform: scale(1.05) translateY(0); }
+    @media (max-width: 600px) {
+      .sticky-cta { bottom: 16px; right: 16px; font-size: 13px; padding: 12px 20px; }
+    }
+
+    /* WHY OLLI DIFFERENT */
+    .diff-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 14px; max-width: 960px;
+    }
+    .diff-card {
+      border-radius: 18px; padding: 24px 22px;
+      border: 2px solid transparent; transition: all 0.25s;
+    }
+    .diff-bad {
+      background: rgba(17,17,17,0.03);
+      border-color: rgba(17,17,17,0.07);
+    }
+    .diff-bad:hover { border-color: rgba(17,17,17,0.15); transform: translateY(-3px); }
+    .diff-good {
+      background: rgba(45,155,111,0.05);
+      border-color: rgba(45,155,111,0.2);
+    }
+    .diff-good:hover { border-color: rgba(45,155,111,0.4); transform: translateY(-3px); box-shadow: 3px 3px 0 rgba(45,155,111,0.2); }
+    .diff-icon { font-size: 22px; margin-bottom: 10px; }
+    .diff-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 15px; color: var(--dark);
+      letter-spacing: -0.2px; margin-bottom: 8px;
+    }
+    .diff-desc { font-size: 13px; color: var(--muted); line-height: 1.65; font-weight: 300; }
+    @media (max-width: 900px) { .diff-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .diff-grid { grid-template-columns: 1fr; } }
+
+    /* MICRO-INTERACTIONS */
+    .demo-btn {
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
+    }
+    .qv-chip { transition: all 0.18s !important; }
+    .qv-chip:active { transform: scale(0.95) !important; }
+    .city-btn { transition: all 0.18s !important; }
+    .city-btn:active { transform: scale(0.93) !important; }
+    .vibe-card { transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s !important; }
+    .stop-item { transition: transform 0.2s !important; }
+    .stop-item:hover { transform: translateY(-2px) !important; }
+    .maps-link { transition: all 0.2s !important; }
+    .maps-link:active { transform: scale(0.97) !important; }
+    .share-block-btn { transition: all 0.18s !important; }
+    .share-block-btn:active { transform: scale(0.97) !important; }
+
     .hero-cta-btn {
       display: inline-block;
       background: var(--coral);
@@ -1605,6 +1681,11 @@
     </div>
   </div>
 
+  <!-- STICKY CTA -->
+  <button class="sticky-cta" id="stickyCta" onclick="document.getElementById('demoCard').scrollIntoView({behavior:'smooth'}); setTimeout(()=>document.getElementById('vibeInput').focus(),600)">
+    ✨ Plan My Day
+  </button>
+
   <!-- PWA INSTALL BANNER -->
   <div class="install-banner" id="installBanner">
     📱 Add Olli to your home screen
@@ -1620,6 +1701,7 @@
     <div class="confetti-shape cs4"></div>
 
     <div class="hero-eyebrow"><span class="eyebrow-dot"></span> Olli-powered local discovery</div>
+    <div class="hero-proof-badge">🗺️ 100+ days planned &nbsp;·&nbsp; 🌍 Used in 20+ cities</div>
 
     <h1 class="hero-title">
       <span class="t-dark">Stop searching.</span><br>
@@ -1642,6 +1724,7 @@
       <div class="demo-city-row" id="cityRow">
         <button class="city-btn" id="locationBtn" onclick="useMyLocation()">📍 My location</button>
         <button class="city-btn active" data-city="Austin, Texas">🤠 Austin</button>
+        <button class="city-btn" data-city="Atlanta, Georgia">🍑 Atlanta</button>
         <button class="city-btn" data-city="New York City">🗽 New York</button>
         <button class="city-btn" data-city="Los Angeles">🌴 LA</button>
         <button class="city-btn" data-city="Miami">🌊 Miami</button>
@@ -1933,6 +2016,44 @@
       <div class="city-pill">🍑 Atlanta</div>
       <div class="city-pill city-pill-location" onclick="useMyLocation(); document.querySelector('.hero').scrollIntoView({behavior:'smooth'})">📍 Use my location</div>
       <div class="city-pill city-pill-everywhere">🌍 Any city on earth</div>
+    </div>
+  </section>
+
+  <!-- WHY OLLI IS DIFFERENT -->
+  <section class="section" style="padding-top:0">
+    <div class="label reveal">Not your average app</div>
+    <h2 class="section-title reveal">Why Olli is <em>different</em></h2>
+    <div class="diff-grid reveal">
+      <div class="diff-card diff-bad">
+        <div class="diff-icon">❌</div>
+        <div class="diff-title">Not generic AI</div>
+        <div class="diff-desc">Olli doesn't just Google things for you. It understands mood, context, and vibe — and matches them to real places people actually love.</div>
+      </div>
+      <div class="diff-card diff-bad">
+        <div class="diff-icon">❌</div>
+        <div class="diff-title">Not a list of 200 places</div>
+        <div class="diff-desc">No scrolling through endless options. Olli picks the best 4–5 spots for your specific vibe, curated and ready to go.</div>
+      </div>
+      <div class="diff-card diff-bad">
+        <div class="diff-icon">❌</div>
+        <div class="diff-title">Not influencer recommendations</div>
+        <div class="diff-desc">No sponsored posts. No one-size-fits-all "top 10" lists. Just real data from Google Places matched to what you actually want.</div>
+      </div>
+      <div class="diff-card diff-bad">
+        <div class="diff-icon">❌</div>
+        <div class="diff-title">Not tourist traps</div>
+        <div class="diff-desc">Olli finds the spots locals actually go to — with real ratings, real reviews, and real hours. No gimmicks.</div>
+      </div>
+      <div class="diff-card diff-good">
+        <div class="diff-icon">✅</div>
+        <div class="diff-title">Real data + vibe understanding</div>
+        <div class="diff-desc">Google Places data + AI vibe interpretation = a day that actually fits how you feel. Built for humans, not algorithms.</div>
+      </div>
+      <div class="diff-card diff-good">
+        <div class="diff-icon">✅</div>
+        <div class="diff-title">Works in any city, instantly</div>
+        <div class="diff-desc">Type your vibe. Get your day. Any city on earth. No account needed to start. 10 seconds flat.</div>
+      </div>
     </div>
   </section>
 
@@ -2301,6 +2422,19 @@
 
     // Init auth on page load
     initAuth();
+
+    // ── STICKY CTA ──
+    const stickyCta = document.getElementById('stickyCta');
+    const heroSection = document.querySelector('.hero');
+    window.addEventListener('scroll', () => {
+      if (!heroSection || !stickyCta) return;
+      const heroBottom = heroSection.getBoundingClientRect().bottom;
+      if (heroBottom < 0) {
+        stickyCta.classList.add('visible');
+      } else {
+        stickyCta.classList.remove('visible');
+      }
+    });
 
     // ── PWA INSTALL — triggers after magic moment ──
     let deferredPrompt = null;
