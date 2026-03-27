@@ -1029,6 +1029,56 @@
 
     /* NAV RIGHT */
     .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-install-btn {
+      font-size: 13px; font-weight: 600; color: var(--coral);
+      background: rgba(255,107,53,0.08); border: 1.5px solid rgba(255,107,53,0.2);
+      border-radius: 100px; padding: 7px 14px; cursor: pointer;
+      transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+    }
+    .nav-install-btn:hover { background: rgba(255,107,53,0.15); border-color: var(--coral); }
+
+    /* iOS INSTALL MODAL */
+    .ios-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); z-index: 998; backdrop-filter: blur(4px);
+    }
+    .ios-modal-overlay.visible { display: block; }
+    .ios-modal {
+      display: none; position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--white); border-radius: 24px 24px 0 0;
+      padding: 32px 28px 40px; z-index: 999;
+      box-shadow: 0 -20px 60px rgba(0,0,0,0.2);
+    }
+    .ios-modal.visible { display: block; }
+    .ios-modal-handle {
+      width: 40px; height: 4px; background: rgba(17,17,17,0.15);
+      border-radius: 2px; margin: 0 auto 24px;
+    }
+    .ios-modal-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 20px; color: var(--dark); margin-bottom: 8px;
+    }
+    .ios-modal-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+    .ios-step {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid rgba(17,17,17,0.06);
+    }
+    .ios-step:last-child { border-bottom: none; }
+    .ios-step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--dark); color: var(--white);
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .ios-step-text { font-size: 14px; color: var(--dark); line-height: 1.5; }
+    .ios-step-text strong { color: var(--coral); }
+    .ios-modal-close {
+      width: 100%; margin-top: 20px; padding: 15px;
+      background: var(--dark); color: var(--white);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 15px; border: none; border-radius: 14px; cursor: pointer;
+    }
     .nav-user { display: flex; align-items: center; gap: 10px; }
     .nav-user-name { font-size: 13px; font-weight: 500; color: var(--muted); }
     .nav-signout {
@@ -1632,6 +1682,7 @@
       <a class="nav-link" href="saved.html" id="myDaysLink" style="display:none">My Days</a>
     </div>
     <div class="nav-right">
+      <button class="nav-install-btn" id="navInstallBtn" onclick="handleInstallClick()" style="display:none">📲 Install App</button>
       <button class="nav-cta" id="navAuthBtn" onclick="openAuthModal()">Sign in</button>
       <div class="nav-user" id="navUser" style="display:none">
         <span class="nav-user-name" id="navUserName"></span>
@@ -1679,6 +1730,27 @@
       <span id="authToggleText">Don't have an account?</span>
       <button onclick="toggleAuthMode()" id="authToggleBtn">Sign up</button>
     </div>
+  </div>
+
+  <!-- iOS INSTALL MODAL -->
+  <div class="ios-modal-overlay" id="iosModalOverlay" onclick="closeIosModal()"></div>
+  <div class="ios-modal" id="iosModal">
+    <div class="ios-modal-handle"></div>
+    <div class="ios-modal-title">📲 Add Olli to your home screen</div>
+    <div class="ios-modal-sub">Install Olli as an app — works like a native app, no App Store needed!</div>
+    <div class="ios-step">
+      <div class="ios-step-num">1</div>
+      <div class="ios-step-text">Tap the <strong>Share button</strong> at the bottom of your Safari browser (the box with an arrow pointing up)</div>
+    </div>
+    <div class="ios-step">
+      <div class="ios-step-num">2</div>
+      <div class="ios-step-text">Scroll down and tap <strong>"Add to Home Screen"</strong></div>
+    </div>
+    <div class="ios-step">
+      <div class="ios-step-num">3</div>
+      <div class="ios-step-text">Tap <strong>"Add"</strong> in the top right — Olli will appear on your home screen!</div>
+    </div>
+    <button class="ios-modal-close" onclick="closeIosModal()">Got it!</button>
   </div>
 
   <!-- STICKY CTA -->
@@ -2462,16 +2534,47 @@
 
     // ── PWA INSTALL — triggers after magic moment ──
     let deferredPrompt = null;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+    // Show install button in nav if not already installed
+    if (!isStandalone) {
+      if (isIOS) {
+        // iOS — always show the button with instructions
+        document.getElementById('navInstallBtn').style.display = 'block';
+      }
+    }
+
     window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault();
       deferredPrompt = e;
-      // Don't show immediately — wait for magic moment (itinerary generated)
+      // Show nav install button for Android
+      document.getElementById('navInstallBtn').style.display = 'block';
     });
 
+    function handleInstallClick() {
+      if (deferredPrompt) {
+        // Android — trigger native prompt
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+          document.getElementById('navInstallBtn').style.display = 'none';
+        });
+      } else {
+        // iOS — show instructions modal
+        document.getElementById('iosModalOverlay').classList.add('visible');
+        document.getElementById('iosModal').classList.add('visible');
+      }
+    }
+
+    function closeIosModal() {
+      document.getElementById('iosModalOverlay').classList.remove('visible');
+      document.getElementById('iosModal').classList.remove('visible');
+    }
+
     function triggerInstallPrompt() {
-      // Only show if not already installed and prompt is available
       if (!deferredPrompt) return;
-      if (window.matchMedia('(display-mode: standalone)').matches) return;
+      if (isStandalone) return;
       setTimeout(() => {
         document.getElementById('installBanner').classList.add('visible');
       }, 1500);
@@ -2483,9 +2586,11 @@
       const { outcome } = await deferredPrompt.userChoice;
       deferredPrompt = null;
       document.getElementById('installBanner').classList.remove('visible');
+      document.getElementById('navInstallBtn').style.display = 'none';
     });
     window.addEventListener('appinstalled', () => {
       document.getElementById('installBanner').classList.remove('visible');
+      document.getElementById('navInstallBtn').style.display = 'none';
       deferredPrompt = null;
     });
 
