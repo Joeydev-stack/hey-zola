@@ -2066,9 +2066,9 @@
 
       <!-- FREE -->
       <div class="pricing-card">
-        <div class="pricing-badge" style="background:rgba(17,17,17,0.06); color:var(--muted)">Free</div>
+        <div class="pricing-badge" style="background:rgba(17,17,17,0.06); color:var(--muted)">Free Account</div>
         <div class="pricing-price">$0<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc">Start exploring with Olli today. No credit card needed.</div>
+        <div class="pricing-desc">Create a free account and unlock 3 searches per month.</div>
         <ul class="pricing-features">
           <li>✅ 3 Olli-powered searches per month</li>
           <li>✅ Real venue data — photos, ratings, hours</li>
@@ -2105,8 +2105,8 @@
     <!-- FOUNDERS BANNER -->
     <div class="founders-banner reveal">
       <span class="founders-badge">🎉 Founders Offer</span>
-      Sign up free today → get locked-in founders pricing when Olli Pro launches May 1st.
-      <strong style="color:var(--sun)"> $4.99/mo — locked in for life.</strong>
+      Try free → create account → get locked-in founders pricing when Olli Pro launches May 1st.
+      <strong style="color:var(--sun)"> $4.99/mo — locked in.</strong>
     </div>
 
   <!-- ABOUT -->
@@ -2185,7 +2185,7 @@
       <button class="hero-cta-btn" style="margin-bottom:16px;" onclick="openAuthModal()">
         ✨ Create my free account
       </button>
-      <p style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:4px;">No credit card needed. Founders pricing locked in when Pro launches.</p>
+      <p style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:4px;">1 free search to try · No credit card · Founders pricing locked in when Pro launches.</p>
     </div>
   </div>
 
@@ -2492,7 +2492,7 @@
 
     // ── SEARCH LIMIT (3 free for guests) ──
     const SEARCH_KEY = 'olli_search_count';
-    const FREE_LIMIT = 3;
+    const FREE_LIMIT = 1;
 
     function getSearchCount() {
       return parseInt(sessionStorage.getItem(SEARCH_KEY) || '0');
@@ -2505,12 +2505,16 @@
     }
 
     function checkSearchLimit() {
-      if (currentUser) return true; // logged in — unlimited
+      if (currentUser) return true;
       const count = getSearchCount();
       if (count >= FREE_LIMIT) {
-        // Show auth modal with upgrade message
-        document.getElementById('authTitle').textContent = "You've used your 3 free searches!";
-        document.getElementById('authSub').textContent = 'Sign up free to keep exploring with Olli.';
+        document.getElementById('authTitle').textContent = 'Your day looks amazing!';
+        document.getElementById('authSub').textContent = 'Sign up free to save it, share it, and build more days with Olli.';
+        document.getElementById('authToggleText').textContent = 'Already have an account?';
+        document.getElementById('authToggleBtn').textContent = 'Sign in';
+        // Switch to signup mode
+        authMode = 'signup';
+        document.getElementById('authSubmitBtn').textContent = 'Create free account';
         openAuthModal();
         return false;
       }
@@ -2913,7 +2917,9 @@
       } else {
         const remaining = FREE_LIMIT - getSearchCount();
         saveBtn.textContent = '🔗 Send this itinerary to friends';
-        if (shareSub) shareSub.textContent = `Anyone with the link can see your full day — ${remaining > 0 ? remaining + ' free search' + (remaining !== 1 ? 'es' : '') + ' left' : 'sign up to keep exploring'}`;
+        if (shareSub) shareSub.textContent = remaining > 0
+          ? `Anyone with the link can see your full day — sign up free to build more`
+          : `Love it? Sign up free to build more days with Olli`;
       }
 
       setTimeout(() => {
@@ -3027,9 +3033,12 @@
     });
 
     // ── ENTER KEY (email input) ──
-    document.getElementById('emailInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter') submitEmail();
-    });
+    const emailInputEl = document.getElementById('emailInput');
+    if (emailInputEl) {
+      emailInputEl.addEventListener('keydown', e => {
+        if (e.key === 'Enter') submitEmail();
+      });
+    }
   </script>
   <script>
     if ('serviceWorker' in navigator) {
