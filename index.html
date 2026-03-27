@@ -1808,11 +1808,11 @@
 
         <!-- PROMINENT SHARE BUTTON -->
         <div class="share-block" id="shareBlock">
-          <div class="share-block-label">Love this day? Share it! 🔥</div>
-          <button class="share-block-btn" id="copyLinkBtn" onclick="currentUser ? saveItinerary() : copyPageLink()">
-            🔗 Send this itinerary to friends
+          <div class="share-block-label" id="shareBlockLabel">Love this day? Share it! 🔥</div>
+          <button class="share-block-btn" id="copyLinkBtn" onclick="handleShareBtn()">
+            🔗 Sign up free to save & share this day
           </button>
-          <div class="share-block-sub" id="shareBlockSub">Anyone with the link can see your full day — no account needed</div>
+          <div class="share-block-sub" id="shareBlockSub">Sign up free — save it, share it, build more days with Olli</div>
         </div>
 
         <button class="reset-btn" id="resetBtn">↩ Try a different vibe</button>
@@ -2436,6 +2436,22 @@
       }
     });
 
+    // ── SHARE BUTTON HANDLER ──
+    function handleShareBtn() {
+      if (currentUser) {
+        saveItinerary();
+      } else {
+        // Not logged in — open auth modal with reward framing
+        authMode = 'signup';
+        document.getElementById('authTitle').textContent = 'Your day looks amazing!';
+        document.getElementById('authSub').textContent = 'Sign up free to save it, share it, and build more days with Olli.';
+        document.getElementById('authSubmitBtn').textContent = 'Create free account';
+        document.getElementById('authToggleText').textContent = 'Already have an account?';
+        document.getElementById('authToggleBtn').textContent = 'Sign in';
+        openAuthModal();
+      }
+    }
+
     // ── PWA INSTALL — triggers after magic moment ──
     let deferredPrompt = null;
     window.addEventListener('beforeinstallprompt', e => {
@@ -2556,7 +2572,7 @@
         btn.style.background = 'var(--coral)';
         btn.style.color = '#fff';
         setTimeout(() => {
-          btn.textContent = '🔗 Share Hey, Olli!';
+          btn.textContent = currentUser ? '💾 Save & share this itinerary' : '🔗 Sign up free to save & share this day';
           btn.style.background = '';
           btn.style.color = '';
         }, 2500);
@@ -2915,11 +2931,18 @@
         saveBtn.textContent = '💾 Save & send this itinerary';
         if (shareSub) shareSub.textContent = 'Saved to your account + link copied for friends';
       } else {
-        const remaining = FREE_LIMIT - getSearchCount();
-        saveBtn.textContent = '🔗 Send this itinerary to friends';
-        if (shareSub) shareSub.textContent = remaining > 0
-          ? `Anyone with the link can see your full day — sign up free to build more`
-          : `Love it? Sign up free to build more days with Olli`;
+      const saveBtn = document.getElementById('copyLinkBtn');
+      const shareSub = document.getElementById('shareBlockSub');
+      const shareLabel = document.getElementById('shareBlockLabel');
+      if (currentUser) {
+        saveBtn.textContent = '💾 Save & share this itinerary';
+        if (shareSub) shareSub.textContent = 'Saved to your account + shareable link copied for friends';
+        if (shareLabel) shareLabel.textContent = 'Love this day? Save & share it! 🔥';
+      } else {
+        saveBtn.textContent = '🔗 Sign up free to save & share this day';
+        if (shareSub) shareSub.textContent = 'Sign up free — save it, share it, build more days with Olli';
+        if (shareLabel) shareLabel.textContent = 'Love this day? Share it! 🔥';
+      }
       }
 
       setTimeout(() => {
