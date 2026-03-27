@@ -2239,6 +2239,13 @@
         showFoundersToast(name);
       }
       closeAuthModal();
+
+      // If they signed in/up after hitting share button — complete the save now
+      const pendingShare = sessionStorage.getItem('olli_pending_share');
+      if (pendingShare && currentItineraryData) {
+        sessionStorage.removeItem('olli_pending_share');
+        setTimeout(() => saveItinerary(), 800);
+      }
     }
 
     function showFoundersToast(name) {
@@ -2441,7 +2448,8 @@
       if (currentUser) {
         saveItinerary();
       } else {
-        // Not logged in — open auth modal with reward framing
+        // Set pending share flag — will auto-complete after signup
+        sessionStorage.setItem('olli_pending_share', '1');
         authMode = 'signup';
         document.getElementById('authTitle').textContent = 'Your day looks amazing!';
         document.getElementById('authSub').textContent = 'Sign up free to save it, share it, and build more days with Olli.';
