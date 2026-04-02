@@ -2463,7 +2463,10 @@
         openAuthModal();
         return;
       }
-      if (!currentItineraryData) return;
+      if (!currentItineraryData) {
+        console.error('No itinerary data to save');
+        return;
+      }
 
       const btn = document.getElementById('copyLinkBtn');
       btn.textContent = '💾 Saving...';
@@ -2479,37 +2482,50 @@
           mood_tags: currentItineraryData.mood_tags,
         }).select('id').single();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Supabase save error:', error);
+          throw error;
+        }
 
         // Generate shareable link
         const shareUrl = `${window.location.origin}/day.html?id=${data.id}`;
 
         // Copy link to clipboard
-        await navigator.clipboard.writeText(shareUrl).catch(() => {
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+        } catch {
           const ta = document.createElement('textarea');
           ta.value = shareUrl;
           document.body.appendChild(ta);
           ta.select();
           document.execCommand('copy');
           document.body.removeChild(ta);
-        });
+        }
 
         btn.textContent = '✅ Saved & link copied!';
         btn.style.background = '#2D9B6F';
         btn.style.color = '#fff';
+
+        // Show My Days link in nav
+        const myDays = document.getElementById('myDaysLink');
+        if (myDays) myDays.style.display = 'block';
+
         setTimeout(() => {
-          btn.textContent = currentUser ? '💾 Save & share' : '🔗 Share Olli!';
+          btn.textContent = '💾 Save & share this itinerary';
           btn.style.background = '';
           btn.style.color = '';
           btn.disabled = false;
         }, 3000);
 
       } catch (e) {
-        btn.textContent = '⚠️ Could not save';
+        console.error('Save failed:', e);
+        btn.textContent = '⚠️ Could not save — try again';
+        btn.style.background = '';
+        btn.style.color = '';
         setTimeout(() => {
-          btn.textContent = currentUser ? '💾 Save & share' : '🔗 Share Olli!';
+          btn.textContent = '💾 Save & share this itinerary';
           btn.disabled = false;
-        }, 2000);
+        }, 3000);
       }
     }
 
