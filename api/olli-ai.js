@@ -1,4 +1,21 @@
 export default async function handler(req, res) {
+
+  // ── GEOCODING — GET request for GPS → city name ──
+  if (req.method === 'GET' && req.query.geocode) {
+    try {
+      const { lat, lng } = req.query;
+      if (!lat || !lng) return res.status(400).json({ error: 'Missing lat/lng' });
+      const PLACES_KEY = process.env.GOOGLE_PLACES_API_KEY;
+      const geoRes = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${PLACES_KEY}`
+      );
+      const geoData = await geoRes.json();
+      return res.status(200).json(geoData);
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
