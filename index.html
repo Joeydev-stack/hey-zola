@@ -45,11 +45,14 @@
       color: var(--dark);
       font-family: 'DM Sans', sans-serif;
       overflow-x: hidden;
+      cursor: auto;
+    }
+    body.cursor-ready {
       cursor: none;
     }
 
     @media (hover: none) and (pointer: coarse) {
-      body, button, a { cursor: auto !important; }
+      body, body.cursor-ready, button, a { cursor: auto !important; }
       .cursor, .cursor-ring { display: none !important; }
     }
 
@@ -1708,6 +1711,7 @@
     <a class="mobile-link" href="#cities" onclick="toggleMenu()">Cities</a>
     <a class="mobile-link" href="pricing.html" onclick="toggleMenu()">Pricing</a>
     <a class="mobile-link" href="#about" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">About</a>
+    <a class="mobile-link" href="saved.html" id="myDaysMobileLink" style="display:none" onclick="toggleMenu()">📋 My Days</a>
     <a class="mobile-link mobile-link-cta" href="#" onclick="document.getElementById('demoCard').scrollIntoView({behavior:'smooth'}); toggleMenu(); return false;">✨ Try Olli Free</a>
   </div>
 
@@ -2292,7 +2296,15 @@
     const { createClient } = supabase;
     const _supabase = createClient(
       'https://khmjudppxeicircdkvsr.supabase.co',
-      'sb_publishable_hBUz687GcBUbGGJ4dRlCaw_1KcCiTP5'
+      'sb_publishable_hBUz687GcBUbGGJ4dRlCaw_1KcCiTP5',
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+          storageKey: 'olli-auth-token',
+        }
+      }
     );
 
     let currentUser = null;
@@ -2300,11 +2312,18 @@
     // Check session on load
     async function initAuth() {
       const { data: { session } } = await _supabase.auth.getSession();
-      if (session?.user) setUser(session.user);
+      if (session?.user) {
+        setUser(session.user);
+      }
 
       _supabase.auth.onAuthStateChange((event, session) => {
-        if (session?.user) setUser(session.user);
-        else clearUser();
+        if (event === 'SIGNED_IN' && session?.user) {
+          setUser(session.user);
+        } else if (event === 'SIGNED_OUT') {
+          clearUser();
+        } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+          setUser(session.user);
+        }
       });
     }
 
@@ -2317,6 +2336,8 @@
       document.getElementById('navUserName').textContent = `👋 ${name}`;
       const myDays = document.getElementById('myDaysLink');
       if (myDays) myDays.style.display = 'block';
+      const myDaysMobile = document.getElementById('myDaysMobileLink');
+      if (myDaysMobile) myDaysMobile.style.display = 'block';
 
       // Show founders welcome toast for new signups
       const isNew = sessionStorage.getItem('olli_new_signup');
@@ -2373,6 +2394,8 @@
       document.getElementById('navUser').style.display = 'none';
       const myDays = document.getElementById('myDaysLink');
       if (myDays) myDays.style.display = 'none';
+      const myDaysMobile = document.getElementById('myDaysMobileLink');
+      if (myDaysMobile) myDaysMobile.style.display = 'none';
     }
 
     // ── AUTH MODAL ──
@@ -2506,9 +2529,11 @@
         btn.style.background = '#2D9B6F';
         btn.style.color = '#fff';
 
-        // Show My Days link in nav
+        // Show My Days link in nav (desktop + mobile)
         const myDays = document.getElementById('myDaysLink');
         if (myDays) myDays.style.display = 'block';
+        const myDaysMobile = document.getElementById('myDaysMobileLink');
+        if (myDaysMobile) myDaysMobile.style.display = 'block';
 
         setTimeout(() => {
           btn.textContent = '💾 Save & share this itinerary';
@@ -2752,20 +2777,22 @@
     // ── CURSOR ──
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
-    let mx=0,my=0,rx=0,ry=0;
-    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-    (function anim(){
-      cursor.style.left=mx+'px'; cursor.style.top=my+'px';
-      rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
-      ring.style.left=rx+'px'; ring.style.top=ry+'px';
-      requestAnimationFrame(anim);
-    })();
-    document.querySelectorAll('button,a,.vibe-card,.city-pill').forEach(el=>{
-      el.addEventListener('mouseenter',()=>{cursor.style.width='18px';cursor.style.height='18px';ring.style.opacity='0';});
-      el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.opacity='1';});
-    });
+    if (cursor && ring && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      document.body.classList.add('cursor-ready');
+      let mx=0,my=0,rx=0,ry=0;
+      document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+      (function anim(){
+        cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+        rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+        ring.style.left=rx+'px'; ring.style.top=ry+'px';
+        requestAnimationFrame(anim);
+      })();
+      document.querySelectorAll('button,a,.vibe-card,.city-pill').forEach(el=>{
+        el.addEventListener('mouseenter',()=>{cursor.style.width='18px';cursor.style.height='18px';ring.style.opacity='0';});
+        el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.opacity='1';});
+      });
+    }
 
-    // ── SCROLL REVEAL ──
     // ── SCROLL REVEAL ──
     // First make all already-visible (above fold) elements visible immediately
     document.querySelectorAll('.reveal').forEach(el => {
@@ -2799,7 +2826,7 @@
           const { latitude, longitude } = pos.coords;
           try {
             const res = await fetch(
-              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyD4_4UQN9LNE3l6bjjUeEZL1Nn6dXtK7Qs`
+              `/api/olli-ai?geocode=1&lat=${latitude}&lng=${longitude}`
             );
             const data = await res.json();
 
@@ -3079,12 +3106,6 @@
       // Update save button based on auth state
       const saveBtn = document.getElementById('copyLinkBtn');
       const shareSub = document.getElementById('shareBlockSub');
-      if (currentUser) {
-        saveBtn.textContent = '💾 Save & send this itinerary';
-        if (shareSub) shareSub.textContent = 'Saved to your account + link copied for friends';
-      } else {
-      const saveBtn = document.getElementById('copyLinkBtn');
-      const shareSub = document.getElementById('shareBlockSub');
       const shareLabel = document.getElementById('shareBlockLabel');
       if (currentUser) {
         saveBtn.textContent = '💾 Save & share this itinerary';
@@ -3094,7 +3115,6 @@
         saveBtn.textContent = '🔗 Sign up free to save & share this day';
         if (shareSub) shareSub.textContent = 'Sign up free — save it, share it, build more days with Olli';
         if (shareLabel) shareLabel.textContent = 'Love this day? Share it! 🔥';
-      }
       }
 
       setTimeout(() => {
