@@ -2164,9 +2164,9 @@
       <div class="pricing-card">
         <div class="pricing-badge" style="background:rgba(17,17,17,0.06); color:var(--muted)">Free</div>
         <div class="pricing-price">$0<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc">Start with 1 Magic Search — no account needed. Create a free account to unlock 3 searches per month.</div>
+        <div class="pricing-desc">Start instantly — no login required. Create a free account to unlock 3 searches per month.</div>
         <ul class="pricing-features">
-          <li>✨ 1 Free Magic Search — no account needed</li>
+          <li>✨ 1 Instant Magic Search — no login required</li>
           <li>✅ 3 searches/month with a free account</li>
           <li>✅ Real venue data — photos, ratings, hours</li>
           <li>✅ Interactive map with pins</li>
@@ -2603,7 +2603,7 @@
         sessionStorage.setItem('olli_pending_share', '1');
         authMode = 'signup';
         document.getElementById('authTitle').textContent = 'Your day looks amazing!';
-        document.getElementById('authSub').textContent = 'Sign up free to save it, share it, and build more days with Olli.';
+        document.getElementById('authSub').textContent = 'You\'ve used your 1 Instant Magic Search. Sign up free — unlock 3 searches/month, save & share your days.';
         document.getElementById('authSubmitBtn').textContent = 'Create free account';
         document.getElementById('authToggleText').textContent = 'Already have an account?';
         document.getElementById('authToggleBtn').textContent = 'Sign in';
@@ -2717,7 +2717,7 @@
       const count = getSearchCount();
       if (count >= FREE_LIMIT) {
         document.getElementById('authTitle').textContent = 'Your day looks amazing!';
-        document.getElementById('authSub').textContent = 'Sign up free to save it, share it, and build more days with Olli.';
+        document.getElementById('authSub').textContent = 'You\'ve used your 1 Instant Magic Search. Sign up free — unlock 3 searches/month, save & share your days.';
         document.getElementById('authToggleText').textContent = 'Already have an account?';
         document.getElementById('authToggleBtn').textContent = 'Sign in';
         // Switch to signup mode
