@@ -195,7 +195,7 @@
       margin: 0 auto 28px;
       opacity: 0;
       animation: fadeUp 0.8s 0.5s forwards;
-      font-style: italic;
+      
     }
 
     /* HERO PROOF BADGE */
@@ -680,7 +680,7 @@
       font-size: 13px;
       color: rgba(255,255,255,0.5);
       line-height: 1.6;
-      font-style: italic;
+      
     }
 
     /* ── MAP SECTION ── */
@@ -1037,6 +1037,17 @@
 
     /* NAV RIGHT */
     .nav-right { display: flex; align-items: center; gap: 12px; }
+    /* Auth loading state — hides nav buttons until session resolves */
+    .nav-auth-wrap {
+      display: flex; align-items: center; gap: 12px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+    .nav-auth-wrap.auth-ready {
+      opacity: 1;
+      pointer-events: all;
+    }
     .nav-install-btn {
       font-size: 13px; font-weight: 600; color: var(--coral);
       background: rgba(255,107,53,0.08); border: 1.5px solid rgba(255,107,53,0.2);
@@ -1309,7 +1320,7 @@
     .itin-ex-title {
       font-family: 'Syne', sans-serif; font-weight: 800;
       font-size: 18px; color: var(--white);
-      letter-spacing: -0.3px; margin-bottom: 12px; font-style: italic;
+      letter-spacing: -0.3px; margin-bottom: 12px; 
     }
     .itin-ex-tags { display: flex; gap: 8px; flex-wrap: wrap; }
     .itin-ex-tag {
@@ -1406,7 +1417,7 @@
     .pain-icon { font-size: 28px; margin-bottom: 12px; }
     .pain-text {
       font-size: 15px; font-weight: 500; color: var(--dark);
-      line-height: 1.6; margin-bottom: 10px; font-style: italic;
+      line-height: 1.6; margin-bottom: 10px; 
     }
     .pain-solution {
       font-size: 13px; font-weight: 700; color: var(--coral);
@@ -1534,7 +1545,7 @@
       font-family: 'DM Sans', sans-serif;
       font-size: 17px; font-weight: 400;
       color: rgba(255,255,255,0.5);
-      margin-bottom: 44px; font-style: italic;
+      margin-bottom: 44px;
     }
     .cta-form {
       display: flex; gap: 10px; justify-content: center;
@@ -1553,7 +1564,6 @@
       font-weight: 400;
       color: rgba(255,255,255,0.5);
       margin-bottom: 14px;
-      font-style: italic;
       text-align: center;
     }
     .email-form-row {
@@ -1694,10 +1704,12 @@
     </div>
     <div class="nav-right">
       <button class="nav-install-btn" id="navInstallBtn" onclick="handleInstallClick()" style="display:none">📲 Install App</button>
-      <button class="nav-cta" id="navAuthBtn" onclick="openAuthModal()">Sign in</button>
-      <div class="nav-user" id="navUser" style="display:none">
-        <span class="nav-user-name" id="navUserName"></span>
-        <button class="nav-signout" onclick="signOut()">Sign out</button>
+      <div class="nav-auth-wrap" id="navAuthWrap">
+        <button class="nav-cta" id="navAuthBtn" onclick="openAuthModal()">Sign in</button>
+        <div class="nav-user" id="navUser" style="display:none">
+          <span class="nav-user-name" id="navUserName"></span>
+          <button class="nav-signout" onclick="signOut()">Sign out</button>
+        </div>
       </div>
     </div>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -1721,7 +1733,7 @@
     <button class="auth-close" onclick="closeAuthModal()">✕</button>
     <div class="auth-logo">Olli</div>
     <div class="auth-title" id="authTitle">Welcome back</div>
-    <div class="auth-sub" id="authSub">Sign in to save your itineraries</div>
+    <div class="auth-sub" id="authSub">Sign in to access your searches and saved days</div>
 
     <div class="auth-error" id="authError" style="display:none"></div>
     <div class="auth-success" id="authSuccess" style="display:none"></div>
@@ -2136,7 +2148,7 @@
       <div class="diff-card diff-good">
         <div class="diff-icon">✅</div>
         <div class="diff-title">Works in any city, instantly</div>
-        <div class="diff-desc">Type your vibe. Get your day. Any city on earth. No account needed to start. 10 seconds flat.</div>
+        <div class="diff-desc">Type your vibe. Get your day. 1 Free Magic Search, no account needed. Then 3 searches/month free — or go unlimited with Pro.</div>
       </div>
     </div>
   </section>
@@ -2150,11 +2162,12 @@
 
       <!-- FREE -->
       <div class="pricing-card">
-        <div class="pricing-badge" style="background:rgba(17,17,17,0.06); color:var(--muted)">Free Account</div>
+        <div class="pricing-badge" style="background:rgba(17,17,17,0.06); color:var(--muted)">Free</div>
         <div class="pricing-price">$0<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc">Create a free account and unlock 3 searches per month.</div>
+        <div class="pricing-desc">Start with 1 Magic Search — no account needed. Create a free account to unlock 3 searches per month.</div>
         <ul class="pricing-features">
-          <li>✅ 3 Olli-powered searches per month</li>
+          <li>✨ 1 Free Magic Search — no account needed</li>
+          <li>✅ 3 searches/month with a free account</li>
           <li>✅ Real venue data — photos, ratings, hours</li>
           <li>✅ Interactive map with pins</li>
           <li>✅ Works in any city on earth</li>
@@ -2189,7 +2202,7 @@
     <!-- FOUNDERS BANNER -->
     <div class="founders-banner reveal">
       <span class="founders-badge">🎉 Founders Offer</span>
-      Try free → create account → get locked-in founders pricing when Olli Pro launches May 1st.
+      1 Free Magic Search, no account needed. Create a free account for 3 searches/mo. Go Pro for unlimited — founders price locked in May 1st.
       <strong style="color:var(--sun)"> $4.99/mo — locked in.</strong>
     </div>
 
@@ -2198,13 +2211,13 @@
     <div class="label reveal">About Olli</div>
     <h2 class="section-title reveal">Built for the<br><em>curious explorer.</em></h2>
     <div class="reveal" style="max-width:640px">
-      <p style="font-size:16px; color:var(--muted); line-height:1.8; font-weight:300; margin-bottom:16px;">
+      <p style="font-size:16px; color:var(--muted); line-height:1.8; font-weight:400; margin-bottom:16px;">
         Olli was built by BIEY SYSTEMS with one idea in mind — what if you had a brilliant local friend in every city you visited? Someone who just <em>gets</em> your vibe and tells you exactly where to go.
       </p>
-      <p style="font-size:16px; color:var(--muted); line-height:1.8; font-weight:300; margin-bottom:16px;">
+      <p style="font-size:16px; color:var(--muted); line-height:1.8; font-weight:400; margin-bottom:16px;">
         No more scrolling through endless reviews. No more generic tourist traps. Just tell Olli how you're feeling, and it'll build your perfect day — with real spots, real photos, and a map ready to go.
       </p>
-      <p style="font-size:16px; color:var(--muted); line-height:1.8; font-weight:300;">
+      <p style="font-size:16px; color:var(--muted); line-height:1.8; font-weight:400;">
         Olli works in any city on earth. Powered by smart AI, designed to feel like a local friend. And just getting started.
       </p>
     </div>
@@ -2269,7 +2282,7 @@
       <button class="hero-cta-btn" style="margin-bottom:16px;" onclick="openAuthModal()">
         ✨ Create my free account
       </button>
-      <p style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:4px;">1 free search to try · No credit card · Founders pricing locked in when Pro launches.</p>
+      <p style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:4px;">1 Free Magic Search · No account needed · Free account unlocks 3/mo · Founders pricing locked in when Pro launches.</p>
     </div>
   </div>
 
@@ -2315,6 +2328,9 @@
       if (session?.user) {
         setUser(session.user);
       }
+      // Reveal nav auth area — no flicker regardless of session state
+      const wrap = document.getElementById('navAuthWrap');
+      if (wrap) wrap.classList.add('auth-ready');
 
       _supabase.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
@@ -2324,6 +2340,9 @@
         } else if (event === 'TOKEN_REFRESHED' && session?.user) {
           setUser(session.user);
         }
+        // Always ensure nav is visible after any auth event
+        const wrap = document.getElementById('navAuthWrap');
+        if (wrap) wrap.classList.add('auth-ready');
       });
     }
 
@@ -2418,7 +2437,7 @@
       authMode = authMode === 'signin' ? 'signup' : 'signin';
       const isSignIn = authMode === 'signin';
       document.getElementById('authTitle').textContent = isSignIn ? 'Welcome back' : 'Create account';
-      document.getElementById('authSub').textContent = isSignIn ? 'Sign in to save your itineraries' : 'Join Olli — free to start';
+      document.getElementById('authSub').textContent = isSignIn ? 'Sign in to access your searches and saved days' : 'Join Olli — free to start';
       document.getElementById('authSubmitBtn').textContent = isSignIn ? 'Sign in' : 'Create account';
       document.getElementById('authToggleText').textContent = isSignIn ? "Don't have an account?" : 'Already have an account?';
       document.getElementById('authToggleBtn').textContent = isSignIn ? 'Sign up' : 'Sign in';
@@ -2556,6 +2575,11 @@
 
     // Init auth on page load
     initAuth();
+    // Safety fallback — reveal nav after 1s max regardless of auth state
+    setTimeout(() => {
+      const wrap = document.getElementById('navAuthWrap');
+      if (wrap) wrap.classList.add('auth-ready');
+    }, 1000);
 
     // ── STICKY CTA ──
     const stickyCta = document.getElementById('stickyCta');
