@@ -1263,6 +1263,228 @@
     }
     .section-title em { color: var(--coral); font-style: normal; }
 
+    /* ── BENTO BOX GRID ── */
+    .bento-section {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+    .bento-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--coral); margin-bottom: 14px;
+    }
+    .bento-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      color: var(--dark);
+      margin-bottom: 40px;
+    }
+    .bento-title em { color: var(--coral); font-style: normal; }
+
+    /* HOW IT WORKS BENTO */
+    .bento-how {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .bento-step {
+      background: var(--white);
+      border: 1.5px solid rgba(17,17,17,0.08);
+      border-radius: 28px;
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    }
+    .bento-step:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(17,17,17,0.08);
+      border-color: rgba(255,107,53,0.2);
+    }
+    .bento-step-num {
+      position: absolute; top: 20px; right: 24px;
+      font-family: 'Syne', sans-serif;
+      font-size: 72px; font-weight: 800;
+      line-height: 1; letter-spacing: -4px;
+      color: rgba(17,17,17,0.04);
+      user-select: none;
+    }
+    .bento-step-icon {
+      width: 72px; height: 72px;
+      margin-bottom: 20px;
+      object-fit: contain;
+    }
+    .bento-step-name {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700; font-size: 18px;
+      letter-spacing: -0.2px; margin-bottom: 10px;
+      color: var(--dark);
+    }
+    .bento-step-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; color: var(--muted);
+      line-height: 1.7; font-weight: 400;
+    }
+    .bento-step-accent {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; border-radius: 0 0 28px 28px;
+      background: var(--coral); opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .bento-step:hover .bento-step-accent { opacity: 1; }
+
+    /* SOCIAL PROOF BENTO TILES */
+    .bento-proof-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .bento-tile {
+      border-radius: 28px;
+      padding: 28px 26px;
+      border: 1.5px solid rgba(17,17,17,0.08);
+      background: var(--white);
+      transition: transform 0.25s, box-shadow 0.25s;
+      overflow: hidden;
+      position: relative;
+    }
+    .bento-tile:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 48px rgba(17,17,17,0.07);
+    }
+    .bento-tile-live {
+      background: var(--dark);
+      border-color: rgba(255,255,255,0.08);
+    }
+    .bento-tile-coral {
+      background: linear-gradient(135deg, rgba(255,107,53,0.06) 0%, rgba(255,184,0,0.04) 100%);
+      border-color: rgba(255,107,53,0.15);
+    }
+    .bento-tile-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .bento-tile-live .bento-tile-label { color: rgba(255,255,255,0.35); }
+    .bento-tile-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #2D9B6F; animation: blink 2s infinite;
+    }
+    .bento-feed-item {
+      font-size: 13px; color: rgba(255,255,255,0.75);
+      line-height: 1.6; padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .bento-feed-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .bento-feed-city {
+      font-size: 10px; color: rgba(255,255,255,0.3);
+      letter-spacing: 0.5px; margin-top: 2px;
+    }
+    .bento-stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 48px; font-weight: 800;
+      color: var(--dark); letter-spacing: -3px;
+      line-height: 1; margin-bottom: 6px;
+    }
+    .bento-stat-label {
+      font-size: 14px; color: var(--muted);
+      font-weight: 400; line-height: 1.5;
+    }
+    .bento-stat-accent { color: var(--coral); }
+    .bento-quote-stars {
+      color: var(--sun); font-size: 16px;
+      letter-spacing: 2px; margin-bottom: 12px;
+    }
+    .bento-quote-text {
+      font-size: 14px; color: var(--dark);
+      line-height: 1.65; font-weight: 400;
+      margin-bottom: 14px;
+    }
+    .bento-quote-author {
+      font-size: 12px; font-weight: 700;
+      color: var(--muted); letter-spacing: 0.3px;
+    }
+    .bento-quote-city {
+      font-size: 11px; color: rgba(17,17,17,0.3);
+      margin-top: 2px;
+    }
+
+    /* USE CASES BENTO */
+    .bento-use-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .bento-use-card {
+      border-radius: 28px;
+      padding: 32px 28px;
+      border: 1.5px solid rgba(17,17,17,0.08);
+      background: var(--white);
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    }
+    .bento-use-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(17,17,17,0.08);
+      border-color: rgba(255,107,53,0.2);
+    }
+    .bento-use-card.featured {
+      background: var(--dark);
+      border-color: transparent;
+      grid-column: span 2;
+    }
+    .bento-use-emoji {
+      font-size: 32px; margin-bottom: 16px;
+      display: block;
+    }
+    .bento-use-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700; font-size: 17px;
+      color: var(--dark); margin-bottom: 8px;
+      letter-spacing: -0.2px;
+    }
+    .bento-use-card.featured .bento-use-title { color: var(--white); }
+    .bento-use-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; color: var(--muted);
+      line-height: 1.7; font-weight: 400;
+    }
+    .bento-use-card.featured .bento-use-desc { color: rgba(255,255,255,0.55); }
+    .bento-use-tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--coral); background: rgba(255,107,53,0.1);
+      padding: 4px 10px; border-radius: 100px;
+      margin-bottom: 14px;
+    }
+    .bento-use-card.featured .bento-use-tag {
+      color: var(--sun); background: rgba(255,184,0,0.15);
+    }
+
+    /* MOBILE RESPONSIVE */
+    @media (max-width: 900px) {
+      .bento-how { grid-template-columns: 1fr; }
+      .bento-proof-grid { grid-template-columns: 1fr; }
+      .bento-use-grid { grid-template-columns: 1fr 1fr; }
+      .bento-use-card.featured { grid-column: span 2; }
+    }
+    @media (max-width: 600px) {
+      .bento-section { padding: 0 16px; }
+      .bento-step { padding: 28px 22px; }
+      .bento-tile { padding: 22px 18px; }
+      .bento-use-grid { grid-template-columns: 1fr; }
+      .bento-use-card.featured { grid-column: span 1; }
+      .bento-stat-num { font-size: 36px; }
+    }
+
     .steps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1938,69 +2160,125 @@
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
-  <section class="section" id="how-it-works">
-    <div class="label reveal">How it works</div>
-    <h2 class="section-title reveal">Three steps to your<br><em>perfect day</em></h2>
-    <div class="steps reveal">
-      <div class="step">
-        <div class="step-num">01</div>
-        <div class="step-icon"><img src="olli-face.png" alt="Olli" style="width:80px; height:80px; object-fit:contain;" /></div>
-        <div class="step-name">Tell Olli your vibe</div>
-        <p class="step-desc">Type exactly how you're feeling. No filters, no dropdowns. Just talk like you're texting a friend who knows every city.</p>
+  <!-- HOW IT WORKS — BENTO BOX -->
+  <div class="bento-section reveal" id="how-it-works">
+    <div class="bento-label">How it works</div>
+    <h2 class="bento-title">Three steps to your<br><em>perfect day</em></h2>
+    <div class="bento-how">
+      <div class="bento-step">
+        <div class="bento-step-num">01</div>
+        <img src="olli-face.png" alt="Olli" class="bento-step-icon" />
+        <div class="bento-step-name">Tell Olli your vibe</div>
+        <p class="bento-step-desc">Type exactly how you're feeling. No filters, no dropdowns. Just talk like you're texting a friend who knows every city.</p>
+        <div class="bento-step-accent"></div>
       </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <div class="step-icon"><img src="olli-face.png" alt="Olli" style="width:80px; height:80px; object-fit:contain;" /></div>
-        <div class="step-name">Olli builds your itinerary</div>
-        <p class="step-desc">Olli reads your mood and matches it to real local spots — pulling from Google Places and real city data to craft your perfect day.</p>
+      <div class="bento-step">
+        <div class="bento-step-num">02</div>
+        <img src="olli-face.png" alt="Olli" class="bento-step-icon" />
+        <div class="bento-step-name">Olli builds your itinerary</div>
+        <p class="bento-step-desc">Olli reads your mood and matches it to real local spots — pulling from Google Places and real city data to craft your perfect day.</p>
+        <div class="bento-step-accent"></div>
       </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <div class="step-icon"><img src="olli-face.png" alt="Olli" style="width:80px; height:80px; object-fit:contain;" /></div>
-        <div class="step-name">Explore on your map</div>
-        <p class="step-desc">Get a beautiful pinned map itinerary with hours, ratings, and vibes — ready to walk right into.</p>
+      <div class="bento-step">
+        <div class="bento-step-num">03</div>
+        <img src="olli-face.png" alt="Olli" class="bento-step-icon" />
+        <div class="bento-step-name">Explore on your map</div>
+        <p class="bento-step-desc">Get a beautiful pinned map itinerary with hours, ratings, and vibes — ready to walk right into.</p>
+        <div class="bento-step-accent"></div>
       </div>
     </div>
-  </section>
 
-  <!-- VIBE EXAMPLES -->
-  <section class="section" style="padding-top:0">
-    <div class="label reveal">Real people. Real days.</div>
-    <h2 class="section-title reveal">Just say what you <em>feel</em></h2>
-    <div class="vibes-grid reveal">
-      <div class="vibe-card vc-sun">
-        <p class="vibe-query">"Cozy coffee spot with good wifi, then the best tacos in the city, then somewhere chill for sunset"</p>
-        <p class="vibe-result">Patty Matters + Torchy's Tacos + Rainey St.</p>
-        <p class="vibe-loc">Austin, TX · Full day itinerary</p>
-        <span class="vibe-tag tag-sun">☕ Chill Day</span>
+    <!-- PROOF TILES ROW -->
+    <div class="bento-proof-grid">
+
+      <!-- Live Feed Tile -->
+      <div class="bento-tile bento-tile-live">
+        <div class="bento-tile-label">
+          <span class="bento-tile-dot"></span> Live feed
+        </div>
+        <div class="bento-feed-item">
+          A local just found hidden tacos in Austin 🌮
+          <div class="bento-feed-city">Austin, TX · 2 min ago</div>
+        </div>
+        <div class="bento-feed-item">
+          Date night planned in NYC 🌹
+          <div class="bento-feed-city">New York, NY · 5 min ago</div>
+        </div>
+        <div class="bento-feed-item">
+          Golden hour rooftop found in Miami 🌅
+          <div class="bento-feed-city">Miami, FL · 11 min ago</div>
+        </div>
       </div>
-      <div class="vibe-card vc-coral">
-        <p class="vibe-query">"Romantic date night, upscale but not stuffy, great cocktails and amazing food"</p>
-        <p class="vibe-result">Carbone + The Dead Rabbit</p>
-        <p class="vibe-loc">New York, NY · Date night pick</p>
-        <span class="vibe-tag tag-coral">🌹 Date Night</span>
+
+      <!-- Global Reach Tile -->
+      <div class="bento-tile bento-tile-coral">
+        <div class="bento-tile-label">Global reach</div>
+        <div class="bento-stat-num">200<span class="bento-stat-accent">+</span></div>
+        <div class="bento-stat-label">Cities where Olli has planned perfect days — and counting.</div>
       </div>
-      <div class="vibe-card vc-mag">
-        <p class="vibe-query">"Rooftop bar with ocean views for golden hour, somewhere locals actually go"</p>
-        <p class="vibe-result">Sugar + Pérez Art Museum</p>
-        <p class="vibe-loc">Miami, FL · Opens at 5pm</p>
-        <span class="vibe-tag tag-mag">🌅 Golden Hour</span>
+
+      <!-- Trust Quote Tile -->
+      <div class="bento-tile">
+        <div class="bento-quote-stars">★★★★★</div>
+        <div class="bento-quote-text">"I used Olli for my first night in Miami and it was perfect. I never would have found those spots on my own."</div>
+        <div class="bento-quote-author">Early Olli user</div>
+        <div class="bento-quote-city">Miami, FL</div>
       </div>
-      <div class="vibe-card vc-lime">
-        <p class="vibe-query">"Hidden gem brunch spot no tourists know about, then a walk through a cool neighborhood"</p>
-        <p class="vibe-result">Snooze AM + The RiNo District</p>
-        <p class="vibe-loc">Denver, CO · Locals' picks</p>
-        <span class="vibe-tag tag-lime">🌿 Local Pick</span>
-      </div>
+
     </div>
-  </section>
+  </div>
+
+  <!-- PERFECT FOR WHEN — BENTO BOX -->
+  <div class="bento-section reveal">
+    <div class="bento-label">Sound familiar?</div>
+    <h2 class="bento-title">Perfect for when <em>you need it most</em></h2>
+    <div class="bento-use-grid">
+
+      <div class="bento-use-card featured">
+        <span class="bento-use-tag">Most popular</span>
+        <span class="bento-use-emoji">🌹</span>
+        <div class="bento-use-title">Planning a date night</div>
+        <div class="bento-use-desc">Tell Olli "romantic, upscale but not stuffy, great cocktails" and watch it build a night your partner will actually remember. No stress, no endless scrolling.</div>
+      </div>
+
+      <div class="bento-use-card">
+        <span class="bento-use-emoji">✈️</span>
+        <div class="bento-use-title">Just landed in a new city</div>
+        <div class="bento-use-desc">No idea where to go. Tell Olli your vibe and have a full day planned before you grab your luggage.</div>
+      </div>
+
+      <div class="bento-use-card">
+        <span class="bento-use-emoji">😩</span>
+        <div class="bento-use-title">Can't decide what to do</div>
+        <div class="bento-use-desc">You've been staring at your phone for 20 minutes. One sentence and your day is planned.</div>
+      </div>
+
+      <div class="bento-use-card">
+        <span class="bento-use-emoji">👥</span>
+        <div class="bento-use-title">Friends can't agree</div>
+        <div class="bento-use-desc">One vibe, a full group itinerary, zero arguments. Olli's specialty.</div>
+      </div>
+
+      <div class="bento-use-card">
+        <span class="bento-use-emoji">👨‍👩‍👧</span>
+        <div class="bento-use-title">Need something kid-friendly</div>
+        <div class="bento-use-desc">Just say "family friendly, fun for all ages" and Olli handles the rest.</div>
+      </div>
+
+      <div class="bento-use-card">
+        <span class="bento-use-emoji">🌍</span>
+        <div class="bento-use-title">Explore like a local</div>
+        <div class="bento-use-desc">No tourist traps. Olli finds the spots locals actually go to — in any city on earth.</div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- REAL ITINERARY EXAMPLE -->
-  <section class="section" style="padding-top:0">
-    <div class="label reveal">See it in action</div>
-    <h2 class="section-title reveal">A real day built <em>by Olli</em></h2>
-    <div class="itin-example reveal">
+  <div class="bento-section reveal">
+    <div class="bento-label">See it in action</div>
+    <h2 class="bento-title">A real day built <em>by Olli</em></h2>
+    <div class="itin-example">
       <div class="itin-ex-header">
         <div class="itin-ex-city">📍 Atlanta, GA</div>
         <div class="itin-ex-title">"Artsy afternoon with great coffee and local vibes"</div>
@@ -2048,52 +2326,7 @@
         Try this vibe yourself →
       </button>
     </div>
-  </section>
-
-  <!-- PERFECT FOR WHEN -->
-  <section class="section" style="padding-top:0">
-    <div class="label reveal">Sound familiar?</div>
-    <h2 class="section-title reveal">Perfect for when <em>you need it most</em></h2>
-    <div class="pfw-grid reveal">
-
-      <div class="pfw-card">
-        <div class="pfw-emoji">✈️</div>
-        <div class="pfw-title">You just landed in a new city</div>
-        <div class="pfw-desc">No idea where to go. No time to research. Tell Olli your vibe and you'll have a full day planned before you grab your luggage.</div>
-      </div>
-
-      <div class="pfw-card">
-        <div class="pfw-emoji">😩</div>
-        <div class="pfw-title">You can't decide what to do</div>
-        <div class="pfw-desc">You've been staring at your phone for 20 minutes. Olli ends the scrolling. One sentence and your day is planned.</div>
-      </div>
-
-      <div class="pfw-card pfw-highlight">
-        <div class="pfw-emoji">🌹</div>
-        <div class="pfw-title">You're planning a date night</div>
-        <div class="pfw-desc">Tell Olli "romantic, upscale but not stuffy, great cocktails" and watch it build a night your partner will actually remember.</div>
-      </div>
-
-      <div class="pfw-card">
-        <div class="pfw-emoji">👥</div>
-        <div class="pfw-title">Your friends can't agree on anything</div>
-        <div class="pfw-desc">"Something for everyone" is Olli's specialty. One vibe, a full group itinerary, zero arguments.</div>
-      </div>
-
-      <div class="pfw-card">
-        <div class="pfw-emoji">👨‍👩‍👧</div>
-        <div class="pfw-title">You need something kid-friendly</div>
-        <div class="pfw-desc">Just say "family friendly, fun for all ages" and Olli handles the rest — spots the whole family will love.</div>
-      </div>
-
-      <div class="pfw-card">
-        <div class="pfw-emoji">🌍</div>
-        <div class="pfw-title">You want to explore like a local</div>
-        <div class="pfw-desc">No tourist traps. No generic recommendations. Olli finds the spots locals actually go to — in any city on earth.</div>
-      </div>
-
-    </div>
-  </section>
+  </div>
 
   <!-- CITIES -->
   <section class="section" style="padding-top:0" id="cities">
