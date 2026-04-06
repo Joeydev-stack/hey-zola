@@ -19,8 +19,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Olli" />
   <link rel="apple-touch-icon" href="/olli-icon-180.png" />
-  <!-- iOS Splash Screens -->
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <!-- iOS Splash Screen -->
   <link rel="apple-touch-startup-image" href="/olli-icon-512.png" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
@@ -661,14 +660,14 @@
       transform: translateY(-1px);
     }
 
-    .zola-tip {
+    .olli-tip {
       background: rgba(255,184,0,0.08);
       border: 1px solid rgba(255,184,0,0.15);
       border-radius: 14px;
       padding: 14px 16px;
       margin-top: 6px;
     }
-    .zola-tip-header {
+    .olli-tip-header {
       display: flex; align-items: center; gap: 8px;
       font-family: 'Syne', sans-serif;
       font-size: 12px; font-weight: 700;
@@ -676,7 +675,7 @@
       letter-spacing: 0.5px;
       margin-bottom: 6px;
     }
-    .zola-tip-text {
+    .olli-tip-text {
       font-size: 13px;
       color: rgba(255,255,255,0.5);
       line-height: 1.6;
@@ -786,7 +785,7 @@
       text-transform: uppercase;
       display: flex; align-items: center; gap: 6px;
     }
-    #zolaMap {
+    #olliMap {
       width: 100%;
       height: 280px;
       border: none;
@@ -1927,7 +1926,7 @@
 
       /* Smaller photo + map on mobile */
       .stop-photo { height: 120px; }
-      #zolaMap { height: 220px; }
+      #olliMap { height: 220px; }
 
       .section { padding: 72px 24px; }
       .steps { grid-template-columns: 1fr; }
@@ -2121,15 +2120,15 @@
 
       <div class="loading-steps" id="loadingSteps">
         <div class="loading-step" id="ls1">
-          <div class="ls-icon"><img src="olli-face.png" class="ls-emoji" style="width:28px;height:28px;object-fit:contain;background:transparent;" /><div class="ls-spin"></div></div>
+          <div class="ls-icon"><img src="olli-face.png" alt="Olli" class="ls-emoji" style="width:28px;height:28px;object-fit:contain;background:transparent;" /><div class="ls-spin"></div></div>
           <span>Olli is reading your vibe...</span>
         </div>
         <div class="loading-step" id="ls2">
-          <div class="ls-icon"><img src="olli-face.png" class="ls-emoji" style="width:28px;height:28px;object-fit:contain;background:transparent;" /><div class="ls-spin"></div></div>
+          <div class="ls-icon"><img src="olli-face.png" alt="Olli" class="ls-emoji" style="width:28px;height:28px;object-fit:contain;background:transparent;" /><div class="ls-spin"></div></div>
           <span>Finding the perfect spots...</span>
         </div>
         <div class="loading-step" id="ls3">
-          <div class="ls-icon"><img src="olli-face.png" class="ls-emoji" style="width:28px;height:28px;object-fit:contain;background:transparent;" /><div class="ls-spin"></div></div>
+          <div class="ls-icon"><img src="olli-face.png" alt="Olli" class="ls-emoji" style="width:28px;height:28px;object-fit:contain;background:transparent;" /><div class="ls-spin"></div></div>
           <span>Olli is crafting your itinerary...</span>
         </div>
       </div>
@@ -2148,18 +2147,18 @@
             <div class="map-label">🗺️ Your day on the map</div>
           </div>
           <div class="map-wrap" id="mapWrap">
-            <iframe id="zolaMap" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe id="olliMap" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
             <div class="map-overlay" id="mapOverlay" onclick="activateMap()">
               <div class="map-overlay-msg">👆 Tap to interact · scroll to continue ↓</div>
             </div>
           </div>
         </div>
 
-        <div class="zola-tip" id="zolaTip" style="display:none">
-          <div class="zola-tip-header">
+        <div class="olli-tip" id="olliTip" style="display:none">
+          <div class="olli-tip-header">
             <span style="font-size:18px">✦</span> Olli's local tip
           </div>
-          <div class="zola-tip-text" id="zolaTipText"></div>
+          <div class="olli-tip-text" id="olliTipText"></div>
         </div>
 
         <!-- PROMINENT SHARE BUTTON -->
@@ -2764,15 +2763,24 @@
     }
 
     async function signInWithGoogle() {
-      await _supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: window.location.href }
-      });
+      try {
+        await _supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: window.location.href }
+        });
+      } catch (e) {
+        console.error('Google sign in error:', e);
+      }
     }
 
     async function signOut() {
-      await _supabase.auth.signOut();
-      clearUser();
+      try {
+        await _supabase.auth.signOut();
+        clearUser();
+      } catch (e) {
+        console.error('Sign out error:', e);
+        clearUser();
+      }
     }
 
     // ── SAVE ITINERARY TO SUPABASE ──
@@ -2865,7 +2873,33 @@
       canvas.width = 1080;
       canvas.height = 1920;
 
+      // ── ENSURE SYNE FONT IS LOADED BEFORE DRAWING ──
+      try {
+        await document.fonts.load('800 72px Syne');
+        await document.fonts.load('400 36px Syne');
+        await document.fonts.load('400 36px DM Sans');
+      } catch (e) {
+        console.warn('Font preload warning:', e);
+        // Continue anyway — will fall back to system fonts
+      }
+
       // ── BACKGROUND GRADIENT ──
+      // Polyfill roundRect for older browsers
+      if (!ctx.roundRect) {
+        ctx.roundRect = function(x, y, w, h, r) {
+          ctx.beginPath();
+          ctx.moveTo(x + r, y);
+          ctx.lineTo(x + w - r, y);
+          ctx.arcTo(x + w, y, x + w, y + r, r);
+          ctx.lineTo(x + w, y + h - r);
+          ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+          ctx.lineTo(x + r, y + h);
+          ctx.arcTo(x, y + h, x, y + h - r, r);
+          ctx.lineTo(x, y + r);
+          ctx.arcTo(x, y, x + r, y, r);
+          ctx.closePath();
+        };
+      }
       const grad = ctx.createLinearGradient(0, 0, 1080, 1920);
       grad.addColorStop(0, '#FFB800');
       grad.addColorStop(0.5, '#FF6B35');
@@ -2892,7 +2926,7 @@
       ctx.fill();
 
       // ── HEADER — LOGO ──
-      ctx.font = '800 72px Arial';
+      ctx.font = '800 72px Syne, Arial';
       ctx.fillStyle = 'rgba(255,255,255,0.95)';
       ctx.textAlign = 'left';
       ctx.fillText('Hey, Olli!', 80, 160);
@@ -2907,7 +2941,7 @@
 
       // ── ITINERARY TITLE ──
       const title = currentItineraryData?.title || 'Your Perfect Day';
-      ctx.font = '800 64px Arial';
+      ctx.font = '800 64px Syne, Arial';
       ctx.fillStyle = '#ffffff';
       ctx.textAlign = 'left';
       // Word wrap the title
@@ -2930,7 +2964,7 @@
       const tags = currentItineraryData?.mood_tags?.slice(0, 3) || [];
       let tagX = 80;
       const tagY = titleY + 70;
-      ctx.font = '600 30px Arial';
+      ctx.font = '600 30px DM Sans, Arial';
       for (const tag of tags) {
         const tw = ctx.measureText(tag).width + 40;
         ctx.fillStyle = 'rgba(255,255,255,0.2)';
@@ -2947,7 +2981,7 @@
       const dotColors = ['#FFB800', '#FF6B35', '#00B4A6', '#C8F000'];
       let stopY = tagY + 120;
 
-      ctx.font = '600 28px Arial';
+      ctx.font = '600 28px DM Sans, Arial';
       ctx.fillStyle = 'rgba(255,255,255,0.6)';
       ctx.fillText('YOUR ITINERARY', 80, stopY - 10);
 
@@ -2975,19 +3009,19 @@
         }
 
         // Time
-        ctx.font = '500 30px Arial';
+        ctx.font = '500 30px DM Sans, Arial';
         ctx.fillStyle = 'rgba(255,255,255,0.6)';
         ctx.textAlign = 'left';
         ctx.fillText(stop.time || '', 140, stopY);
 
         // Name
-        ctx.font = '800 46px Arial';
+        ctx.font = '800 46px Syne, Arial';
         ctx.fillStyle = '#ffffff';
         ctx.fillText(stop.name || '', 140, stopY + 46);
 
         // Type + Rating
         const meta = [stop.type, stop.rating ? `⭐ ${stop.rating}` : ''].filter(Boolean).join('  ·  ');
-        ctx.font = '400 28px Arial';
+        ctx.font = '400 28px DM Sans, Arial';
         ctx.fillStyle = 'rgba(255,255,255,0.55)';
         ctx.fillText(meta, 140, stopY + 82);
 
@@ -3004,11 +3038,11 @@
       ctx.stroke();
 
       // ── FOOTER CTA ──
-      ctx.font = '400 36px Arial';
+      ctx.font = '400 36px DM Sans, Arial';
       ctx.fillStyle = 'rgba(255,255,255,0.75)';
       ctx.textAlign = 'center';
       ctx.fillText('Plan your vibe at', 540, 1820);
-      ctx.font = '800 48px Arial';
+      ctx.font = '800 48px Syne, Arial';
       ctx.fillStyle = '#ffffff';
       ctx.fillText('getolliapp.com', 540, 1878);
 
@@ -3721,7 +3755,7 @@
       // ── BUILD MAP ──
       if (mapPins.length > 0) {
         const mapSection = document.getElementById('mapSection');
-        const mapIframe = document.getElementById('zolaMap');
+        const mapIframe = document.getElementById('olliMap');
 
         // Build Google Maps embed with all pins as a search
         // Use the first stop as center, list all in the q param
@@ -3735,10 +3769,10 @@
 
       // Olli tip
       if(data.olli_note) {
-        document.getElementById('zolaTipText').textContent = data.olli_note;
-        document.getElementById('zolaTip').style.display = 'block';
+        document.getElementById('olliTipText').textContent = data.olli_note;
+        document.getElementById('olliTip').style.display = 'block';
       } else {
-        document.getElementById('zolaTip').style.display = 'none';
+        document.getElementById('olliTip').style.display = 'none';
       }
 
       document.getElementById('resultsPanel').classList.add('visible');
