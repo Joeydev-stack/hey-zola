@@ -2199,17 +2199,19 @@
         <div class="bento-tile-label">
           <span class="bento-tile-dot"></span> Live feed
         </div>
-        <div class="bento-feed-item">
-          A local just found hidden tacos in Austin 🌮
-          <div class="bento-feed-city">Austin, TX · 2 min ago</div>
-        </div>
-        <div class="bento-feed-item">
-          Date night planned in NYC 🌹
-          <div class="bento-feed-city">New York, NY · 5 min ago</div>
-        </div>
-        <div class="bento-feed-item">
-          Golden hour rooftop found in Miami 🌅
-          <div class="bento-feed-city">Miami, FL · 11 min ago</div>
+        <div id="olliFeed">
+          <div class="bento-feed-item">
+            A local just found hidden tacos in Austin 🌮
+            <div class="bento-feed-city">Austin, TX · <span class="feed-ts" data-offset="2"></span></div>
+          </div>
+          <div class="bento-feed-item">
+            Date night planned in NYC 🌹
+            <div class="bento-feed-city">New York, NY · <span class="feed-ts" data-offset="5"></span></div>
+          </div>
+          <div class="bento-feed-item">
+            Golden hour rooftop found in Miami 🌅
+            <div class="bento-feed-city">Miami, FL · <span class="feed-ts" data-offset="11"></span></div>
+          </div>
         </div>
       </div>
 
@@ -2816,6 +2818,90 @@
       const wrap = document.getElementById('navAuthWrap');
       if (wrap) wrap.classList.add('auth-ready');
     }, 1000);
+
+    // ── LIVE FEED — dynamic timestamps + rotating entries ──
+    const feedEntries = [
+      { text: 'A local just found hidden tacos in Austin 🌮', city: 'Austin, TX' },
+      { text: 'Date night planned in NYC 🌹', city: 'New York, NY' },
+      { text: 'Golden hour rooftop found in Miami 🌅', city: 'Miami, FL' },
+      { text: 'Kid-friendly afternoon built in Atlanta 🍑', city: 'Atlanta, GA' },
+      { text: 'Hidden brunch spot discovered in Chicago ☕', city: 'Chicago, IL' },
+      { text: 'Romantic dinner planned in Los Angeles 🌴', city: 'Los Angeles, CA' },
+      { text: 'Local gems found in Nashville 🎵', city: 'Nashville, TN' },
+      { text: 'Artsy afternoon built in Portland 🎨', city: 'Portland, OR' },
+      { text: 'Sunset rooftop discovered in Austin 🌇', city: 'Austin, TX' },
+      { text: 'First night itinerary built in Denver ⛰️', city: 'Denver, CO' },
+    ];
+
+    function formatTimeAgo(minutes) {
+      if (minutes < 1) return 'just now';
+      if (minutes === 1) return '1 min ago';
+      if (minutes < 60) return `${minutes} min ago`;
+      const h = Math.floor(minutes / 60);
+      return h === 1 ? '1 hr ago' : `${h} hrs ago`;
+    }
+
+    function initLiveFeed() {
+      const timestamps = document.querySelectorAll('.feed-ts');
+      // Set initial dynamic timestamps on page load
+      // Each visitor sees slightly different times based on when they arrived
+      const baseJitter = Math.floor(Math.random() * 3); // 0-2 min random jitter
+      timestamps.forEach(el => {
+        const offset = parseInt(el.dataset.offset) + baseJitter;
+        el.textContent = formatTimeAgo(offset);
+      });
+
+      // Tick every 60 seconds — increments all timestamps by 1 min
+      let ticks = 0;
+      setInterval(() => {
+        ticks++;
+        timestamps.forEach(el => {
+          const original = parseInt(el.dataset.offset) + baseJitter;
+          el.textContent = formatTimeAgo(original + ticks);
+        });
+
+        // Every 3 minutes, rotate the oldest entry out and add a new one
+        if (ticks % 3 === 0) {
+          rotateFeedEntry();
+        }
+      }, 60000);
+    }
+
+    let feedIndex = 3; // start after the 3 initial entries
+    function rotateFeedEntry() {
+      const feed = document.getElementById('olliFeed');
+      if (!feed) return;
+      const items = feed.querySelectorAll('.bento-feed-item');
+      if (!items.length) return;
+
+      // Remove oldest entry with fade
+      const oldest = items[0];
+      oldest.style.transition = 'opacity 0.4s, transform 0.4s';
+      oldest.style.opacity = '0';
+      oldest.style.transform = 'translateX(-10px)';
+      setTimeout(() => oldest.remove(), 400);
+
+      // Add new entry
+      const next = feedEntries[feedIndex % feedEntries.length];
+      feedIndex++;
+      const div = document.createElement('div');
+      div.className = 'bento-feed-item';
+      div.style.opacity = '0';
+      div.style.transform = 'translateX(10px)';
+      div.style.transition = 'opacity 0.4s, transform 0.4s';
+      div.innerHTML = `${next.text}<div class="bento-feed-city">${next.city} · <span class="feed-ts" data-offset="0">just now</span></div>`;
+      feed.appendChild(div);
+      // Trigger fade in
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          div.style.opacity = '1';
+          div.style.transform = 'translateX(0)';
+        });
+      });
+    }
+
+    // Init the live feed
+    initLiveFeed();
 
     // ── STICKY CTA ──
     const stickyCta = document.getElementById('stickyCta');
