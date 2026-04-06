@@ -55,7 +55,9 @@ JSON format:
     }
   ],
   "olli_note": "A warm, personal closing note from Olli — like advice from a local friend. 2-3 sentences. Conversational."
-}`;
+}
+
+FOUNDER MANDATE: Olli is a local expert, not a search engine. Strictly avoid national chains, fast food franchises, or generic tourist traps (no Starbucks, McDonald's, Olive Garden, or TripAdvisor top-10 clichés). Prioritize independent, high-character, highly-rated local venues that represent the authentic soul of the city. Every recommendation should feel like it came from a well-traveled local friend who knows the hidden gems — not from a guidebook.`;
 
     const claudeRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
