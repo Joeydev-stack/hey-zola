@@ -1,4 +1,5 @@
- export default async function handler(req, res) {
+
+⏺ export default async function handler(req, res) {
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -13,8 +14,8 @@
       const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
       const PLACES_KEY = process.env.GOOGLE_PLACES_API_KEY;
 
-      // ── STEP 1: Claude interprets vibe into search queries ──
-      const systemPrompt = `You are Olli, an AI-powered local discovery guide. You ONLY respond with valid JSON — no 
+      // STEP 1: Claude interprets vibe into search queries
+      const systemPrompt = `You are Olli, an AI-powered local discovery guide. You ONLY respond with valid JSON - no 
   markdown, no explanation, just raw JSON.
 
   Your job: Take a user's vibe and city, return 3-5 specific search queries to find the best matching places on Google 
@@ -40,7 +41,7 @@
         "olli_pick_reason": "one sentence why this type of place fits the vibe"
       }
     ],
-    "olli_note": "A warm, personal closing note from Olli — like advice from a local friend. 2-3 sentences. 
+    "olli_note": "A warm, personal closing note from Olli - like advice from a local friend. 2-3 sentences. 
   Conversational."
   }`;
 
@@ -66,7 +67,7 @@
       const clean = raw.replace(/```json|```/g, '').trim();
       const plan = JSON.parse(clean);
 
-      // ── STEP 2: Geocode city to lat/lng so every Places search is pinned ──
+      // STEP 2: Geocode city to lat/lng so every Places search is pinned
       let cityLat = null;
       let cityLng = null;
       try {
@@ -82,19 +83,17 @@
         console.error('Geocoding error:', e.message);
       }
 
-      // ── STEP 3: Google Places — find best match for each query ──
+      // STEP 3: Google Places - find best match for each query
       const stops = [];
 
       for (const item of plan.queries) {
         try {
-          // Text Search to find candidates — pinned to city coordinates if available
           const locationBias = (cityLat && cityLng) ? `&location=${cityLat},${cityLng}&radius=50000` : '';
           const searchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(item.
   query)}${locationBias}&key=${PLACES_KEY}`;
           const searchRes = await fetch(searchUrl);
           const searchData = await searchRes.json();
-
-          // Pick best result: highest rating with enough reviews (not just first)
+  
           const candidates = (searchData.results || []).slice(0, 5);
           let best = candidates[0];
           for (const c of candidates) {
@@ -104,8 +103,7 @@
           }
 
           if (!best) continue;
-  
-          // Place Details for photos, hours, website
+
           const detailsUrl =
   `https://maps.googleapis.com/maps/api/place/details/json?place_id=${best.place_id}&fields=name,rating,formatted_addres
   s,opening_hours,photos,price_level,editorial_summary,url,user_ratings_total,geometry&key=${PLACES_KEY}`;
@@ -113,7 +111,6 @@
           const detailsData = await detailsRes.json();
           const place = detailsData.result || {};
 
-          // Build photo URL (first photo if available)
           let photoUrl = null;
           if (place.photos && place.photos.length > 0) {
             const ref = place.photos[0].photo_reference;
@@ -121,15 +118,12 @@
   `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${ref}&key=${PLACES_KEY}`;
           }
 
-          // Open/closed status
           const isOpen = place.opening_hours?.open_now;
           const openStatus = isOpen === true ? 'open' : isOpen === false ? 'closed' : 'unknown';
 
-          // Google Maps deep link
           const mapsUrl = place.url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name 
   + ' ' + (place.formatted_address || ''))}`;
-  
-          // Coords for map pins
+
           const lat = place.geometry?.location?.lat || null;
           const lng = place.geometry?.location?.lng || null;
 
@@ -147,8 +141,7 @@
             maps_url: mapsUrl,
             lat,
             lng,
-            tags: [item.type, openStatus === 'open' ? '✅ Open now' : openStatus === 'closed' ? '⛔ Closed' : '🕐 Check 
-  hours']
+            tags: [item.type, openStatus === 'open' ? 'Open now' : openStatus === 'closed' ? 'Closed' : 'Check hours']
           });
 
         } catch (e) {
@@ -162,9 +155,8 @@
         stops,
         olli_note: plan.olli_note
       });
-  
+
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
   }
-
