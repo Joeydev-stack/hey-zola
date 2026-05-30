@@ -122,11 +122,11 @@ FOUNDER MANDATE: Olli is a local expert, not a search engine. Strictly avoid nat
         const detailsData = await detailsRes.json();
         const place = detailsData.result || {};
 
-        // Build photo URL (first photo if available)
+        // Build photo URL — proxied through /api/photo so the key never reaches the client
         let photoUrl = null;
         if (place.photos && place.photos.length > 0) {
           const ref = place.photos[0].photo_reference;
-          photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${ref}&key=${PLACES_KEY}`;
+          photoUrl = '/api/photo?ref=' + ref + '&maxwidth=600';
         }
 
         // Open/closed status

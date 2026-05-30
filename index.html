@@ -3834,12 +3834,23 @@
       if (mapPins.length > 0) {
         const mapSection = document.getElementById('mapSection');
         const mapIframe = document.getElementById('olliMap');
+        const MAP_KEY = 'AIzaSyD4_4UQN9LNE3l6bjjUeEZL1Nn6dXtK7Qs';
+        let embedSrc;
 
-        // Build Google Maps embed with all pins as a search
-        // Use the first stop as center, list all in the q param
-        const allNames = mapPins.map(p => p.name).join('|');
-        const center = mapPins[0];
-        const embedSrc = `https://www.google.com/maps/embed/v1/search?key=AIzaSyD4_4UQN9LNE3l6bjjUeEZL1Nn6dXtK7Qs&q=${encodeURIComponent(allNames + ' ' + selectedCity)}&center=${center.lat},${center.lng}&zoom=13`;
+        if (mapPins.length === 1) {
+          // Single stop — place view
+          embedSrc = 'https://www.google.com/maps/embed/v1/place?key=' + MAP_KEY + '&q=' + encodeURIComponent(mapPins[0].name + ' ' + selectedCity);
+        } else {
+          // Multiple stops — directions with lat/lng waypoints (accurate, no name parsing issues)
+          const origin = mapPins[0].lat + ',' + mapPins[0].lng;
+          const destination = mapPins[mapPins.length - 1].lat + ',' + mapPins[mapPins.length - 1].lng;
+          const middle = mapPins.slice(1, -1).map(p => p.lat + ',' + p.lng).join('|');
+          embedSrc = 'https://www.google.com/maps/embed/v1/directions?key=' + MAP_KEY
+            + '&origin=' + origin
+            + '&destination=' + destination
+            + (middle ? '&waypoints=' + middle : '')
+            + '&mode=walking';
+        }
 
         mapIframe.src = embedSrc;
         mapSection.classList.add('visible');
