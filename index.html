@@ -1038,6 +1038,10 @@
       .pricing-price { font-size: 44px; }
     }
 
+    .nav-brand {
+      display: flex; align-items: center;
+      text-decoration: none;
+    }
     .nav-logo-img {
       height: 40px;
       width: auto;
@@ -1949,7 +1953,7 @@
 
   <!-- NAV -->
   <nav>
-    <div class="nav-logo">Hey, <span class="olli">Olli</span><span class="bang">!</span></div>
+    <a href="/" class="nav-brand" aria-label="Olli home"><img src="olli-logo.png" class="nav-logo-img" alt="Olli" /></a>
     <div class="nav-links">
       <a class="nav-link" href="#how-it-works">How it works</a>
       <a class="nav-link" href="#cities">Cities</a>
@@ -2055,19 +2059,7 @@
     <div class="confetti-shape cs3"></div>
     <div class="confetti-shape cs4"></div>
 
-    <div class="hero-eyebrow"><span class="eyebrow-dot"></span> Olli-powered local discovery</div>
-    <div class="hero-proof-badge">🗺️ 100+ days planned &nbsp;·&nbsp; 🌍 Used in 20+ cities</div>
-
-    <h1 class="hero-title">
-      <span class="t-dark">Stop searching.</span><br>
-      <span class="t-coral">Start doing.</span>
-    </h1>
-
-    <p class="hero-sub">Tell Olli your vibe. Get your perfect day — instantly.</p>
-
-    <button class="hero-cta-btn" onclick="document.getElementById('demoCard').scrollIntoView({behavior:'smooth'}); setTimeout(()=>document.getElementById('vibeInput').focus(),600)">
-      ✨ Plan My Day — It's Free
-    </button>
+    <div class="hero-eyebrow" style="margin-bottom:18px;"><span class="eyebrow-dot"></span> A local friend in every city</div>
 
     <!-- LIVE AI DEMO -->
     <div class="demo-card" id="demoCard">
@@ -2458,7 +2450,7 @@
         <div class="pricing-badge" style="background:rgba(255,184,0,0.15); color:#7A5800;">⚡ Olli Pro — Founders Deal</div>
         <div class="pricing-price" style="text-decoration:line-through; opacity:0.4; font-size:28px;">$7<span class="pricing-per">/mo</span></div>
         <div class="pricing-price" style="margin-top:-8px;">$4.99<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc" style="color:var(--sun); font-weight:600;">🔥 Limited founders pricing — launching May 1st</div>
+        <div class="pricing-desc" style="color:var(--sun); font-weight:600;">🔥 Limited founders pricing — available now</div>
         <ul class="pricing-features" style="margin-top:12px;">
           <li>✅ <strong>Unlimited</strong> Olli-powered searches</li>
           <li>✅ Real venue data — photos, ratings, hours</li>
@@ -2477,7 +2469,7 @@
     <!-- FOUNDERS BANNER -->
     <div class="founders-banner reveal">
       <span class="founders-badge">🎉 Founders Offer</span>
-      1 Free Magic Search, no account needed. Create a free account for 3 searches/mo. Go Pro for unlimited — founders price locked in May 1st.
+      1 Free Magic Search, no account needed. Create a free account for 3 searches/mo. Go Pro for unlimited — at the founders price.
       <strong style="color:var(--sun)"> $4.99/mo — locked in.</strong>
     </div>
 
@@ -2553,7 +2545,7 @@
     <div class="cta-inner">
       <p class="cta-label">🎉 Live now · Founders deal inside</p>
       <h2 class="cta-title">Your best day<br>is <span class="hi">one vibe away.</span></h2>
-      <p class="cta-sub">Sign up free today. When Olli Pro launches May 1st, you'll get locked-in founders pricing — <strong style="color:var(--sun)">$4.99/month — locked in.</strong></p>
+      <p class="cta-sub">Sign up free today. Olli Pro is live — grab locked-in founders pricing at <strong style="color:var(--sun)">$4.99/month.</strong></p>
       <button class="hero-cta-btn" style="margin-bottom:16px;" onclick="openAuthModal()">
         ✨ Create my free account
       </button>
@@ -2668,7 +2660,7 @@
 
       const body = document.createElement('div');
       body.style.cssText = 'color:rgba(255,255,255,0.75);line-height:1.6;margin-bottom:12px;';
-      body.innerHTML = 'You are in early. When Olli Pro launches <strong style="color:#fff">May 1st</strong>, you get locked-in founders pricing — <strong style="color:#FFB800">$4.99/month</strong> (reg. $7/mo). We will email you when it is ready.';
+      body.innerHTML = 'You are in early. Olli Pro is <strong style="color:#fff">live now</strong> — grab locked-in founders pricing at <strong style="color:#FFB800">$4.99/month</strong> (reg. $7/mo).';
 
       const btn = document.createElement('button');
       btn.style.cssText = 'background:#FFB800;color:#1A1A2E;border:none;border-radius:100px;padding:8px 20px;font-family:Syne,sans-serif;font-weight:800;font-size:13px;cursor:pointer;';

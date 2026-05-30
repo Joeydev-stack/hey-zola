@@ -30,6 +30,20 @@ export default async function handler(req, res) {
     const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
     const PLACES_KEY = process.env.GOOGLE_PLACES_API_KEY;
 
+    // ── GEOCODE CITY → lat/lng to pin Places results ──
+    let locationParam = '';
+    try {
+      const geoUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + encodeURIComponent(city) + '&key=' + PLACES_KEY;
+      const geoResp = await fetch(geoUrl);
+      const geoJson = await geoResp.json();
+      if (geoJson.results && geoJson.results.length > 0) {
+        const loc = geoJson.results[0].geometry.location;
+        locationParam = '&location=' + loc.lat + ',' + loc.lng + '&radius=50000';
+      }
+    } catch (geoErr) {
+      console.error('Geocoding error:', geoErr.message);
+    }
+
     // ── STEP 1: Claude interprets vibe into search queries ──
     const systemPrompt = `You are Olli, an AI-powered local discovery guide. You ONLY respond with valid JSON — no markdown, no explanation, just raw JSON.
 
@@ -87,7 +101,7 @@ FOUNDER MANDATE: Olli is a local expert, not a search engine. Strictly avoid nat
     for (const item of plan.queries) {
       try {
         // Text Search to find candidates
-        const searchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(item.query)}&key=${PLACES_KEY}`;
+        const searchUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=' + encodeURIComponent(item.query) + locationParam + '&key=' + PLACES_KEY;
         const searchRes = await fetch(searchUrl);
         const searchData = await searchRes.json();
 
