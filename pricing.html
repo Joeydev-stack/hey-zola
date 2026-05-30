@@ -92,6 +92,7 @@
     .pricing-grid {
       display: flex;
       flex-wrap: wrap;
+      align-items: stretch;
       gap: 20px;
       justify-content: center;
       max-width: 1140px;
@@ -127,10 +128,14 @@
     }
     .pricing-price {
       font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800;
-      letter-spacing: -4px; line-height: 1; color: var(--dark); margin-bottom: 6px;
+      letter-spacing: -4px; line-height: 1; color: var(--dark); margin-bottom: 0;
     }
     .pricing-card-pro .pricing-price { color: var(--white); }
-    .pricing-per { font-size: 18px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
+    .pricing-per {
+      display: block;
+      font-size: 15px; font-weight: 400; letter-spacing: 0;
+      color: var(--muted); margin-top: 4px; margin-bottom: 14px;
+    }
     .pricing-card-pro .pricing-per { color: rgba(255,255,255,0.45); }
     .pricing-effective {
       font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
