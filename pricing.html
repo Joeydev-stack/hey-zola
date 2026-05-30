@@ -91,13 +91,13 @@
       display: flex; justify-content: center;
     }
     .pricing-grid {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 20px; width: 100%; max-width: 1100px;
     }
     .pricing-card {
       background: var(--off); border-radius: 24px; padding: 36px 28px;
       border: 2px solid transparent; transition: transform 0.25s, box-shadow 0.25s;
-      display: flex; flex-direction: column;
+      display: flex; flex-direction: column; min-width: 0;
     }
     .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
     .pricing-card-pro {
@@ -118,6 +118,7 @@
     .pricing-price {
       font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800;
       letter-spacing: -4px; line-height: 1; color: var(--dark); margin-bottom: 6px;
+      word-break: break-word; overflow-wrap: break-word;
     }
     .pricing-card-pro .pricing-price,
     .pricing-card-annual .pricing-price { color: var(--white); }
@@ -180,23 +181,34 @@
     .footer-dots { display: flex; gap: 8px; }
     .fd { width: 10px; height: 10px; border-radius: 50%; }
 
-    @media (max-width: 1024px) {
-      .pricing-grid { grid-template-columns: 1fr 1fr; }
-      .pricing-card-annual { grid-column: span 2; max-width: 540px; margin: 0 auto; width: 100%; }
+    @media (max-width: 1200px) {
+      .pricing-wrap { padding: 40px 32px 100px; }
+      .pricing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    }
+    @media (max-width: 960px) {
+      .pricing-wrap { padding: 40px 24px 100px; }
+      .pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pricing-card-annual { grid-column: 1 / -1; max-width: 480px; margin: 0 auto; width: 100%; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 18px 24px; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .pricing-hero { padding: 110px 24px 40px; }
+      .pricing-wrap { padding: 24px 16px 60px; }
+      .pricing-grid { grid-template-columns: minmax(0, 1fr); }
+      .pricing-card-annual { grid-column: auto; max-width: 100%; }
+      .pricing-card { padding: 28px 22px; }
+      .faq-section { padding: 0 20px 60px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
+      .nav-logo-img { height: 32px; }
     }
     @media (max-width: 900px) {
       nav { padding: 18px 24px; }
       .nav-links { display: none; }
       .nav-cta { display: none; }
       .hamburger { display: flex; }
-      .pricing-hero { padding: 110px 24px 40px; }
-      .pricing-wrap { padding: 24px 20px 60px; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .pricing-card-annual { grid-column: span 1; max-width: 100%; }
-      .pricing-card { padding: 28px 22px; }
-      .pricing-price { font-size: 52px; }
-      .faq-section { padding: 0 24px 60px; }
-      footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
       .nav-logo-img { height: 32px; }
     }
   </style>
