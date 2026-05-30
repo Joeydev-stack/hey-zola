@@ -19,15 +19,15 @@
     /* NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 22px 52px;
+      padding: 18px 52px;
       display: flex; align-items: center; justify-content: space-between;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(17,17,17,0.07);
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid rgba(17,17,17,0.06);
     }
-    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; color: var(--dark); text-decoration: none; }
-    .nav-logo .olli { color: var(--coral); }
-    .nav-logo .bang { color: var(--sun); }
+    .nav-brand { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo-img { height: 40px; width: auto; display: block; }
     .nav-links { display: flex; align-items: center; gap: 32px; }
     .nav-link { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
     .nav-link:hover, .nav-link.active { color: var(--dark); }
@@ -91,39 +91,57 @@
       display: flex; justify-content: center;
     }
     .pricing-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 20px; width: 100%; max-width: 860px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px; width: 100%; max-width: 1100px;
     }
     .pricing-card {
-      background: var(--off); border-radius: 24px; padding: 40px 36px;
+      background: var(--off); border-radius: 24px; padding: 36px 28px;
       border: 2px solid transparent; transition: transform 0.25s, box-shadow 0.25s;
+      display: flex; flex-direction: column;
     }
-    .pricing-card:hover { transform: translateY(-4px); }
+    .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
     .pricing-card-pro {
       background: var(--dark); border-color: var(--sun);
-      box-shadow: 6px 6px 0 var(--sun);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05), 0 16px 48px rgba(0,0,0,0.12);
     }
-    .pricing-card-pro:hover { box-shadow: 8px 8px 0 var(--sun); }
+    .pricing-card-pro:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 32px 72px rgba(0,0,0,0.18); }
+    .pricing-card-annual {
+      background: var(--dark); border-color: var(--coral);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05), 0 16px 48px rgba(0,0,0,0.12);
+    }
+    .pricing-card-annual:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 32px 72px rgba(0,0,0,0.18); }
     .pricing-badge {
       display: inline-block; padding: 4px 14px; border-radius: 100px;
       font-size: 11px; font-weight: 700; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 20px;
     }
     .pricing-price {
-      font-family: 'Syne', sans-serif; font-size: 72px; font-weight: 800;
-      letter-spacing: -4px; line-height: 1; color: var(--dark); margin-bottom: 12px;
+      font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800;
+      letter-spacing: -4px; line-height: 1; color: var(--dark); margin-bottom: 6px;
     }
-    .pricing-card-pro .pricing-price { color: var(--white); }
-    .pricing-per { font-size: 20px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
-    .pricing-card-pro .pricing-per { color: rgba(255,255,255,0.45); }
-    .pricing-desc { font-size: 15px; color: var(--muted); margin-bottom: 28px; line-height: 1.5; font-weight: 300; }
-    .pricing-card-pro .pricing-desc { color: rgba(255,255,255,0.5); }
-    .pricing-features { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 12px; }
+    .pricing-card-pro .pricing-price,
+    .pricing-card-annual .pricing-price { color: var(--white); }
+    .pricing-per { font-size: 18px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
+    .pricing-card-pro .pricing-per,
+    .pricing-card-annual .pricing-per { color: rgba(255,255,255,0.45); }
+    .pricing-effective {
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.45); margin-bottom: 6px;
+    }
+    .pricing-desc { font-size: 15px; color: var(--muted); margin-bottom: 24px; line-height: 1.55; font-weight: 400; }
+    .pricing-card-pro .pricing-desc,
+    .pricing-card-annual .pricing-desc { color: rgba(255,255,255,0.55); }
+    .pricing-features { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 11px; flex: 1; }
     .pricing-features li { font-size: 14px; color: var(--dark); font-weight: 400; }
     .pricing-features li.muted { color: rgba(17,17,17,0.3); }
-    .pricing-card-pro .pricing-features li { color: rgba(255,255,255,0.85); }
-    .pricing-card-pro .pricing-features li.muted { color: rgba(255,255,255,0.25); }
-    .pricing-annual { font-size: 13px; color: var(--sun); font-weight: 500; margin-bottom: 18px; }
+    .pricing-card-pro .pricing-features li,
+    .pricing-card-annual .pricing-features li { color: rgba(255,255,255,0.85); }
+    .pricing-features li.muted { color: rgba(17,17,17,0.28); }
+    .pricing-card-pro .pricing-features li.muted,
+    .pricing-card-annual .pricing-features li.muted { color: rgba(255,255,255,0.25); }
+    .pricing-lockline { font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+    .pricing-card-pro .pricing-lockline { color: rgba(255,184,0,0.8); }
+    .pricing-card-annual .pricing-lockline { color: rgba(255,107,53,0.8); }
     .pricing-cta-secondary {
       width: 100%; padding: 16px; border-radius: 14px;
       border: 2px solid rgba(17,17,17,0.15); background: transparent;
@@ -132,12 +150,19 @@
     }
     .pricing-cta-secondary:hover { border-color: var(--dark); background: var(--dark); color: var(--white); }
     .pricing-cta-pro {
-      width: 100%; padding: 18px; border-radius: 14px; border: none;
+      width: 100%; padding: 16px; border-radius: 14px; border: none;
       background: var(--sun); color: var(--dark);
-      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px;
       cursor: pointer; transition: all 0.2s;
     }
-    .pricing-cta-pro:hover { background: var(--coral); color: #fff; transform: scale(1.02); }
+    .pricing-cta-pro:hover { background: #e5a600; transform: scale(1.02); }
+    .pricing-cta-annual {
+      width: 100%; padding: 16px; border-radius: 14px; border: none;
+      background: var(--coral); color: var(--white);
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .pricing-cta-annual:hover { background: #e5551f; transform: scale(1.02); }
 
     /* FAQ */
     .faq-section { padding: 0 52px 100px; max-width: 760px; margin: 0 auto; }
@@ -155,6 +180,10 @@
     .footer-dots { display: flex; gap: 8px; }
     .fd { width: 10px; height: 10px; border-radius: 50%; }
 
+    @media (max-width: 1024px) {
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+      .pricing-card-annual { grid-column: span 2; max-width: 540px; margin: 0 auto; width: 100%; }
+    }
     @media (max-width: 900px) {
       nav { padding: 18px 24px; }
       .nav-links { display: none; }
@@ -163,10 +192,12 @@
       .pricing-hero { padding: 110px 24px 40px; }
       .pricing-wrap { padding: 24px 20px 60px; }
       .pricing-grid { grid-template-columns: 1fr; }
-      .pricing-card { padding: 28px 24px; }
-      .pricing-price { font-size: 56px; }
+      .pricing-card-annual { grid-column: span 1; max-width: 100%; }
+      .pricing-card { padding: 28px 22px; }
+      .pricing-price { font-size: 52px; }
       .faq-section { padding: 0 24px 60px; }
       footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
+      .nav-logo-img { height: 32px; }
     }
   </style>
 </head>
@@ -174,14 +205,14 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="index.html">Olli</a>
+    <a href="index.html" class="nav-brand" aria-label="Olli home"><img src="olli-logo.png" class="nav-logo-img" alt="Olli" /></a>
     <div class="nav-links">
       <a class="nav-link" href="index.html#how-it-works">How it works</a>
       <a class="nav-link" href="index.html#cities">Cities</a>
       <a class="nav-link active" href="pricing.html">Pricing</a>
       <a class="nav-link" href="index.html#about">About</a>
     </div>
-    <a class="nav-cta" href="index.html#pricing">Get Early Access</a>
+    <a class="nav-cta" href="index.html">Try it free</a>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -199,8 +230,8 @@
   <!-- HERO -->
   <div class="pricing-hero">
     <div class="label">Pricing</div>
-    <h1 class="pricing-hero-title">Free to explore.<br><em>Pro to go deeper.</em></h1>
-    <p class="pricing-hero-sub">Start for free. Upgrade when you're hooked.</p>
+    <h1 class="pricing-hero-title">Simple pricing.<br><em>No surprises.</em></h1>
+    <p class="pricing-hero-sub">Start free. Go Pro when you're hooked.</p>
   </div>
 
   <!-- CARDS -->
@@ -211,35 +242,49 @@
       <div class="pricing-card">
         <div class="pricing-badge" style="background:rgba(17,17,17,0.06); color:var(--muted)">Free</div>
         <div class="pricing-price">$0<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc">Perfect for trying Olli out. No account needed.</div>
+        <div class="pricing-desc">For trying Olli when you need a quick idea.</div>
         <ul class="pricing-features">
-          <li>✅ 3 Olli-powered searches per month</li>
+          <li>✅ 3 Olli searches per month</li>
           <li>✅ Real venue data — photos, ratings, hours</li>
-          <li>✅ Interactive map with pins</li>
           <li>✅ Works in any city on earth</li>
           <li class="muted">— Saved itineraries</li>
-          <li class="muted">— Favorite spots</li>
-          <li class="muted">— Shareable itinerary links</li>
+          <li class="muted">— Favorites</li>
+          <li class="muted">— Shareable links</li>
         </ul>
-        <button class="pricing-cta-secondary" onclick="window.location.href='index.html'">Try it free →</button>
+        <button class="pricing-cta-secondary" onclick="window.location.href='index.html'">Start free →</button>
       </div>
 
-      <!-- PRO -->
+      <!-- PRO MONTHLY -->
       <div class="pricing-card pricing-card-pro">
-        <div class="pricing-badge" style="background:rgba(255,184,0,0.15); color:#7A5800;">⚡ Olli Pro</div>
-        <div class="pricing-price" style="text-decoration:line-through; opacity:0.4; font-size:28px;">$7<span class="pricing-per">/mo</span></div><div class="pricing-price" style="margin-top:-8px;">$4.99<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc">For the real explorers. Unlimited everything.</div>
+        <div class="pricing-badge" style="background:rgba(255,184,0,0.15); color:#7A5800;">⚡ Olli Pro Founders</div>
+        <div class="pricing-price">$4.99<span class="pricing-per">/month</span></div>
+        <div class="pricing-desc">For people who want a local friend in every city.</div>
         <ul class="pricing-features">
-          <li>✅ <strong>Unlimited</strong> Olli-powered searches</li>
-          <li>✅ Real venue data — photos, ratings, hours</li>
-          <li>✅ Interactive map with pins</li>
-          <li>✅ Works in any city on earth</li>
-          <li>✅ Save & revisit your itineraries</li>
+          <li>✅ <strong>Unlimited</strong> searches</li>
+          <li>✅ Saved plans &amp; itineraries</li>
           <li>✅ Favorite spots across cities</li>
           <li>✅ Shareable itinerary links</li>
+          <li>✅ Real venue data — photos, ratings, hours</li>
+          <li>✅ Works in any city on earth</li>
         </ul>
-        <div class="pricing-annual">💛 $49/year — founders rate (reg. $60)</div>
+        <div class="pricing-lockline">🔒 Founder price locked in forever</div>
         <button class="pricing-cta-pro" onclick="window.location.href='index.html#pricing'">✉️ Request Founders Access →</button>
+      </div>
+
+      <!-- ANNUAL — BEST VALUE -->
+      <div class="pricing-card pricing-card-annual">
+        <div class="pricing-badge" style="background:rgba(200,240,0,0.15); color:#556800;">🌟 Best Value</div>
+        <div class="pricing-price">$39.99<span class="pricing-per">/year</span></div>
+        <div class="pricing-effective">$3.33/mo, billed annually</div>
+        <div class="pricing-desc">Save more with annual founder pricing.</div>
+        <ul class="pricing-features">
+          <li>✅ Everything in Olli Pro</li>
+          <li>✅ <strong>Save 33%</strong> vs monthly</li>
+          <li>✅ Founder rate locked in</li>
+          <li>✅ One simple yearly charge</li>
+        </ul>
+        <div class="pricing-lockline">🔒 Reg. $84/year — you pay $39.99</div>
+        <button class="pricing-cta-annual" onclick="window.location.href='index.html#pricing'">✉️ Request Annual Access →</button>
       </div>
 
     </div>
@@ -250,8 +295,8 @@
     <div class="faq-title">Common questions</div>
 
     <div class="faq-item">
-      <div class="faq-q">When does Olli Pro launch?</div>
-      <div class="faq-a">Olli Pro is coming soon. Request early access and be first in line — at a founder discount.</div>
+      <div class="faq-q">What's the difference between monthly and annual?</div>
+      <div class="faq-a">Same Pro features either way. Annual billing saves you 33% — $39.99/year vs $59.88 if you paid monthly. Both lock in the founders rate.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">What counts as a "search"?</div>

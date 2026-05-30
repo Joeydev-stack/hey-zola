@@ -945,10 +945,33 @@
     /* PRICING */
     .pricing-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 20px;
-      max-width: 860px;
+      max-width: 1100px;
     }
+    .pricing-effective {
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.45); margin-bottom: 6px;
+    }
+    .pricing-card-annual {
+      background: var(--dark); border-color: var(--coral);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05), 0 16px 48px rgba(0,0,0,0.12);
+    }
+    .pricing-card-annual:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 32px 72px rgba(0,0,0,0.18); }
+    .pricing-card-annual .pricing-price { color: var(--white); }
+    .pricing-card-annual .pricing-per { color: rgba(255,255,255,0.45); }
+    .pricing-card-annual .pricing-desc { color: rgba(255,255,255,0.55); }
+    .pricing-card-annual .pricing-features li { color: rgba(255,255,255,0.85); }
+    .pricing-lockline { font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+    .pricing-card-pro .pricing-lockline { color: rgba(255,184,0,0.8); }
+    .pricing-card-annual .pricing-lockline { color: rgba(255,107,53,0.8); }
+    .pricing-cta-annual {
+      width: 100%; padding: 16px; border-radius: 12px; border: none;
+      background: var(--coral); color: var(--white);
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 15px; cursor: pointer; transition: all 0.2s;
+    }
+    .pricing-cta-annual:hover { background: #e5551f; transform: scale(1.02); }
     .pricing-card {
       background: var(--off);
       border-radius: 24px;
@@ -1065,8 +1088,13 @@
       white-space: nowrap;
     }
 
+    @media (max-width: 1024px) {
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+      .pricing-card-annual { grid-column: span 2; max-width: 540px; margin: 0 auto; width: 100%; }
+    }
     @media (max-width: 900px) {
       .pricing-grid { grid-template-columns: 1fr; max-width: 100%; }
+      .pricing-card-annual { grid-column: span 1; max-width: 100%; }
       .pricing-card { padding: 28px 24px; }
       .pricing-price { font-size: 44px; }
     }
@@ -2466,46 +2494,57 @@
       <div class="pricing-card">
         <div class="pricing-badge" style="background:rgba(17,17,17,0.06); color:var(--muted)">Free</div>
         <div class="pricing-price">$0<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc">Start instantly — no login required. Create a free account to unlock 3 searches per month.</div>
+        <div class="pricing-desc">For trying Olli when you need a quick idea.</div>
         <ul class="pricing-features">
-          <li>✨ 1 Instant Magic Search — no login required</li>
-          <li>✅ 3 searches/month with a free account</li>
+          <li>✅ 3 Olli searches per month</li>
           <li>✅ Real venue data — photos, ratings, hours</li>
-          <li>✅ Interactive map with pins</li>
           <li>✅ Works in any city on earth</li>
-          <li>✅ Save & share itineraries</li>
-          <li class="muted">— Unlimited searches</li>
-          <li class="muted">— Favorite spots</li>
+          <li class="muted">— Saved itineraries</li>
+          <li class="muted">— Favorites</li>
+          <li class="muted">— Shareable links</li>
         </ul>
-        <button class="pricing-cta-secondary" onclick="openAuthModal()">Create free account →</button>
+        <button class="pricing-cta-secondary" onclick="openAuthModal()">Start free →</button>
       </div>
 
-      <!-- PRO -->
+      <!-- PRO MONTHLY -->
       <div class="pricing-card pricing-card-pro">
-        <div class="pricing-badge" style="background:rgba(255,184,0,0.15); color:#7A5800;">⚡ Olli Pro — Founders Deal</div>
-        <div class="pricing-price" style="text-decoration:line-through; opacity:0.4; font-size:28px;">$7<span class="pricing-per">/mo</span></div>
-        <div class="pricing-price" style="margin-top:-8px;">$4.99<span class="pricing-per">/month</span></div>
-        <div class="pricing-desc" style="color:var(--sun); font-weight:600;">🔥 Limited founders pricing — available now</div>
-        <ul class="pricing-features" style="margin-top:12px;">
-          <li>✅ <strong>Unlimited</strong> Olli-powered searches</li>
-          <li>✅ Real venue data — photos, ratings, hours</li>
-          <li>✅ Interactive map with pins</li>
-          <li>✅ Works in any city on earth</li>
-          <li>✅ Save & revisit your itineraries</li>
+        <div class="pricing-badge" style="background:rgba(255,184,0,0.15); color:#7A5800;">⚡ Olli Pro Founders</div>
+        <div class="pricing-price">$4.99<span class="pricing-per">/month</span></div>
+        <div class="pricing-desc">For people who want a local friend in every city.</div>
+        <ul class="pricing-features">
+          <li>✅ <strong>Unlimited</strong> searches</li>
+          <li>✅ Saved plans &amp; itineraries</li>
           <li>✅ Favorite spots across cities</li>
           <li>✅ Shareable itinerary links</li>
+          <li>✅ Real venue data — photos, ratings, hours</li>
+          <li>✅ Works in any city on earth</li>
         </ul>
-        <div class="pricing-annual">💛 $49/year — founders rate (reg. $60)</div>
+        <div class="pricing-lockline">🔒 Founder price locked in forever</div>
         <button class="pricing-cta-pro" onclick="requestProInvite()">✉️ Request Founders Access →</button>
+      </div>
+
+      <!-- ANNUAL — BEST VALUE -->
+      <div class="pricing-card pricing-card-annual">
+        <div class="pricing-badge" style="background:rgba(200,240,0,0.15); color:#556800;">🌟 Best Value</div>
+        <div class="pricing-price">$39.99<span class="pricing-per">/year</span></div>
+        <div class="pricing-effective">$3.33/mo, billed annually</div>
+        <div class="pricing-desc">Save more with annual founder pricing.</div>
+        <ul class="pricing-features">
+          <li>✅ Everything in Olli Pro</li>
+          <li>✅ <strong>Save 33%</strong> vs monthly</li>
+          <li>✅ Founder rate locked in</li>
+          <li>✅ One simple yearly charge</li>
+        </ul>
+        <div class="pricing-lockline">🔒 Reg. $84/year — you pay $39.99</div>
+        <button class="pricing-cta-annual" onclick="requestProInvite()">✉️ Request Annual Access →</button>
       </div>
 
     </div>
 
     <!-- FOUNDERS BANNER -->
     <div class="founders-banner reveal">
-      <span class="founders-badge">🎉 Founders Offer</span>
-      1 Free Magic Search, no account needed. Create a free account for 3 searches/mo. Go Pro for unlimited — at the founders price.
-      <strong style="color:var(--sun)"> $4.99/mo — locked in.</strong>
+      <span class="founders-badge">🎉 Founders Pricing</span>
+      Free to start — 3 searches/month, no account needed. Go Pro for unlimited at <strong style="color:var(--sun)">$4.99/mo</strong> or save 33% at <strong style="color:var(--sun)">$39.99/year.</strong> Founder rates locked in forever.
     </div>
 
   <!-- ABOUT -->
