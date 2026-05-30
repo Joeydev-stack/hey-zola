@@ -413,6 +413,11 @@
     let authMode = 'signin';
     const dotColors = ['#FFB800','#FF6B35','#E8006F','#C8F000','#00B4A6'];
 
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
     // ── INIT ──
     async function init() {
       const { data: { session } } = await _supabase.auth.getSession();
@@ -467,7 +472,14 @@
 
       document.getElementById('loadingState').style.display = 'none';
 
-      if (error || !data || data.length === 0) {
+      if (error) {
+        const es = document.getElementById('emptyState');
+        es.querySelector('.empty-title').textContent = 'Could not load your days';
+        es.querySelector('.empty-sub').textContent = 'Something went wrong. Please refresh and try again.';
+        es.style.display = 'flex';
+        return;
+      }
+      if (!data || data.length === 0) {
         document.getElementById('emptyState').style.display = 'flex';
         return;
       }
@@ -493,20 +505,20 @@
       const card = document.createElement('div');
       card.className = 'saved-card';
 
-      const tagsHTML = tags.slice(0,3).map(t => `<span class="card-tag">${t}</span>`).join('');
+      const tagsHTML = tags.slice(0,3).map(t => `<span class="card-tag">${escapeHtml(t)}</span>`).join('');
       const stopsHTML = stops.slice(0,4).map((s, i) => `
         <div class="card-stop">
           <div class="card-stop-dot" style="background:${dotColors[i % dotColors.length]}"></div>
-          <div class="card-stop-time">${s.time || ''}</div>
-          <div class="card-stop-name">${s.name || ''}</div>
+          <div class="card-stop-time">${escapeHtml(s.time || '')}</div>
+          <div class="card-stop-name">${escapeHtml(s.name || '')}</div>
           ${s.rating ? `<div class="card-stop-rating">⭐ ${s.rating}</div>` : ''}
         </div>
       `).join('');
 
       card.innerHTML = `
         <div class="card-header">
-          <div class="card-city">📍 ${item.city || 'Unknown city'}</div>
-          <div class="card-title">${item.title || 'My Olli Day'}</div>
+          <div class="card-city">📍 ${escapeHtml(item.city || 'Unknown city')}</div>
+          <div class="card-title">${escapeHtml(item.title || 'My Olli Day')}</div>
           <div class="card-tags">${tagsHTML}</div>
         </div>
         <div class="card-body">
@@ -528,7 +540,7 @@
     async function deleteItinerary(id, btn) {
       if (!confirm('Delete this itinerary?')) return;
       btn.textContent = 'Deleting...';
-      const { error } = await _supabase.from('searches').delete().eq('id', id);
+      const { error } = await _supabase.from('searches').delete().eq('id', id).eq('user_id', currentUser.id);
       if (!error) {
         btn.closest('.saved-card').style.opacity = '0';
         btn.closest('.saved-card').style.transition = 'opacity 0.3s';
@@ -537,9 +549,7 @@
     }
 
     function viewItinerary(id) {
-      // Store id and redirect to homepage to view
-      localStorage.setItem('olli_view_id', id);
-      window.location.href = 'index.html?view=' + id;
+      window.location.href = 'day.html?id=' + id;
     }
 
     // ── AUTH ──
@@ -561,7 +571,7 @@
     }
     async function handleAuth() {
       const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value.trim();
+      const password = document.getElementById('authPassword').value;
       const errEl = document.getElementById('authError');
       const sucEl = document.getElementById('authSuccess');
       const btn = document.getElementById('authSubmitBtn');

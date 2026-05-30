@@ -2099,7 +2099,7 @@
 
   <!-- CONFETTI + SHARE CANVAS (hidden) -->
   <canvas id="confettiCanvas"></canvas>
-  <canvas id="shareCardCanvas" style="display:none;"></canvas>
+  <canvas id="shareCardCanvas" style="display:none; pointer-events:none;"></canvas>
 
   <!-- STICKY CTA -->
   <button class="sticky-cta" id="stickyCta" onclick="document.getElementById('demoCard').scrollIntoView({behavior:'smooth'}); setTimeout(()=>document.getElementById('vibeInput').focus(),600)">
@@ -2535,7 +2535,7 @@
           <li>✅ Founder rate locked in</li>
           <li>✅ One simple yearly charge</li>
         </ul>
-        <div class="pricing-lockline">🔒 Reg. $84/year — you pay $39.99</div>
+        <div class="pricing-lockline">🔒 Reg. $59.88/year — you pay $39.99</div>
         <button class="pricing-cta-annual" onclick="requestProInvite()">✉️ Request Annual Access →</button>
       </div>
 
@@ -2546,6 +2546,8 @@
       <span class="founders-badge">🎉 Founders Pricing</span>
       Free to start — 3 searches/month, no account needed. Go Pro for unlimited at <strong style="color:var(--sun)">$4.99/mo</strong> or save 33% at <strong style="color:var(--sun)">$39.99/year.</strong> Founder rates locked in forever.
     </div>
+
+  </section>
 
   <!-- ABOUT -->
   <section class="section" id="about" style="padding-top:0">
@@ -2788,7 +2790,7 @@
 
     async function handleAuth() {
       const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value.trim();
+      const password = document.getElementById('authPassword').value;
       const errEl = document.getElementById('authError');
       const sucEl = document.getElementById('authSuccess');
       const btn = document.getElementById('authSubmitBtn');
@@ -3259,7 +3261,7 @@
       let ticks = 0;
       setInterval(() => {
         ticks++;
-        timestamps.forEach(el => {
+        document.querySelectorAll('.feed-ts').forEach(el => {
           const original = parseInt(el.dataset.offset) + baseJitter;
           el.textContent = formatTimeAgo(original + ticks);
         });
@@ -3729,6 +3731,16 @@
       return '● Check hours';
     }
 
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function safeUrl(url) {
+      if (!url) return '';
+      return (url.startsWith('https://') || url.startsWith('http://')) ? url : '';
+    }
+
     // ── RENDER RESULTS ──
     function renderResults(data) {
       document.getElementById('resultTitle').textContent = data.title || 'Your Perfect Day';
@@ -3757,7 +3769,7 @@
 
         // Photo or placeholder
         const photoHTML = stop.photo_url
-          ? `<img class="stop-photo" src="${stop.photo_url}" alt="${stop.name}" loading="lazy" onerror="this.style.display='none'">`
+          ? `<img class="stop-photo" src="${escapeHtml(safeUrl(stop.photo_url))}" alt="${escapeHtml(stop.name)}" loading="lazy" onerror="this.style.display='none'">`
           : `<div class="stop-photo-placeholder">📍</div>`;
 
         // Rating stars
@@ -3778,12 +3790,12 @@
 
         // Address
         const addressHTML = stop.address
-          ? `<div class="stop-address">📍 ${stop.address}</div>`
+          ? `<div class="stop-address">📍 ${escapeHtml(stop.address)}</div>`
           : '';
 
         // Maps link
-        const mapsHTML = stop.maps_url
-          ? `<a class="maps-link" href="${stop.maps_url}" target="_blank" rel="noopener">
+        const mapsHTML = safeUrl(stop.maps_url)
+          ? `<a class="maps-link" href="${escapeHtml(safeUrl(stop.maps_url))}" target="_blank" rel="noopener">
                🗺️ Open in Google Maps
              </a>`
           : '';
@@ -3793,8 +3805,8 @@
           <div class="stop-content">
             <div class="stop-top-row">
               <div class="stop-name-block">
-                <div class="stop-time">${stop.time || ''}</div>
-                <div class="stop-name">${stop.name}</div>
+                <div class="stop-time">${escapeHtml(stop.time || '')}</div>
+                <div class="stop-name">${escapeHtml(stop.name)}</div>
               </div>
               <div class="stop-meta-right">
                 ${ratingHTML}
@@ -3802,10 +3814,10 @@
               </div>
             </div>
             <div class="stop-type-row">
-              <div class="stop-type">${stop.type || ''}</div>
+              <div class="stop-type">${escapeHtml(stop.type || '')}</div>
               ${statusHTML}
             </div>
-            <div class="stop-desc">${stop.description}</div>
+            <div class="stop-desc">${escapeHtml(stop.description)}</div>
             ${addressHTML}
             ${mapsHTML}
           </div>
@@ -3885,7 +3897,6 @@
 
       // Check search limit for guests
       if (!checkSearchLimit()) return;
-      incrementSearchCount();
 
       const btn = document.getElementById('buildBtn');
       btn.disabled = true;
@@ -3905,6 +3916,7 @@
 
         stopLoading();
         renderResults(json);
+        incrementSearchCount();
 
       } catch(err) {
         stopLoading();
@@ -3926,50 +3938,6 @@
       document.getElementById('vibeInput').focus();
     });
 
-    // ── EMAIL SUBMIT → BEEHIIV ──
-    async function submitEmail() {
-      const input = document.getElementById('emailInput');
-      const btn = document.getElementById('emailSubmitBtn');
-      const success = document.getElementById('emailSuccess');
-      const error = document.getElementById('emailError');
-      const email = input.value.trim();
-
-      if (!email || !email.includes('@')) {
-        input.style.borderColor = 'rgba(255,92,58,0.6)';
-        setTimeout(() => input.style.borderColor = '', 1500);
-        return;
-      }
-
-      btn.disabled = true;
-      btn.textContent = 'Sending...';
-      success.style.display = 'none';
-      error.style.display = 'none';
-
-      try {
-        const res = await fetch('https://api.beehiiv.com/v2/publications/pub_294198e9-a0c3-4f42-b2f9-87c56d6553a7/subscriptions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, reactivate_existing: true, send_welcome_email: true })
-        });
-
-        if (res.ok || res.status === 201 || res.status === 200) {
-          success.style.display = 'block';
-          input.value = '';
-        } else {
-          window.open(`https://getolliapp.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
-          success.style.display = 'block';
-          input.value = '';
-        }
-      } catch (err) {
-        window.open(`https://getolliapp.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, '_blank');
-        success.style.display = 'block';
-        input.value = '';
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Stay in the loop';
-      }
-    }
-
     // ── ENTER KEY (vibe input) ──
     document.getElementById('vibeInput').addEventListener('keydown', e => {
       if(e.key === 'Enter' && !e.shiftKey) {
@@ -3977,14 +3945,6 @@
         document.getElementById('buildBtn').click();
       }
     });
-
-    // ── ENTER KEY (email input) ──
-    const emailInputEl = document.getElementById('emailInput');
-    if (emailInputEl) {
-      emailInputEl.addEventListener('keydown', e => {
-        if (e.key === 'Enter') submitEmail();
-      });
-    }
   </script>
   <script>
     if ('serviceWorker' in navigator) {

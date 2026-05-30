@@ -7,7 +7,7 @@
   <meta property="og:title" content="Check out my Olli day!" />
   <meta property="og:description" content="I built the perfect day with Olli — AI-powered local discovery. Try it yourself!" />
   <meta property="og:image" content="https://getolliapp.com/olli-og-image.jpg" />
-  <meta property="og:url" content="https://getolliapp.com" />
+  <meta property="og:url" id="ogUrl" content="https://getolliapp.com" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://getolliapp.com/olli-og-image.jpg" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
@@ -222,6 +222,16 @@
 
     const dotColors = ['#FFB800','#FF6B35','#E8006F','#C8F000','#00B4A6'];
 
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function safeUrl(url) {
+      if (!url) return '';
+      return (url.startsWith('https://') || url.startsWith('http://')) ? url : '';
+    }
+
     function priceLabel(level) {
       if (level == null) return '';
       return '$'.repeat(level + 1);
@@ -261,8 +271,9 @@
           return;
         }
 
-        // Update meta tags
+        // Update meta tags dynamically
         document.title = `${data.title} — Olli`;
+        document.getElementById('ogUrl').setAttribute('content', window.location.href);
 
         // Render
         document.getElementById('itinCity').textContent = `📍 ${data.city || ''}`;
@@ -284,7 +295,7 @@
           div.style.animationDelay = `${idx * 0.1}s`;
 
           const photoHTML = stop.photo_url
-            ? `<img class="stop-photo" src="${stop.photo_url}" alt="${stop.name}" loading="lazy" onerror="this.style.display='none'">`
+            ? `<img class="stop-photo" src="${escapeHtml(safeUrl(stop.photo_url))}" alt="${escapeHtml(stop.name)}" loading="lazy" onerror="this.style.display='none'">`
             : `<div class="stop-photo-placeholder">📍</div>`;
 
           const ratingHTML = stop.rating
@@ -294,16 +305,16 @@
           const priceHTML = stop.price_level != null
             ? `<div class="stop-price">${priceLabel(stop.price_level)}</div>` : '';
 
-          const mapsHTML = stop.maps_url
-            ? `<a class="maps-link" href="${stop.maps_url}" target="_blank" rel="noopener">🗺️ Open in Google Maps</a>` : '';
+          const mapsHTML = safeUrl(stop.maps_url)
+            ? `<a class="maps-link" href="${escapeHtml(safeUrl(stop.maps_url))}" target="_blank" rel="noopener">🗺️ Open in Google Maps</a>` : '';
 
           div.innerHTML = `
             ${photoHTML}
             <div class="stop-content">
               <div class="stop-top">
                 <div>
-                  <div class="stop-time">${stop.time || ''}</div>
-                  <div class="stop-name">${stop.name}</div>
+                  <div class="stop-time">${escapeHtml(stop.time || '')}</div>
+                  <div class="stop-name">${escapeHtml(stop.name)}</div>
                 </div>
                 <div class="stop-meta">
                   ${ratingHTML}
@@ -311,11 +322,11 @@
                 </div>
               </div>
               <div class="stop-type-row">
-                <div class="stop-type">${stop.type || ''}</div>
+                <div class="stop-type">${escapeHtml(stop.type || '')}</div>
                 <span class="stop-status ${statusClass(stop.open_status)}">${statusLabel(stop.open_status)}</span>
               </div>
-              ${stop.description ? `<div class="stop-desc">${stop.description}</div>` : ''}
-              ${stop.address ? `<div class="stop-address">📍 ${stop.address}</div>` : ''}
+              ${stop.description ? `<div class="stop-desc">${escapeHtml(stop.description)}</div>` : ''}
+              ${stop.address ? `<div class="stop-address">📍 ${escapeHtml(stop.address)}</div>` : ''}
               ${mapsHTML}
             </div>
           `;

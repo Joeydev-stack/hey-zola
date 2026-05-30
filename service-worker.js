@@ -6,6 +6,7 @@ const STATIC_ASSETS = [
   '/saved.html',
   '/day.html',
   '/olli-face.png',
+  '/olli-logo.png',
   '/olli-icon-192.png',
   '/olli-icon-512.png',
   '/olli-og-image.jpg',
@@ -53,6 +54,7 @@ self.addEventListener('message', event => {
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   if (event.request.url.includes('/api/')) return;
+  if (event.request.url.includes('/_vercel/')) return;
   if (event.request.url.includes('supabase.co')) return;
   if (event.request.url.includes('googleapis.com') && !event.request.url.includes('fonts')) return;
 
