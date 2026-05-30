@@ -87,17 +87,27 @@
 
     /* PRICING GRID */
     .pricing-wrap {
-      padding: 40px 52px 100px;
-      display: flex; justify-content: center;
+      padding: 40px 24px 100px;
     }
     .pricing-grid {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px; width: 100%; max-width: 1100px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      max-width: 1140px;
+      margin: 0 auto;
     }
     .pricing-card {
-      background: var(--off); border-radius: 24px; padding: 36px 28px;
-      border: 2px solid transparent; transition: transform 0.25s, box-shadow 0.25s;
-      display: flex; flex-direction: column; min-width: 0;
+      flex: 1 1 300px;
+      max-width: 360px;
+      background: var(--off);
+      border-radius: 24px;
+      padding: 36px 28px;
+      border: 2px solid transparent;
+      transition: transform 0.25s, box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
     }
     .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
     .pricing-card-pro {
@@ -105,11 +115,11 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.05), 0 16px 48px rgba(0,0,0,0.12);
     }
     .pricing-card-pro:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 32px 72px rgba(0,0,0,0.18); }
-    .pricing-card.pricing-card-annual {
-      background: #1A1A2E; border-color: var(--coral);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05), 0 16px 48px rgba(0,0,0,0.12);
+    .pricing-card-annual {
+      border-color: var(--coral);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05), 0 16px 48px rgba(0,0,0,0.08);
     }
-    .pricing-card.pricing-card-annual:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 32px 72px rgba(0,0,0,0.18); }
+    .pricing-card-annual:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 32px 60px rgba(0,0,0,0.12); }
     .pricing-badge {
       display: inline-block; padding: 4px 14px; border-radius: 100px;
       font-size: 11px; font-weight: 700; letter-spacing: 1px;
@@ -118,31 +128,24 @@
     .pricing-price {
       font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800;
       letter-spacing: -4px; line-height: 1; color: var(--dark); margin-bottom: 6px;
-      word-break: break-word; overflow-wrap: break-word;
     }
-    .pricing-card-pro .pricing-price,
-    .pricing-card-annual .pricing-price { color: var(--white); }
+    .pricing-card-pro .pricing-price { color: var(--white); }
     .pricing-per { font-size: 18px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
-    .pricing-card-pro .pricing-per,
-    .pricing-card-annual .pricing-per { color: rgba(255,255,255,0.45); }
+    .pricing-card-pro .pricing-per { color: rgba(255,255,255,0.45); }
     .pricing-effective {
       font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-      color: rgba(255,255,255,0.45); margin-bottom: 6px;
+      color: var(--muted); margin-bottom: 6px;
     }
     .pricing-desc { font-size: 15px; color: var(--muted); margin-bottom: 24px; line-height: 1.55; font-weight: 400; }
-    .pricing-card-pro .pricing-desc,
-    .pricing-card-annual .pricing-desc { color: rgba(255,255,255,0.55); }
+    .pricing-card-pro .pricing-desc { color: rgba(255,255,255,0.55); }
     .pricing-features { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 11px; flex: 1; }
     .pricing-features li { font-size: 14px; color: var(--dark); font-weight: 400; }
     .pricing-features li.muted { color: rgba(17,17,17,0.3); }
-    .pricing-card-pro .pricing-features li,
-    .pricing-card-annual .pricing-features li { color: rgba(255,255,255,0.85); }
-    .pricing-features li.muted { color: rgba(17,17,17,0.28); }
-    .pricing-card-pro .pricing-features li.muted,
-    .pricing-card-annual .pricing-features li.muted { color: rgba(255,255,255,0.25); }
-    .pricing-lockline { font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+    .pricing-card-pro .pricing-features li { color: rgba(255,255,255,0.85); }
+    .pricing-card-pro .pricing-features li.muted { color: rgba(255,255,255,0.25); }
+    .pricing-lockline { font-size: 12px; font-weight: 600; margin-bottom: 16px; color: var(--muted); }
     .pricing-card-pro .pricing-lockline { color: rgba(255,184,0,0.8); }
-    .pricing-card-annual .pricing-lockline { color: rgba(255,107,53,0.8); }
+    .pricing-card-annual .pricing-lockline { color: var(--coral); }
     .pricing-cta-secondary {
       width: 100%; padding: 16px; border-radius: 14px;
       border: 2px solid rgba(17,17,17,0.15); background: transparent;
@@ -181,35 +184,18 @@
     .footer-dots { display: flex; gap: 8px; }
     .fd { width: 10px; height: 10px; border-radius: 50%; }
 
-    @media (max-width: 1200px) {
-      .pricing-wrap { padding: 40px 32px 100px; }
-      .pricing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-    }
-    @media (max-width: 960px) {
-      .pricing-wrap { padding: 40px 24px 100px; }
-      .pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .pricing-card-annual { grid-column: 1 / -1; max-width: 480px; margin: 0 auto; width: 100%; }
-    }
-    @media (max-width: 640px) {
-      nav { padding: 18px 24px; }
-      .nav-links { display: none; }
-      .nav-cta { display: none; }
-      .hamburger { display: flex; }
-      .pricing-hero { padding: 110px 24px 40px; }
-      .pricing-wrap { padding: 24px 16px 60px; }
-      .pricing-grid { grid-template-columns: minmax(0, 1fr); }
-      .pricing-card-annual { grid-column: auto; max-width: 100%; }
-      .pricing-card { padding: 28px 22px; }
-      .faq-section { padding: 0 20px 60px; }
-      footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
-      .nav-logo-img { height: 32px; }
-    }
     @media (max-width: 900px) {
       nav { padding: 18px 24px; }
       .nav-links { display: none; }
       .nav-cta { display: none; }
       .hamburger { display: flex; }
       .nav-logo-img { height: 32px; }
+      .pricing-hero { padding: 110px 24px 40px; }
+      .pricing-wrap { padding: 24px 16px 60px; }
+      .pricing-card { flex: 1 1 260px; max-width: 100%; padding: 28px 22px; }
+      .pricing-price { font-size: 52px; }
+      .faq-section { padding: 0 20px 60px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
     }
   </style>
 </head>
@@ -285,7 +271,7 @@
 
       <!-- ANNUAL — BEST VALUE -->
       <div class="pricing-card pricing-card-annual">
-        <div class="pricing-badge" style="background:rgba(200,240,0,0.18); color:#C8F000;">🌟 Best Value</div>
+        <div class="pricing-badge" style="background:rgba(200,240,0,0.2); color:#556800;">🌟 Best Value</div>
         <div class="pricing-price">$39.99<span class="pricing-per">/year</span></div>
         <div class="pricing-effective">$3.33/mo, billed annually</div>
         <div class="pricing-desc">Save more with annual founder pricing.</div>
