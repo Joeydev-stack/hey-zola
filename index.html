@@ -502,7 +502,6 @@
     .pricing-card-annual { background: var(--dark); border-color: var(--coral); box-shadow: 0 2px 8px rgba(0,0,0,0.05), 0 16px 48px rgba(0,0,0,0.12); }
     .pricing-card-annual:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 32px 72px rgba(0,0,0,0.18); }
     .pricing-card-annual .pricing-price { color: var(--white); }
-    .pricing-card-annual .pricing-per { color: rgba(255,255,255,0.45); }
     .pricing-card-annual .pricing-desc { color: rgba(255,255,255,0.55); }
     .pricing-card-annual .pricing-features li { color: rgba(255,255,255,0.85); }
     .pricing-lockline { font-size: 12px; font-weight: 600; margin-bottom: 16px; }
@@ -519,6 +518,7 @@
     .pricing-card-pro .pricing-price { color: var(--white); }
     .pricing-per { font-size: 18px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
     .pricing-card-pro .pricing-per { color: rgba(255,255,255,0.45); }
+    .pricing-card-annual .pricing-per { color: rgba(255,255,255,0.45); }
     .pricing-desc { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; font-weight: 400; }
     .pricing-card-pro .pricing-desc { color: rgba(255,255,255,0.5); }
     .pricing-features { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px; }
@@ -824,6 +824,11 @@
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    if (typeof supabase === 'undefined') {
+      document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
+    }
+  </script>
 </head>
 <body>
 
