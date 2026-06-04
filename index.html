@@ -1834,18 +1834,12 @@
             let city = '';
             const results = data.results || [];
 
-            // Try in priority order: locality → sublocality → county → state → formatted address
+            // Try in priority order: locality → sublocality → county → state
             const typePriority = ['locality', 'sublocality', 'sublocality_level_1', 'administrative_area_level_2', 'administrative_area_level_1'];
-            outer:
+            const allComponents = results.flatMap(r => r.address_components || []);
             for (const type of typePriority) {
-              for (const result of results) {
-                for (const component of result.address_components) {
-                  if (component.types.includes(type)) {
-                    city = component.long_name;
-                    break outer;
-                  }
-                }
-              }
+              const match = allComponents.find(c => c.types.includes(type));
+              if (match) { city = match.long_name; break; }
             }
 
             // Last resort — first part of formatted address
