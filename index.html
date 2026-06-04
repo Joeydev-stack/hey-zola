@@ -949,7 +949,7 @@
 
       <!-- LOCATION STATUS ROW -->
       <div class="location-status" id="locationStatus">
-        <div class="location-detecting" id="locationDetecting" style="display:none;">
+        <div class="location-detecting" id="locationDetecting">
           <div class="location-spin"></div>
           Detecting your location...
         </div>
@@ -969,9 +969,8 @@
         </div>
       </div>
 
-      <!-- CITY BUTTONS ROW (visible by default) -->
-      <div class="demo-city-row" id="cityRow">
-        <button class="city-btn" id="detectLocationBtn" onclick="autoDetectLocation()" style="background:rgba(0,180,166,0.12);border-color:rgba(0,180,166,0.35);color:#00B4A6;font-weight:600;">📍 Use my location</button>
+      <!-- CITY BUTTONS ROW (hidden by default, shown on trip planning or failure) -->
+      <div class="demo-city-row" id="cityRow" style="display:none;">
         <button class="city-btn active" data-city="Austin, Texas">🤠 Austin</button>
         <button class="city-btn" data-city="Atlanta, Georgia">🍑 Atlanta</button>
         <button class="city-btn" data-city="New York City">🗽 New York</button>
@@ -1819,16 +1818,12 @@
       btn.textContent = isVisible ? 'Planning a trip? Change city →' : 'Hide cities ↑';
     }
 
-    // ── LOCATION DETECT (user-triggered, works on all browsers including Chrome mobile) ──
+    // ── AUTO LOCATION ON PAGE LOAD ──
     async function autoDetectLocation() {
       if (!navigator.geolocation) {
         showLocationFailed('📍 Location not supported — pick a city below');
         return;
       }
-      // Show detecting spinner, hide detect button
-      document.getElementById('locationDetecting').style.display = 'flex';
-      const detectBtn = document.getElementById('detectLocationBtn');
-      if (detectBtn) detectBtn.style.display = 'none';
 
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
@@ -1838,19 +1833,31 @@
             const data = await res.json();
             let city = '';
             const results = data.results || [];
-            for (const result of results) {
-              for (const component of result.address_components) {
-                if (component.types.includes('locality')) { city = component.long_name; break; }
+
+            // Try in priority order: locality → sublocality → county → state → formatted address
+            const typePriority = ['locality', 'sublocality', 'sublocality_level_1', 'administrative_area_level_2', 'administrative_area_level_1'];
+            outer:
+            for (const type of typePriority) {
+              for (const result of results) {
+                for (const component of result.address_components) {
+                  if (component.types.includes(type)) {
+                    city = component.long_name;
+                    break outer;
+                  }
+                }
               }
-              if (city) break;
             }
-            if (!city && results.length > 0) city = results[0].formatted_address.split(',')[0];
+
+            // Last resort — first part of formatted address
+            if (!city && results.length > 0) {
+              city = results[0].formatted_address.split(',')[0];
+            }
+
             if (city) {
               selectedCity = city;
               document.getElementById('detectedCityLabel').textContent = city;
               document.getElementById('locationDetecting').style.display = 'none';
               document.getElementById('locationFound').style.display = 'block';
-              // Deactivate city buttons, hide city row
               document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
               document.getElementById('cityRow').style.display = 'none';
             } else {
@@ -1874,6 +1881,7 @@
       document.getElementById('locationDetecting').style.display = 'none';
       document.getElementById('locationFailedMsg').textContent = msg;
       document.getElementById('locationFailed').style.display = 'block';
+      document.getElementById('cityRow').style.display = 'flex';
       selectedCity = 'Austin, Texas';
     }
 
@@ -1884,13 +1892,15 @@
         document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         selectedCity = btn.dataset.city;
-        // If location was found, update label and show city row
         const foundEl = document.getElementById('locationFound');
         if (foundEl && foundEl.style.display !== 'none') {
           document.getElementById('detectedCityLabel').textContent = btn.dataset.city;
         }
       });
     });
+
+    // Kick off auto-detect on page load
+    autoDetectLocation();
 
     // ── CUSTOM CITY ──
     function toggleCustomCity() {
