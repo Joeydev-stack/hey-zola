@@ -1,4 +1,4 @@
-const CACHE_NAME = 'olli-v2';
+const CACHE_NAME = 'olli-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -12,14 +12,12 @@ const STATIC_ASSETS = [
   '/olli-og-image.jpg',
   '/manifest.json',
 ];
-
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS).catch(() => {}))
   );
   self.skipWaiting();
 });
-
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -28,8 +26,6 @@ self.addEventListener('activate', event => {
   );
   self.clients.claim();
 });
-
-// Predictive cache after itinerary generated
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'CACHE_ITINERARY') {
     const { stops } = event.data;
@@ -50,14 +46,16 @@ self.addEventListener('message', event => {
     });
   }
 });
-
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   if (event.request.url.includes('/api/')) return;
   if (event.request.url.includes('/_vercel/')) return;
   if (event.request.url.includes('supabase.co')) return;
-  if (event.request.url.includes('googleapis.com') && !event.request.url.includes('fonts')) return;
-
+  if (event.request.url.includes('googleapis.com')) return;
+  if (event.request.url.includes('gstatic.com')) return;
+  if (event.request.url.includes('jsdelivr.net')) return;
+  if (event.request.url.includes('unpkg.com')) return;
+  if (event.request.url.includes('google.com/maps')) return;
   event.respondWith(
     fetch(event.request)
       .then(response => {
