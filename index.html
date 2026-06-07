@@ -1204,6 +1204,26 @@
     </div>
   </section>
 
+  <!-- LEARN MORE TOGGLE BUTTON -->
+  <div style="text-align:center; padding: 32px 24px 0; background: var(--white);">
+    <button id="learnMoreBtn" onclick="toggleLearnMore()" style="
+      background: transparent;
+      border: 2px solid rgba(17,17,17,0.12);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      padding: 12px 28px; border-radius: 100px;
+      cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    ">
+      <span id="learnMoreArrow" style="transition: transform 0.3s; display:inline-block;">↓</span>
+      Learn more about Olli
+    </button>
+  </div>
+
+  <!-- ALL SECTIONS (hidden by default) -->
+  <div id="learnMoreSections" style="display:none;">
+
   <!-- TICKER -->
   <div class="ticker-wrap">
     <div class="ticker">
@@ -1492,6 +1512,8 @@
       <p style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:4px;">1 Free Magic Search · No account needed · Free account unlocks 3/mo · Founders pricing locked in when Pro launches.</p>
     </div>
   </div>
+
+  </div><!-- end learnMoreSections -->
 
   <!-- PRICING MODAL -->
   <div class="pricing-modal-overlay" id="pricingModalOverlay" onclick="closePricingModal()"></div>
@@ -1931,6 +1953,27 @@
         const ta = document.createElement('textarea'); ta.value = window.location.href; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
         btn.textContent = '✅ Link copied — share the vibe!'; setTimeout(() => { btn.textContent = '🔗 Share Hey, Olli!'; }, 2500);
       });
+    }
+
+    // ── LEARN MORE TOGGLE ──
+    function toggleLearnMore() {
+      const sections = document.getElementById('learnMoreSections');
+      const btn = document.getElementById('learnMoreBtn');
+      const arrow = document.getElementById('learnMoreArrow');
+      const isOpen = sections.style.display !== 'none';
+      if (isOpen) {
+        sections.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+        btn.style.borderColor = 'rgba(17,17,17,0.12)';
+        btn.style.color = 'var(--muted)';
+        btn.innerHTML = '<span id="learnMoreArrow" style="transition:transform 0.3s;display:inline-block;">↓</span> Learn more about Olli';
+      } else {
+        sections.style.display = 'block';
+        btn.innerHTML = '<span id="learnMoreArrow" style="transition:transform 0.3s;display:inline-block; transform:rotate(180deg);">↓</span> Hide';
+        btn.style.borderColor = 'var(--coral)';
+        btn.style.color = 'var(--coral)';
+        setTimeout(() => sections.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+      }
     }
 
     // ── FULLSCREEN MENU ──
