@@ -1519,8 +1519,8 @@
   <div class="pricing-modal-overlay" id="pricingModalOverlay" onclick="closePricingModal()"></div>
   <div class="pricing-modal" id="pricingModal">
     <button class="pricing-modal-close" onclick="closePricingModal()">✕</button>
-    <div class="pricing-modal-title">Your free search is up 🎉</div>
-    <div class="pricing-modal-sub">You just experienced what Olli can do. Ready to unlock unlimited days?</div>
+    <div class="pricing-modal-title">Loving Olli? 🔥</div>
+    <div class="pricing-modal-sub">Unlock unlimited days — save & share every itinerary, favorites across cities.</div>
     <div class="pricing-modal-cards">
       <div class="pmc pmc-pro" onclick="requestProInvite()">
         <div class="pmc-badge">⚡ Most popular</div>
@@ -2171,7 +2171,7 @@
     function statusClass(s) { if (s === 'open') return 'status-open'; if (s === 'closed') return 'status-closed'; return 'status-unknown'; }
     function statusLabel(s) { if (s === 'open') return '● Open now'; if (s === 'closed') return '● Closed'; return '● Check hours'; }
     function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-    function safeUrl(url) { if (!url) return ''; return (url.startsWith('https://') || url.startsWith('http://')) ? url : ''; }
+    function safeUrl(url) { if (!url) return ''; if (url.startsWith('/')) return url; return (url.startsWith('https://') || url.startsWith('http://')) ? url : ''; }
 
     function renderResults(data) {
       document.getElementById('resultTitle').textContent = data.title || 'Your Perfect Day';
