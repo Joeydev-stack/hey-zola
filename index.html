@@ -1597,6 +1597,21 @@
       closeAuthModal();
       const pendingShare = sessionStorage.getItem('olli_pending_share');
       if (pendingShare && currentItineraryData) { sessionStorage.removeItem('olli_pending_share'); setTimeout(() => saveItinerary(), 800); }
+
+      // If user just signed up/in after hitting Build — run their pending search
+      const pendingVibe = sessionStorage.getItem('olli_pending_vibe');
+      const pendingCity = sessionStorage.getItem('olli_pending_city');
+      if (pendingVibe) {
+        sessionStorage.removeItem('olli_pending_vibe');
+        sessionStorage.removeItem('olli_pending_city');
+        document.getElementById('vibeInput').value = pendingVibe;
+        if (pendingCity) selectedCity = pendingCity;
+        setTimeout(async () => {
+          if (await checkSearchLimit()) {
+            await runSearch(pendingVibe, pendingCity || selectedCity);
+          }
+        }, 800);
+      }
     }
 
     function showFoundersToast(name) {
@@ -1628,7 +1643,13 @@
     }
 
     let authMode = 'signin';
-    function openAuthModal() { document.getElementById('authOverlay').classList.add('visible'); document.getElementById('authModal').classList.add('visible'); document.getElementById('authEmail').focus(); }
+    function openAuthModal(title, sub) {
+      if (title) document.getElementById('authTitle').textContent = title;
+      if (sub) document.getElementById('authSub').textContent = sub;
+      document.getElementById('authOverlay').classList.add('visible');
+      document.getElementById('authModal').classList.add('visible');
+      document.getElementById('authEmail').focus();
+    }
     function closeAuthModal() { document.getElementById('authOverlay').classList.remove('visible'); document.getElementById('authModal').classList.remove('visible'); document.getElementById('authError').style.display = 'none'; document.getElementById('authSuccess').style.display = 'none'; }
     function toggleAuthMode() {
       authMode = authMode === 'signin' ? 'signup' : 'signin';
@@ -1914,18 +1935,39 @@
       setTimeout(() => { if (overlay) overlay.classList.remove('hidden'); window.removeEventListener('scroll', onScroll); }, 12000);
     }
 
-    // ── SEARCH LIMIT ──
-    const SEARCH_KEY = 'olli_search_count';
-    const FREE_LIMIT = 1;
-    function getSearchCount() { return parseInt(sessionStorage.getItem(SEARCH_KEY) || '0'); }
-    function incrementSearchCount() { const count = getSearchCount() + 1; sessionStorage.setItem(SEARCH_KEY, count); return count; }
-    function checkSearchLimit() {
-      if (currentUser) return true;
-      if (getSearchCount() >= FREE_LIMIT) {
+    // ── SEARCH LIMIT — Supabase-backed, per account, per month ──
+    const FREE_MONTHLY_LIMIT = 3;
+
+    async function getMonthlySearchCount() {
+      if (!currentUser) return 0;
+      try {
+        const now = new Date();
+        const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+        const { count, error } = await _supabase
+          .from('searches')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', currentUser.id)
+          .gte('created_at', firstOfMonth);
+        if (error) { console.error('Search count error:', error); return 0; }
+        return count || 0;
+      } catch (e) { console.error('Search count fetch failed:', e); return 0; }
+    }
+
+    async function checkSearchLimit() {
+      if (!currentUser) return false;
+      // Pro users — unlimited (check metadata or a pro_users table later)
+      // For now, all signed-in users get FREE_MONTHLY_LIMIT searches/month
+      const count = await getMonthlySearchCount();
+      if (count >= FREE_MONTHLY_LIMIT) {
         openPricingModal();
         return false;
       }
       return true;
+    }
+
+    async function incrementSearchCount() {
+      // Count is tracked by inserts into searches table — no separate increment needed
+      // Just update the nav search count display if needed
     }
 
     // ── PRO INVITE REQUEST ──
@@ -2229,19 +2271,41 @@
     document.getElementById('buildBtn').addEventListener('click', async () => {
       const vibe = document.getElementById('vibeInput').value.trim();
       if(!vibe) { document.getElementById('vibeInput').focus(); document.getElementById('vibeInput').style.borderColor = 'rgba(255,92,58,0.6)'; setTimeout(()=>document.getElementById('vibeInput').style.borderColor = '', 1500); return; }
-      if (!checkSearchLimit()) return;
+
+      // Gate on auth — if not signed in, show modal before running search
+      if (!currentUser) {
+        sessionStorage.setItem('olli_pending_vibe', vibe);
+        sessionStorage.setItem('olli_pending_city', selectedCity);
+        authMode = 'signup';
+        document.getElementById('authTitle').textContent = 'Almost there! 🔥';
+        document.getElementById('authSub').textContent = 'Create your free account to get your Olli day. Free users get 3 searches/month — no credit card needed.';
+        document.getElementById('authSubmitBtn').textContent = 'Create free account';
+        document.getElementById('authToggleText').textContent = 'Already have an account?';
+        document.getElementById('authToggleBtn').textContent = 'Sign in';
+        openAuthModal();
+        return;
+      }
+
+      // Check monthly search limit from Supabase
+      if (!await checkSearchLimit()) return;
+
+      await runSearch(vibe, selectedCity);
+    });
+
+    async function runSearch(vibe, city) {
       const btn = document.getElementById('buildBtn'); btn.disabled = true; btn.textContent = '✨ Olli is thinking...';
       document.getElementById('errorMsg').classList.remove('visible'); startLoading();
       try {
-        const res = await fetch('/api/olli-ai', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ vibe, city: selectedCity }) });
+        const res = await fetch('/api/olli-ai', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ vibe, city }) });
         const json = await res.json();
         if(!res.ok) throw new Error(json.error || 'Something went wrong');
-        stopLoading(); renderResults(json); incrementSearchCount();
+        stopLoading(); renderResults(json);
+        await incrementSearchCount();
       } catch(err) {
         stopLoading(); const errEl = document.getElementById('errorMsg');
         errEl.textContent = '⚠️ Olli hit a snag: ' + err.message + '. Try again in a moment.'; errEl.classList.add('visible');
       } finally { btn.disabled = false; btn.textContent = '✨ Build my day, Olli'; }
-    });
+    }
 
     document.getElementById('resetBtn').addEventListener('click', () => {
       document.getElementById('vibeInput').value = '';
